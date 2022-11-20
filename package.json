@@ -2,9 +2,14 @@
   "name": "did-profiles",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": {
+    "name": "Frank Fox",
+    "email": "ffox77@cabanalabs.com",
+    "url": "http://github.com/ffox77"
+  },
+  "homepage": "https://nestjs.com",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "Apache2",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -22,8 +27,14 @@
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
+    "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.13.2",
+    "ipfs-http-client": "56.0.3",
+    "ipfs-only-hash": "^4.0.0",
+    "lit-js-sdk": "^1.1.234",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"
@@ -66,6 +77,7 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFiles": ["../setupJest.js"]
   }
 }

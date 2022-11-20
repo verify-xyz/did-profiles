@@ -18,7 +18,7 @@ More development work coming soon!
 ## Planned System Design
 
 <p align="center">
-  <img src="https://cabanalabs.com/static/img/verify-did-profiles.png" width="900" alt="Cabana Labs, Inc Logo" />
+  <img src="https://github.com/verify-xyz/did-profiles/raw/main/assets/schematic.png" width="900" alt="Cabana Labs, Inc Logo" />
 </p>
 
 ## Installation
