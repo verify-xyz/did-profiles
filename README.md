@@ -3,17 +3,17 @@
 <p align="center">
   <a href="https://cabanalabs.com" target="blank"><img src="https://cabanalabs.com/_next/static/media/cabana_logo.7bf4fac6.svg" width="200" alt="Cabana Labs, Inc Logo" /></a>
 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-  <a href="https://cabanalabs.com" target="blank"><img src="https://github.com/verify-xyz/did-profiles/raw/main/src/assets/verify_logo.png" width="200" alt="Cabana Labs, Inc Logo" /></a>
+  <a href="https://cabanalabs.com" target="blank"><img src="https://github.com/verify-xyz/did-profiles/raw/main/assets/verify_logo.png" width="200" alt="Cabana Labs, Inc Logo" /></a>
 </p>
 
 
 ## Development
 
-This project is currently under development. 
+This project is currently under development.
 
 See the latest work in branch: [poc-lit](https://github.com/verify-xyz/did-profiles/tree/poc-lit)
 
-A proof-of-concept was built using Lit Protocol and the smart contract **ethr-did-registry** to show how a user could control access to their profile content. 
+A proof-of-concept was built using Lit Protocol and the smart contract **ethr-did-registry** to show how a user could control access to their profile content.
 
 More development work coming soon!
 
@@ -50,7 +50,7 @@ $ npm run test
 
 ## Support
 
-Verify XYZ - DID Profiles is an Apache2-licensed open source project from [Cabana Labs, Inc](https://cabanalabs.com). 
+Verify XYZ - DID Profiles is an Apache2-licensed open source project from [Cabana Labs, Inc](https://cabanalabs.com).
 
 ## Stay in touch
 
