@@ -11,6 +11,8 @@
 
 This project is currently under development. 
 
+See the latest work in branch: [poc-lit](https://github.com/verify-xyz/did-profiles/tree/poc-lit)
+
 A proof-of-concept was built using Lit Protocol and the smart contract **ethr-did-registry** to show how a user could control access to their profile content. 
 
 More development work coming soon!
@@ -31,7 +33,7 @@ $ npm install
 
 ```bash
 # development
-$ npm run serve
+$ npm run start
 
 
 ```
