@@ -5,6 +5,7 @@ import ServerAPI from './api/serverAPI.js';
 function App () {
     const [message, setMessage] = useState('Hello World!');
     const [address, setAddress] = useState('address');
+    // const [receivedMessage, setReceivedMessage] = useState('');
 
     useEffect(() => {
         console.log(message);
@@ -15,7 +16,14 @@ function App () {
         const obj = { message };
         const json = JSON.stringify(obj);
 
-        ServerAPI.postSendMessageToIpfsServer(json);
+        ServerAPI.postSendMessageToIPFS(json);
+    };
+
+    function getMessageFromIPFS (address) {
+        const obj = { address };
+        const json = JSON.stringify(obj);
+
+        ServerAPI.postGetMessageFromIPFS(json);
     };
 
     function getHelloFromServer () {
@@ -34,6 +42,7 @@ function App () {
 
     function fetchButtonClickedHandler () {
         const inputAddress = window.document.getElementById('addressID').value;
+        getMessageFromIPFS(inputAddress);
         getHelloFromServer();
         setAddress(inputAddress);
     };

@@ -1,5 +1,5 @@
 class ServerAPI {
-    static postSendMessageToIpfsServer = (message) => {
+    static postSendMessageToIPFS = (message) => {
         fetch('/send-message', {
             method: 'POST',
             headers: {
@@ -7,7 +7,22 @@ class ServerAPI {
                 Accept: 'application/json'
             },
             body: message
-        });
+        })
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
+    };
+
+    static async postGetMessageFromIPFS (address) {
+        await fetch('/get-message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: address
+        })
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
     };
 
     static async getHello () {

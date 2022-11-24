@@ -12,7 +12,6 @@ export class AppController {
 
     @Get('hello')
     async getHello2(): Promise<string> {
-        console.log('Helo');
         const str = await this.appService.getHello2();
         const resp = { message: str };
         const json = JSON.stringify(resp);
@@ -27,6 +26,18 @@ export class AppController {
         // Received message should be sent to IPFS
 
         const resp = { message: 'success' };
+        const json = JSON.stringify(resp);
+        return json;
+    }
+
+    @Post('get-message')
+    async getMessage(@Body() data: any) {
+        console.log('get-message');
+        console.log(data);
+
+        // Based on provided address, the message should be read and returned to frontend
+
+        const resp = { message: 'message to return' };
         const json = JSON.stringify(resp);
         return json;
     }
