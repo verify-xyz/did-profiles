@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './styles/styleApp.css';
-// import ServerAPI from './api/serverAPI.js';
+import ServerAPI from './api/serverAPI.js';
 
 function App () {
     const [message, setMessage] = useState('Hello World!');
@@ -28,6 +28,7 @@ function App () {
                 console.log(error);
                 this.setState({ messsage: 'error' });
             }); */
+        ServerAPI.getHello();
     };
 
     function sendButtonClickedHandler () {

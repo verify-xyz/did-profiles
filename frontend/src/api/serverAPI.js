@@ -1,16 +1,23 @@
 class ServerAPI {
-    static postSendMessageToIpfsServer = (messageJSON) => {
-        fetch('/post-send-message', {
+    static postSendMessageToIpfsServer = (message) => {
+        fetch('/send-message', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json'
             },
-            body: messageJSON
+            body: message
         })
             .then(response => console.log(response))
             .catch(error => console.log(error));
     };
+
+    static async getHello () {
+        const response = await fetch('/hello');
+        const res = await response.json();
+        console.log(res.message);
+        // return await response.json();
+    }
 }
 
 export default ServerAPI;
