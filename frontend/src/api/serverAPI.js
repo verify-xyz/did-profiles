@@ -1,6 +1,6 @@
 class ServerAPI {
     static postSendMessageToIpfsServer = (messageJSON) => {
-        fetch('/backend/post-split-percents', {
+        fetch('/post-send-message', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

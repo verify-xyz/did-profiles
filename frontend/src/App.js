@@ -19,27 +19,26 @@ function App () {
         // fetchButtonClickedHandler();
     });
 
-    /* sendMessageToIPFS = () => {
-         ServerAPI.postSendMessageToIpfsServer('message')
+    function sendMessageToIPFS (message) {
+        /* ServerAPI.postSendMessageToIpfsServer(message)
             .then(result => {
                 this.setState({ message: result });
             })
             .catch(error => {
                 console.log(error);
                 this.setState({ messsage: 'error' });
-            });
-    }; */
+            }); */
+    };
 
     function sendButtonClickedHandler () {
         const inputMessage = window.document.getElementById('messageID').value;
+        sendMessageToIPFS(inputMessage);
         setMessage(inputMessage);
-        // console.log(message);
     };
 
     function fetchButtonClickedHandler () {
         const inputAddress = window.document.getElementById('addressID').value;
         setAddress(inputAddress);
-        // console.log(address);
     };
 
     return (
