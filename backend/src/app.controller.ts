@@ -20,8 +20,14 @@ export class AppController {
     }
 
     @Post('send-message')
-    async confirmOTP(@Body() data: any) {
+    async sendMessage(@Body() data: any) {
         console.log('send-message');
-        console.log(data.message);
+        console.log(data);
+
+        // Received message should be sent to IPFS
+
+        const resp = { message: 'success' };
+        const json = JSON.stringify(resp);
+        return json;
     }
 }

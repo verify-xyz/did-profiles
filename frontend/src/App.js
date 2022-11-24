@@ -7,29 +7,24 @@ function App () {
     const [address, setAddress] = useState('address');
 
     useEffect(() => {
-        /* const inputMessage = window.document.getElementById('messageID').value;
-        setMessage(inputMessage);
-        const inputAddress = window.document.getElementById('addressID').value;
-        setAddress(inputAddress); */
-
         console.log(message);
         console.log(address);
-
-        // sendButtonClickedHandler();
-        // fetchButtonClickedHandler();
     });
 
     function sendMessageToIPFS (message) {
-        /* ServerAPI.postSendMessageToIpfsServer(message)
-            .then(result => {
-                this.setState({ message: result });
-            })
-            .catch(error => {
-                console.log(error);
-                this.setState({ messsage: 'error' });
-            }); */
-        ServerAPI.getHello();
+        const obj = { message };
+        const json = JSON.stringify(obj);
+
+        ServerAPI.postSendMessageToIpfsServer(json);
     };
+
+    function getHelloFromServer () {
+        ServerAPI.getHello()
+            .then(result => {
+                console.log('Displaying result.message');
+                console.log(result.message);
+            });
+    }
 
     function sendButtonClickedHandler () {
         const inputMessage = window.document.getElementById('messageID').value;
@@ -39,6 +34,7 @@ function App () {
 
     function fetchButtonClickedHandler () {
         const inputAddress = window.document.getElementById('addressID').value;
+        getHelloFromServer();
         setAddress(inputAddress);
     };
 

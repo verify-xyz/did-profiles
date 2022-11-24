@@ -7,16 +7,12 @@ class ServerAPI {
                 Accept: 'application/json'
             },
             body: message
-        })
-            .then(response => console.log(response))
-            .catch(error => console.log(error));
+        });
     };
 
     static async getHello () {
         const response = await fetch('/hello');
-        const res = await response.json();
-        console.log(res.message);
-        // return await response.json();
+        return await response.json();
     }
 }
 
