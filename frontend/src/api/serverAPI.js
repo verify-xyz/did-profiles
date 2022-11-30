@@ -1,26 +1,23 @@
 class ServerAPI {
+    /**
+     * Sends message to IPFS
+     * @param {string} message - Message that should be added to IPFS
+     * @returns Hash code of the message added to IPFS
+     */
     static async sendMessageToIPFS (message) {
         const response = await fetch('/ipfs/add/' + message);
         return await response.json();
     }
 
+    /**
+     * Gets the message from IPFS
+     * @param {string} hash - Hash code of the message previously added to IPFS
+     * @returns String related to the hash code
+     */
     static async getMessageFromIPFS (hash) {
         const response = await fetch('/ipfs/read/' + hash);
         return await response.json();
     }
-
-    /* static async postGetMessageFromIPFS (address) {
-        await fetch('/get-message', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
-            },
-            body: address
-        })
-            .then(response => console.log(response))
-            .catch(error => console.log(error));
-    }; */
 }
 
 export default ServerAPI;
