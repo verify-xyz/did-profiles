@@ -51,11 +51,11 @@ function App () {
 
             <div className="appGridContainer02">
                 <label className="appLabelAddress">Address:</label>
-                <input className="appInputAddress" id="addressID"></input>
+                <input className="appInputAddress" id="addressID" readOnly></input>
                 <button className="appButtonFetch" onClick={fetchButtonClickedHandler}>Fetch</button>
 
                 <label className="appLabel">Message:</label>
-                <input className="appInput" id="receivedMessageID"></input>
+                <input className="appInput" id="receivedMessageID" readOnly></input>
             </div>
         </div>
     );
