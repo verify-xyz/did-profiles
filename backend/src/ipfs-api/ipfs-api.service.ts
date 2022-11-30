@@ -19,7 +19,7 @@ export class IpfsApiService {
 
     /**
      * Adds string into IPFS
-     * @param text - string to be assed into IPFS
+     * @param text - string to be added into IPFS
      * @returns - hash code of the string added into IPFS
      */
     async addStringToIpfs(text: string) {
@@ -43,7 +43,6 @@ export class IpfsApiService {
 
         const response = await this.httpService.get(url).toPromise();
         const text = response.data;
-        console.log(response);
 
         return text;
     }

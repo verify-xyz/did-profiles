@@ -7,22 +7,21 @@ export class IpfsApiController {
 
     @Get('add/:text')
     async addToIpfs(@Param() text: any) {
-        console.log(text);
         const result = await this.ipfsApiService.addStringToIpfs(text.text);
 
         const response = { hash: result };
         const json = JSON.stringify(response);
+
         return json;
     }
 
     @Get('read/:hash')
     async readFromIpfs(@Param() hash: any) {
-        console.log(hash);
         const result = await this.ipfsApiService.getStringFromIpfs(hash.hash);
 
         const response = { message: result };
         const json = JSON.stringify(response);
-        console.log(json);
+
         return json;
     }
 }

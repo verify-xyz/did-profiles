@@ -5,7 +5,6 @@ import ServerAPI from './api/serverAPI.js';
 function App () {
     const [message, setMessage] = useState('Hello World!');
     const [address, setAddress] = useState('address');
-    // const [receivedMessage, setReceivedMessage] = useState('');
 
     useEffect(() => {
         console.log(message);
@@ -15,29 +14,18 @@ function App () {
     async function sendMessageToIPFS (message) {
         const response = await ServerAPI.sendMessageToIPFS(message);
         const hash = response.hash;
-        setAddress(hash);
+
+        // Update address field by received HASH from the server
         window.document.getElementById('addressID').value = hash;
-        console.log(hash);
     };
 
     async function getMessageFromIPFS (hash) {
-        // const obj = { address };
-        // const json = JSON.stringify(obj);
-
         const response = await ServerAPI.getMessageFromIPFS(hash);
-        const message = await response.message;
-        console.log(message);
-        window.document.getElementById('receivedMessageID').value = message;
-        // console.log(hash);
-    };
+        const receivedMessage = await response.message;
 
-    /* function getHelloFromServer () {
-        ServerAPI.getHello()
-            .then(result => {
-                console.log('Displaying result.message');
-                console.log(result.message);
-            });
-    } */
+        // Update received message field by received MESSAGE from the server
+        window.document.getElementById('receivedMessageID').value = receivedMessage;
+    };
 
     function sendButtonClickedHandler () {
         const inputMessage = window.document.getElementById('messageID').value;
@@ -48,7 +36,6 @@ function App () {
     function fetchButtonClickedHandler () {
         const inputAddress = window.document.getElementById('addressID').value;
         getMessageFromIPFS(inputAddress);
-        // getHelloFromServer();
         setAddress(inputAddress);
     };
 
