@@ -1,21 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './styles/styleApp.css';
 import ServerAPI from './api/serverAPI.js';
-import { create } from 'ipfs-http-client';
-// import { Buffer } from 'buffer';
 
 function App () {
     const [message, setMessage] = useState('Hello World!');
     const [address, setAddress] = useState('address');
     // const [receivedMessage, setReceivedMessage] = useState('');
-
-    /* const projectId = 'projectid';
-    const projectSecret = 'project-secret';
-    const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64'); */
-
-    /* Create an instance of the ipfs client */
-    // const ipfs = create({ host: 'localhost', port: '5001', protocol: 'http' });
-    const client = create('https://ipfs.infura.io:5001/api/v0');
 
     useEffect(() => {
         console.log(message);
@@ -23,35 +13,31 @@ function App () {
     });
 
     async function sendMessageToIPFS (message) {
-        const obj = { message };
-        const json = JSON.stringify(obj);
-
-        ServerAPI.postSendMessageToIPFS(json);
-
-        // Send message to IPFS
-        /* console.log('send to IPFS');
-        const added = await ipfs.add('hello world from react app');
-        console.log(added); */
-
-        const added = await client.add('hello world from react app');
-        const url = `https://ipfs.infura.io/ipfs/${added.path}`;
-        console.log(url);
+        const response = await ServerAPI.sendMessageToIPFS(message);
+        const hash = response.hash;
+        setAddress(hash);
+        window.document.getElementById('addressID').value = hash;
+        console.log(hash);
     };
 
-    function getMessageFromIPFS (address) {
-        const obj = { address };
-        const json = JSON.stringify(obj);
+    async function getMessageFromIPFS (hash) {
+        // const obj = { address };
+        // const json = JSON.stringify(obj);
 
-        ServerAPI.postGetMessageFromIPFS(json);
+        const response = await ServerAPI.getMessageFromIPFS(hash);
+        const message = await response.message;
+        console.log(message);
+        window.document.getElementById('receivedMessageID').value = message;
+        // console.log(hash);
     };
 
-    function getHelloFromServer () {
+    /* function getHelloFromServer () {
         ServerAPI.getHello()
             .then(result => {
                 console.log('Displaying result.message');
                 console.log(result.message);
             });
-    }
+    } */
 
     function sendButtonClickedHandler () {
         const inputMessage = window.document.getElementById('messageID').value;
@@ -62,7 +48,7 @@ function App () {
     function fetchButtonClickedHandler () {
         const inputAddress = window.document.getElementById('addressID').value;
         getMessageFromIPFS(inputAddress);
-        getHelloFromServer();
+        // getHelloFromServer();
         setAddress(inputAddress);
     };
 
@@ -82,7 +68,7 @@ function App () {
                 <button className="appButtonFetch" onClick={fetchButtonClickedHandler}>Fetch</button>
 
                 <label className="appLabel">Message:</label>
-                <input className="appInput"></input>
+                <input className="appInput" id="receivedMessageID"></input>
             </div>
         </div>
     );

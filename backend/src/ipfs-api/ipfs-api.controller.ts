@@ -5,15 +5,24 @@ import { IpfsApiService } from './ipfs-api.service';
 export class IpfsApiController {
     constructor(private readonly ipfsApiService: IpfsApiService) {}
 
-    @Post('add')
-    async addToIpfs(@Body() body: any) {
-        const result = await this.ipfsApiService.addStringToIpfs(body.text);
-        return result;
+    @Get('add/:text')
+    async addToIpfs(@Param() text: any) {
+        console.log(text);
+        const result = await this.ipfsApiService.addStringToIpfs(text.text);
+
+        const response = { hash: result };
+        const json = JSON.stringify(response);
+        return json;
     }
 
     @Get('read/:hash')
-    async readFromIpfs(@Param() hashCode: any): Promise<any> {
-        const result = await this.ipfsApiService.getStringFromIpfs(hashCode.hash);
-        return result;
+    async readFromIpfs(@Param() hash: any) {
+        console.log(hash);
+        const result = await this.ipfsApiService.getStringFromIpfs(hash.hash);
+
+        const response = { message: result };
+        const json = JSON.stringify(response);
+        console.log(json);
+        return json;
     }
 }

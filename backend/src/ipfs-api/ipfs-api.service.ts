@@ -1,13 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class IpfsApiService {
+    private readonly ipfsUrlAdd: string;
+    private readonly ipfsUrlRead: string;
+
     /**
      * Constructor - constructs IpfsApiService object
      * @param httpService - HttpService object
+     * @param configService - ConfigService object
      */
-    constructor(private readonly httpService: HttpService) {}
+    constructor(private readonly httpService: HttpService, private readonly configService: ConfigService) {
+        this.ipfsUrlAdd = this.configService.get('IPFS_URL_ADD');
+        this.ipfsUrlRead = this.configService.get('IPFS_URL_READ');
+    }
 
     /**
      * Adds string into IPFS
@@ -15,7 +23,7 @@ export class IpfsApiService {
      * @returns - hash code of the string added into IPFS
      */
     async addStringToIpfs(text: string) {
-        const url = 'http://localhost:8080/ipfs/add';
+        const url = this.ipfsUrlAdd;
         const data = text;
 
         const response = await this.httpService.post(url, data).toPromise();
@@ -31,10 +39,11 @@ export class IpfsApiService {
      * @returns - the string witch is related to the provided ipfs hash code
      */
     async getStringFromIpfs(hash: string) {
-        const url: string = 'http://127.0.0.1:8080/ipfs/' + hash;
+        const url = `${this.ipfsUrlRead}/${hash}`;
 
         const response = await this.httpService.get(url).toPromise();
         const text = response.data;
+        console.log(response);
 
         return text;
     }
