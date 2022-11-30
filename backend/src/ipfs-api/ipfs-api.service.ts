@@ -1,54 +1,53 @@
 import { Injectable } from '@nestjs/common';
-import shell from 'shelljs';
-//import IPFS from 'ipfs-mini';
-import { create } from 'ipfs-http-client';
-//import { create } from 'ipfs';
 import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class IpfsApiService {
-    //constructor(/*private shell2: shell*/) {}
+    /**
+     * Constructor - constructs IpfsApiService object
+     * @param httpService - HttpService object
+     */
     constructor(private readonly httpService: HttpService) {}
 
-    async runBatch(something1: string, something2: string) {
-        // run batch file here
-        console.log('Run batch');
-        //const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
-        //await ipfs.add('hello world!').then(console.log).catch(console.log);
-
-        shell.echo('shell echo tralalalal');
-        // shell.mkdir('labada');
-
-        // await shell.exec('./hi.sh', { async: true });
-
-        /* const client = create();
-        const added = await client.add('hello world from react app');
-        const hash = `hash: ${added.path}`;
-        console.log(hash); */
-
-        /* const { cid } = await client.add('Hello world!');
-        console.log(cid); */
-
-        //const ipfs = await create();
-        //ipfs.add('Hello world!');
-
-        /* Create an instance of the client */
-        /* const client = create({
-            host: 'ipfs.infura.io',
-            port: 5001,
-            protocol: 'https',
-        });
-
-        const added = await client.add('hello world'); */
-    }
-
+    /**
+     * Adds string into IPFS
+     * @param text - string to be assed into IPFS
+     * @returns - hash code of the string added into IPFS
+     */
     async addStringToIpfs(text: string) {
         const url = 'http://localhost:8080/ipfs/add';
-        const data = text; //'tralalalalalala'; //{ resend: true };
+        const data = text;
 
         const response = await this.httpService.post(url, data).toPromise();
         const headers = response.headers;
         const hash = headers['ipfs-hash'];
+
         return hash;
+    }
+
+    /**
+     * Gets string from IPFS
+     * @param hash - ipfs hash code of the string previously added into IPFS
+     * @returns - the string witch is related to the provided ipfs hash code
+     */
+    async getStringFromIpfs(hash: string) {
+        // Get string from IPFS, which is related to the provided ipfs hash code
+        const url: string = 'http://127.0.0.1:8080/ipfs/' + hash;
+        console.log(url);
+        // const url = 'http://localhost:8080/ipfs/QmYhcrdNtC8RmVrvq41YXVQqzHN7SrtYoctQqirwGcForB';
+
+        console.log('http get');
+        const response = await this.httpService.get(url).toPromise();
+        console.log('http get finished');
+        console.log(response.data);
+        const text = response.data;
+        return text;
+    }
+
+    getStringFromIpfsObservable(hash: string) {
+        const url = 'http://localhost:8080/ipfs/QmYhcrdNtC8RmVrvq41YXVQqzHN7SrtYoctQqirwGcForB';
+        const response = this.httpService.get(url);
+        console.log(response);
+        return response;
     }
 }
