@@ -31,23 +31,11 @@ export class IpfsApiService {
      * @returns - the string witch is related to the provided ipfs hash code
      */
     async getStringFromIpfs(hash: string) {
-        // Get string from IPFS, which is related to the provided ipfs hash code
         const url: string = 'http://127.0.0.1:8080/ipfs/' + hash;
-        console.log(url);
-        // const url = 'http://localhost:8080/ipfs/QmYhcrdNtC8RmVrvq41YXVQqzHN7SrtYoctQqirwGcForB';
 
-        console.log('http get');
         const response = await this.httpService.get(url).toPromise();
-        console.log('http get finished');
-        console.log(response.data);
         const text = response.data;
-        return text;
-    }
 
-    getStringFromIpfsObservable(hash: string) {
-        const url = 'http://localhost:8080/ipfs/QmYhcrdNtC8RmVrvq41YXVQqzHN7SrtYoctQqirwGcForB';
-        const response = this.httpService.get(url);
-        console.log(response);
-        return response;
+        return text;
     }
 }
