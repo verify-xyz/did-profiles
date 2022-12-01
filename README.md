@@ -9,13 +9,7 @@
 
 ## Development
 
-This project is currently under development.
-
-See the latest work in branch: [poc-lit](https://github.com/verify-xyz/did-profiles/tree/poc-lit)
-
 A proof-of-concept was built using Lit Protocol and the smart contract **ethr-did-registry** to show how a user could control access to their profile content.
-
-More development work coming soon!
 
 ## Planned System Design
 
@@ -47,15 +41,7 @@ $ npm run test
 
 ```
 
+## Support and License
 
-## Support
+Verify XYZ - DID Profiles is an [Apache licensed](LICENSE) open source project from [Cabana Labs, Inc](https://cabanalabs.com).
 
-Verify XYZ - DID Profiles is an Apache2-licensed open source project from [Cabana Labs, Inc](https://cabanalabs.com).
-
-## Stay in touch
-
-- Author - [Frank Fox](https://github.com/ffox77)
-
-## License
-
-Verify XYZ is [Apache licensed](LICENSE).
