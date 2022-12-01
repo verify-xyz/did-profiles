@@ -29,7 +29,7 @@ function App () {
      */
     async function getMessageFromIPFS (hash) {
         const response = await ServerAPI.getMessageFromIPFS(hash);
-        const receivedMessage = await response.message;
+        const receivedMessage = await response.text;
 
         // Update received message field with received MESSAGE from the server
         window.document.getElementById('receivedMessageID').value = receivedMessage;
