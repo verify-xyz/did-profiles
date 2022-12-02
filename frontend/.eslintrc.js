@@ -24,6 +24,7 @@ module.exports = {
     ],
     rules: {
         semi: [2, 'always'],
-        indent: ['error', 4]
+        indent: ['error', 4],
+        'space-before-function-paren': ['error', 'never']
     }
 };

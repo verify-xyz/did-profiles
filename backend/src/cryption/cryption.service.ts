@@ -23,6 +23,7 @@ export class CryptionService {
 
         const contentStr = JSON.stringify({ account, content });
 
+        console.log('-------------------------------------------------------------');
         console.log('encrypted: ', content);
 
         const contentData = Buffer.from(contentStr);

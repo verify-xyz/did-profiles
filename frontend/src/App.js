@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './styles/styleApp.css';
 import ServerAPI from './api/serverAPI.js';
 
-function App () {
+function App() {
     const [message, setMessage] = useState('');
     const [address, setAddress] = useState('');
 
@@ -15,7 +15,7 @@ function App () {
      * Sends message to IPFS
      * @param {string} message - Message that should be added to IPFS
      */
-    async function sendMessageToIPFS (message) {
+    async function sendMessageToIPFS(message) {
         const response = await ServerAPI.sendMessageToIPFS(message);
         const hash = response.hash;
 
@@ -27,7 +27,7 @@ function App () {
      * Gets message from IPFS
      * @param {string} hash - Hash of the message
      */
-    async function getMessageFromIPFS (hash) {
+    async function getMessageFromIPFS(hash) {
         const response = await ServerAPI.getMessageFromIPFS(hash);
         const receivedMessage = await response.text;
 
@@ -38,7 +38,7 @@ function App () {
     /**
      * Send button clicked - handler function
      */
-    function sendButtonClickedHandler () {
+    function sendButtonClickedHandler() {
         const inputMessage = window.document.getElementById('messageID').value;
         sendMessageToIPFS(inputMessage);
         setMessage(inputMessage);
@@ -47,7 +47,7 @@ function App () {
     /**
      * Fetch button click - handler function
      */
-    function fetchButtonClickedHandler () {
+    function fetchButtonClickedHandler() {
         const inputAddress = window.document.getElementById('addressID').value;
         getMessageFromIPFS(inputAddress);
         setAddress(inputAddress);
