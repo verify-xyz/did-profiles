@@ -52,6 +52,11 @@ export class CryptionService {
         };
     }
 
+    /**
+     * Decrypts badge
+     * @param encryptedBadgeDto - encrypted badge DTO
+     * @returns content with decrypted string
+     */
     async decryptBadge(encryptedBadgeDto: EncryptedBadgeDto) {
         const { encryptedFile, encryptedSymmetricKey } = this.deserializeLitEncrypt(
             encryptedBadgeDto.content.encryptedString,
@@ -63,14 +68,17 @@ export class CryptionService {
             encryptedSymmetricKey,
         );
 
-        console.log('decryptedStr: ', decryptedStr);
-        console.log('account.signedMessage: ', encryptedBadgeDto.account.signedMessage);
-
         return {
             content: JSON.parse(decryptedStr),
         };
     }
 
+    /**
+     * Deserialize Lit Encrypt
+     * @param encryptedString - encrypted string
+     * @param encryptedSymmetricKey - encrypte symetric key
+     * @returns encryptedFile & encryptedSymmetricKey
+     */
     private deserializeLitEncrypt(encryptedString: string, encryptedSymmetricKey: string) {
         const encryptedFile = new Blob([Buffer.from(encryptedString, 'base64')]);
         encryptedSymmetricKey = Buffer.from(encryptedSymmetricKey, 'base64').toString('hex');

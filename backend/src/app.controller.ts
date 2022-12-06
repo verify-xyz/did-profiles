@@ -32,7 +32,7 @@ export class AppController {
 
     @Get('add/:text')
     async addToIpfs(@Param('text') text: string): Promise<string> {
-        const badgeDto: BadgeDto = this.appService.createFakeBadgeDto(text);
+        const badgeDto: BadgeDto = this.appService.createHardCodedBadgeDto(text);
 
         const encryptedString: string = await this.cryptionService.encryptBadge(badgeDto);
         const result = await this.ipfsApiService.addStringToIpfs(encryptedString);
@@ -47,18 +47,11 @@ export class AppController {
     async readFromIpfs(@Param('hash') hash: string): Promise<string> {
         const result = await this.ipfsApiService.getStringFromIpfs(hash);
 
-        console.log('result------------------------------------------------------------------------');
-        console.log(result);
+        const encryptedBadgeDto: EncryptedBadgeDto = result;
 
-        const encryptedBadgeDto: EncryptedBadgeDto = result; //JSON.parse(result);
-        console.log('encrypted badge dto-----------------------------------------------------------');
-        console.log(encryptedBadgeDto);
+        const decrypted: any = await this.cryptionService.decryptBadge(encryptedBadgeDto);
 
-        const aaa: any = await this.cryptionService.decryptBadge(encryptedBadgeDto);
-        console.log('aaa---------------------------------------------------------------------------');
-        console.log(aaa);
-
-        const response = { text: aaa.content.template };
+        const response = { text: decrypted.content.template };
         const json = JSON.stringify(response);
 
         return json;
