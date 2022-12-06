@@ -6,5 +6,6 @@ import { LitService } from '../lit/lit.service';
 @Module({
     controllers: [CryptionController],
     providers: [CryptionService, LitService],
+    exports: [CryptionService],
 })
 export class CryptionModule {}

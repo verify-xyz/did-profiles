@@ -34,9 +34,13 @@ export class CryptionService {
         // SAVE TO LOCAL IPFS INSTEAD OF INFURA
         // const url = await this.storageService.saveToCloud(contentStr, cid);
         // const url = await this.storageService.saveToIPFS(contentStr);
-        const url = '';
+        // const url = '';
 
-        return { url };
+        // return { url };
+
+        console.log('Content STR----------------------------------------------------------');
+        console.log(contentStr);
+        return contentStr;
     }
 
     private async serializeLitEncrypt({ encryptedFile, encryptedSymmetricKey }: LitEncryptedResult) {
