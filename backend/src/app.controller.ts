@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CryptionService } from './cryption/cryption.service';
-import { AuthSigDto, BadgeContentDto, BadgeDto } from './dto/badge.dto';
+import { BadgeDto } from './dto/badge.dto';
 import { EncryptedBadgeDto } from './dto/encryptedBadge.dto';
 import { IpfsApiService } from './ipfs-api/ipfs-api.service';
 
@@ -18,20 +18,8 @@ export class AppController {
         return this.appService.getHello();
     }
 
-    @Post('encrypt')
-    async encryptBadge(@Body() body: BadgeDto) {
-        console.log('encrypt', body);
-        const encryptedString: string = await this.cryptionService.encryptBadge(body);
-        const hash: string = await this.ipfsApiService.addStringToIpfs(encryptedString);
-        console.log('-------encryptedString---------');
-        console.log(encryptedString);
-        console.log('-------hash---------');
-        console.log(hash);
-        return hash;
-    }
-
     @Get('add/:text')
-    async addToIpfs(@Param('text') text: string): Promise<string> {
+    async encryptAndAddToIpfs(@Param('text') text: string): Promise<string> {
         const badgeDto: BadgeDto = this.appService.createHardCodedBadgeDto(text);
 
         const encryptedString: string = await this.cryptionService.encryptBadge(badgeDto);
@@ -44,10 +32,8 @@ export class AppController {
     }
 
     @Get('read/:hash')
-    async readFromIpfs(@Param('hash') hash: string): Promise<string> {
-        const result = await this.ipfsApiService.getStringFromIpfs(hash);
-
-        const encryptedBadgeDto: EncryptedBadgeDto = result;
+    async readFromIpfsAndDecrypt(@Param('hash') hash: string): Promise<string> {
+        const encryptedBadgeDto: EncryptedBadgeDto = await this.ipfsApiService.getStringFromIpfs(hash);
 
         const decrypted: any = await this.cryptionService.decryptBadge(encryptedBadgeDto);
 

@@ -74,7 +74,7 @@ export class LitService {
         if (!this.litNodeClient) {
             await this.connect();
         }
-        //const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain })
+
         const { encryptedString, symmetricKey } = await LitJsSdk.encryptString(str);
 
         const encryptedSymmetricKey = await this.litNodeClient.saveEncryptionKey({
@@ -101,7 +101,7 @@ export class LitService {
         if (!this.litNodeClient) {
             await this.connect();
         }
-        // const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain })
+
         const symmetricKey = await this.litNodeClient.getEncryptionKey({
             evmContractConditions: evmContractConditionsPublicView,
             toDecrypt: encryptedSymmetricKey,
@@ -111,64 +111,5 @@ export class LitService {
         const decryptedFile: string = await LitJsSdk.decryptString(encryptedStr, symmetricKey);
 
         return decryptedFile;
-    }
-
-    /**
-     * Provision and sign
-     * @param authSig - authentication signature
-     * @returns boolean
-     */
-    async provisionAndSign(authSig: AuthSig) {
-        if (!this.litNodeClient) {
-            await this.connect();
-        }
-
-        // let authSig = JSON.parse("{\"sig\":\"0x18a173d68d2f78cc5c13da0dfe36eec2a293285bee6d42547b9577bf26cdc985660ed3dddc4e75d422366cac07e8a9fc77669b10373bef9c7b8e4280252dfddf1b\",\"derivedVia\":\"web3.eth.personal.sign\",\"signedMessage\":\"I am creating an account to use LITs at 2021-08-04T20:14:04.918Z\",\"address\":\"0xdbd360f30097fb6d938dcc8b7b62854b36160b45\"}")
-
-        // const authSig = {
-        //     sig: '0x107b55c16f0099a80347ca364ae3035ad06ccbc11a43e306fbf506337fad90b62c6c670e081c166942e71d71f9aa4b2b9f8749c0645a0d89a8cf6469331d74221b',
-        //     derivedVia: 'web3.eth.personal.sign',
-        //     signedMessage: 'My voice is my passport',
-        //     address: '0x939D7d1F84bF96100aD52ae6fE4195Cb38cE3bC8'
-        // }
-
-        console.log(authSig);
-
-        const randomPath = () =>
-            '/' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-
-        const resourceId = {
-            baseUrl: 'my-dynamic-content-server.com',
-            path: randomPath(),
-            orgId: '',
-            role: '',
-            extraData: '',
-        };
-
-        await this.litNodeClient.saveSigningCondition({
-            evmContractConditions: evmContractConditionsPublicView,
-            chain,
-            authSig,
-            resourceId,
-        });
-
-        const jwt = await this.litNodeClient.getSignedToken({
-            evmContractConditions: evmContractConditionsPublicView,
-            chain,
-            authSig,
-            resourceId,
-        });
-
-        console.log(jwt);
-
-        const { verified, header, payload } = LitJsSdk.verifyJwt({ jwt });
-        console.log('verified', verified);
-        console.log('header', header);
-        console.log('payload', payload);
-
-        if (jwt) {
-            return true;
-        }
-        return false;
     }
 }
