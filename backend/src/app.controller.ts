@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CryptionService } from './cryption/cryption.service';
 import { AuthSigDto, BadgeContentDto, BadgeDto } from './dto/badge.dto';
+import { EncryptedBadgeDto } from './dto/encryptedBadge.dto';
 import { IpfsApiService } from './ipfs-api/ipfs-api.service';
 
 @Controller()
@@ -46,7 +47,18 @@ export class AppController {
     async readFromIpfs(@Param('hash') hash: string): Promise<string> {
         const result = await this.ipfsApiService.getStringFromIpfs(hash);
 
-        const response = { text: result };
+        console.log('result------------------------------------------------------------------------');
+        console.log(result);
+
+        const encryptedBadgeDto: EncryptedBadgeDto = result; //JSON.parse(result);
+        console.log('encrypted badge dto-----------------------------------------------------------');
+        console.log(encryptedBadgeDto);
+
+        const aaa: any = await this.cryptionService.decryptBadge(encryptedBadgeDto);
+        console.log('aaa---------------------------------------------------------------------------');
+        console.log(aaa);
+
+        const response = { text: aaa.content.template };
         const json = JSON.stringify(response);
 
         return json;

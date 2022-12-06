@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BadgeDto } from '../dto/badge.dto';
 import { LitService } from '../lit/lit.service';
 import { of as HashOf } from 'ipfs-only-hash';
+import { EncryptedBadgeDto } from '../dto/encryptedBadge.dto';
 
 @Injectable()
 export class CryptionService {
@@ -47,6 +48,34 @@ export class CryptionService {
         encryptedSymmetricKey = Buffer.from(encryptedSymmetricKey, 'hex').toString('base64');
         return {
             encryptedString,
+            encryptedSymmetricKey,
+        };
+    }
+
+    async decryptBadge(encryptedBadgeDto: EncryptedBadgeDto) {
+        const { encryptedFile, encryptedSymmetricKey } = this.deserializeLitEncrypt(
+            encryptedBadgeDto.content.encryptedString,
+            encryptedBadgeDto.content.encryptedSymmetricKey,
+        );
+        const decryptedStr = await this.litService.decryptString(
+            encryptedBadgeDto.account,
+            encryptedFile,
+            encryptedSymmetricKey,
+        );
+
+        console.log('decryptedStr: ', decryptedStr);
+        console.log('account.signedMessage: ', encryptedBadgeDto.account.signedMessage);
+
+        return {
+            content: JSON.parse(decryptedStr),
+        };
+    }
+
+    private deserializeLitEncrypt(encryptedString: string, encryptedSymmetricKey: string) {
+        const encryptedFile = new Blob([Buffer.from(encryptedString, 'base64')]);
+        encryptedSymmetricKey = Buffer.from(encryptedSymmetricKey, 'base64').toString('hex');
+        return {
+            encryptedFile,
             encryptedSymmetricKey,
         };
     }
