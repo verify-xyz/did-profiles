@@ -48,6 +48,13 @@ export class LitService {
         this.litNodeClient = client;
     }
 
+    /**
+     * Creates authentication signature
+     * @param sig - signature
+     * @param address - address
+     * @param signedMessage - signed message
+     * @returns authentication signature
+     */
     createAuthSig(sig: string, address: string, signedMessage?: string): AuthSig {
         return {
             sig,
@@ -57,6 +64,12 @@ export class LitService {
         };
     }
 
+    /**
+     * Encrypts string
+     * @param authSig - authentication signature
+     * @param str - string
+     * @returns - encrypted string & encrypted symmetric key
+     */
     async encryptString(authSig: AuthSig, str: string) {
         if (!this.litNodeClient) {
             await this.connect();
@@ -77,6 +90,13 @@ export class LitService {
         };
     }
 
+    /**
+     * Decrypts string
+     * @param authSig - authenticated signature
+     * @param encryptedStr - encrypted string
+     * @param encryptedSymmetricKey - encrypted symetric key
+     * @returns decrypted string
+     */
     async decryptString(authSig: AuthSig, encryptedStr, encryptedSymmetricKey) {
         if (!this.litNodeClient) {
             await this.connect();
@@ -93,6 +113,11 @@ export class LitService {
         return decryptedFile;
     }
 
+    /**
+     * Provision and sign
+     * @param authSig - authentication signature
+     * @returns boolean
+     */
     async provisionAndSign(authSig: AuthSig) {
         if (!this.litNodeClient) {
             await this.connect();
