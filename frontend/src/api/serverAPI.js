@@ -5,7 +5,7 @@ class ServerAPI {
      * @returns Hash code of the message added to IPFS
      */
     static async sendMessageToIPFS(message) {
-        const response = await fetch('/ipfs/add/' + message);
+        const response = await fetch('/add/' + message);
         return await response.json();
     }
 
@@ -15,7 +15,7 @@ class ServerAPI {
      * @returns String related to the hash code
      */
     static async getMessageFromIPFS(hash) {
-        const response = await fetch('/ipfs/read/' + hash);
+        const response = await fetch('/read/' + hash);
         return await response.json();
     }
 }
