@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AuthSigDto, ProfileContentDto, ProfileDto } from './dto/badge.dto';
+import { AuthSigDto, ProfileContentDto, ProfileDto } from './dto/profile.dto';
 
 @Injectable()
 export class AppService {

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { ProfileDto } from '../dto/badge.dto';
+import { ProfileDto } from '../dto/profile.dto';
 import { LitService } from '../lit/lit.service';
 import { of as HashOf } from 'ipfs-only-hash';
-import { EncryptedProfileDto } from '../dto/encryptedBadge.dto';
+import { EncryptedProfileDto } from '../dto/encryptedProfile.dto';
 
 @Injectable()
 export class CryptionService {

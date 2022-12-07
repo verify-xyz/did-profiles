@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ProfileDto } from '../dto/badge.dto';
+import { ProfileDto } from '../dto/profile.dto';
 import { CryptionService } from './cryption.service';
 
 @Controller('cryption')

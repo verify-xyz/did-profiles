@@ -1,8 +1,8 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CryptionService } from './cryption/cryption.service';
-import { ProfileDto } from './dto/badge.dto';
-import { EncryptedProfileDto } from './dto/encryptedBadge.dto';
+import { ProfileDto } from './dto/profile.dto';
+import { EncryptedProfileDto } from './dto/encryptedProfile.dto';
 import { IpfsApiService } from './ipfs-api/ipfs-api.service';
 
 @Controller()
