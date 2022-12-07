@@ -2,11 +2,16 @@ import { Injectable } from '@nestjs/common';
 import * as LitJsSdk from 'lit-js-sdk/build/index.node.js';
 import { AuthSig } from '../types';
 
+import { Wallet } from 'ethers';
+import { verifyMessage } from '@ethersproject/wallet';
+import { joinSignature } from '@ethersproject/bytes';
+import { hashMessage } from '@ethersproject/hash';
+
 const client = new LitJsSdk.LitNodeClient({
     debug: false,
     alertWhenUnauthorized: false,
 });
-const chain = 'ethereum';
+const chain = 'ethereum'; //goerly
 const cabanaProfilePublicCondition = '0x0000000000000000000000000000000000000000';
 const cabanaProfilePrivateCondition = '0x000000000000000000000000000000000000dEaD';
 
@@ -19,7 +24,7 @@ const cabanaProfilePrivateCondition = '0x000000000000000000000000000000000000dEa
 const evmContractConditionsPublicView = [
     {
         contractAddress: '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b',
-        chain: 'ethereum',
+        chain: 'ethereum', //goerly
         functionName: 'identityOwner',
         functionParams: [':userAddress'],
         functionAbi: {
@@ -55,13 +60,43 @@ export class LitService {
      * @param signedMessage - signed message
      * @returns authentication signature
      */
-    createAuthSig(sig: string, address: string, signedMessage?: string): AuthSig {
+    /*createAuthSig(sig: string, address: string, signedMessage?: string): AuthSig {
         return {
             sig,
             derivedVia: 'web3.eth.personal.sign',
             signedMessage: signedMessage || 'My signature is my passport',
             address,
         };
+    }*/
+
+    /**
+     * Creates authentication signature
+     * @returns random authentication signature
+     */
+    createRandomAuthSig(): AuthSig {
+        const wallet = Wallet.createRandom();
+        const privateKeyHex = wallet.privateKey.slice(2);
+        const message = 'I am creating an account to use LIT at ' + new Date().toISOString();
+        //Note: this is wallet.signMessage() without the promise
+        const signature = joinSignature(wallet._signingKey().signDigest(hashMessage(message)));
+        const recoverAddress = verifyMessage(message, signature);
+
+        const authSig: AuthSig = {
+            sig: signature,
+            derivedVia: recoverAddress,
+            signedMessage: message,
+            address: recoverAddress,
+        };
+
+        console.log('\n =============== ACCOUNT ===============');
+        console.log('\n PRIVATE_KEY\n', privateKeyHex);
+        console.log('\n ADDRESS\n', wallet.address);
+        console.log('\n MESSAGE\n', message);
+        console.log('\n SIGNATURE\n', signature);
+        console.log('\n verified\n\n', wallet.address === recoverAddress);
+        console.log(JSON.stringify({ signature, address: wallet.address, message }, null, 2));
+
+        return authSig;
     }
 
     /**
@@ -111,5 +146,55 @@ export class LitService {
         const decryptedFile: string = await LitJsSdk.decryptString(encryptedStr, symmetricKey);
 
         return decryptedFile;
+    }
+
+    /**
+     * Provisions and sign
+     * @param authSig authentication signature
+     * @returns boolean
+     */
+    async provisionAndSign(authSig: AuthSig) {
+        if (!this.litNodeClient) {
+            await this.connect();
+        }
+
+        console.log(authSig);
+
+        const randomPath = () =>
+            '/' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+        const resourceId = {
+            baseUrl: 'my-dynamic-content-server.com',
+            path: randomPath(),
+            orgId: '',
+            role: '',
+            extraData: '',
+        };
+
+        await this.litNodeClient.saveSigningCondition({
+            evmContractConditions: evmContractConditionsPublicView,
+            chain,
+            authSig,
+            resourceId,
+        });
+
+        const jwt = await this.litNodeClient.getSignedToken({
+            evmContractConditions: evmContractConditionsPublicView,
+            chain,
+            authSig,
+            resourceId,
+        });
+
+        console.log(jwt);
+
+        const { verified, header, payload } = LitJsSdk.verifyJwt({ jwt });
+        console.log('verified', verified);
+        console.log('header', header);
+        console.log('payload', payload);
+
+        if (jwt) {
+            return true;
+        }
+        return false;
     }
 }
