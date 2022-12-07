@@ -7,13 +7,13 @@ const client = new LitJsSdk.LitNodeClient({
     alertWhenUnauthorized: false,
 });
 const chain = 'ethereum';
-const cabanaBadgePublicCondition = '0x0000000000000000000000000000000000000000';
-const cabanaBadgePrivateCondition = '0x000000000000000000000000000000000000dEaD';
+const cabanaProfilePublicCondition = '0x0000000000000000000000000000000000000000';
+const cabanaProfilePrivateCondition = '0x000000000000000000000000000000000000dEaD';
 
 //Use Case - Going private (SC state updated to private, Gated access condition returns false for everyone, IPFS pin removed)
-//1. Publish new badge. (Has unique DID)
-//2. Make badge private. (By marking the registered DID as private).
-//3. Publish new version of Badge
+//1. Publish new profile. (Has unique DID)
+//2. Make profile private. (By marking the registered DID as private).
+//3. Publish new version of Profile
 //4. Expect Lit.encryptString to throw BadConditionException
 
 const evmContractConditionsPublicView = [

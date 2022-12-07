@@ -1,7 +1,7 @@
 import { IsDefined, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class BadgeContentDto {
+export class ProfileContentDto {
     @IsNotEmpty()
     credentials: any;
 
@@ -23,7 +23,7 @@ export class AuthSigDto {
     message: string;
 }
 
-export class BadgeDto {
+export class ProfileDto {
     @IsDefined()
     @ValidateNested()
     @Type(() => AuthSigDto)
@@ -31,6 +31,6 @@ export class BadgeDto {
 
     @IsDefined()
     @ValidateNested()
-    @Type(() => BadgeContentDto)
-    content: BadgeContentDto;
+    @Type(() => ProfileContentDto)
+    content: ProfileContentDto;
 }

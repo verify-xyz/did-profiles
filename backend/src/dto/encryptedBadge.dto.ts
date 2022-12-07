@@ -23,7 +23,7 @@ export class EncryptedContentDto {
     encryptedSymmetricKey: string;
 }
 
-export class EncryptedBadgeDto {
+export class EncryptedProfileDto {
     @IsDefined()
     @ValidateNested()
     @Type(() => EncryptedAccountDto)

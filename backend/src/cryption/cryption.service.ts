@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { BadgeDto } from '../dto/badge.dto';
+import { ProfileDto } from '../dto/badge.dto';
 import { LitService } from '../lit/lit.service';
 import { of as HashOf } from 'ipfs-only-hash';
-import { EncryptedBadgeDto } from '../dto/encryptedBadge.dto';
+import { EncryptedProfileDto } from '../dto/encryptedBadge.dto';
 
 @Injectable()
 export class CryptionService {
@@ -13,11 +13,11 @@ export class CryptionService {
     constructor(private litService: LitService) {}
 
     /**
-     * Encrypts BadgeDto. Client signs for Lit.Encryption, gets IPFS.CID. Cabana also signs
-     * @param data - BadgeDto (contains signature and content)
+     * Encrypts ProfileDto. Client signs for Lit.Encryption, gets IPFS.CID. Cabana also signs
+     * @param data - ProfileDto (contains signature and content)
      * @returns encrypted string
      */
-    async encryptBadge(data: BadgeDto) {
+    async encryptProfile(data: ProfileDto) {
         const account = this.litService.createAuthSig(
             data.authSig.signature,
             data.authSig.address,
@@ -53,17 +53,17 @@ export class CryptionService {
     }
 
     /**
-     * Decrypts badge
-     * @param encryptedBadgeDto - encrypted badge DTO
+     * Decrypts profile
+     * @param encryptedProfileDto - encrypted profile DTO
      * @returns content with decrypted string
      */
-    async decryptBadge(encryptedBadgeDto: EncryptedBadgeDto) {
+    async decryptProfile(encryptedProfileDto: EncryptedProfileDto) {
         const { encryptedFile, encryptedSymmetricKey } = this.deserializeLitEncrypt(
-            encryptedBadgeDto.content.encryptedString,
-            encryptedBadgeDto.content.encryptedSymmetricKey,
+            encryptedProfileDto.content.encryptedString,
+            encryptedProfileDto.content.encryptedSymmetricKey,
         );
         const decryptedStr = await this.litService.decryptString(
-            encryptedBadgeDto.account,
+            encryptedProfileDto.account,
             encryptedFile,
             encryptedSymmetricKey,
         );

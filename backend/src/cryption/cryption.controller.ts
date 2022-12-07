@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { BadgeDto } from '../dto/badge.dto';
+import { ProfileDto } from '../dto/badge.dto';
 import { CryptionService } from './cryption.service';
 
 @Controller('cryption')
@@ -8,8 +8,8 @@ export class CryptionController {
 
     // Left for test purposes. Can be used from Postman
     @Post('encrypt')
-    encryptBadge(@Body() body: BadgeDto) {
+    encryptProfile(@Body() body: ProfileDto) {
         console.log('encrypt', body);
-        return this.cryptionService.encryptBadge(body);
+        return this.cryptionService.encryptProfile(body);
     }
 }

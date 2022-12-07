@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AuthSigDto, BadgeContentDto, BadgeDto } from './dto/badge.dto';
+import { AuthSigDto, ProfileContentDto, ProfileDto } from './dto/badge.dto';
 
 @Injectable()
 export class AppService {
@@ -8,13 +8,13 @@ export class AppService {
     }
 
     /**
-     * Creates hardcoded BadgeDto
+     * Creates hardcoded ProfileDto
      * @param text Text message received from frontend application
-     * @returns badgeDto
+     * @returns profileDto
      */
-    createHardCodedBadgeDto(text: string): BadgeDto {
+    createHardCodedProfileDto(text: string): ProfileDto {
         // Create hardcoded content. Only text message received from frontend is not hardcoded.
-        const content: BadgeContentDto = {
+        const content: ProfileContentDto = {
             template: text,
             credentials: 1,
             attributes: { a: '2' },
@@ -28,11 +28,11 @@ export class AppService {
             address: '0xdbd360f30097fb6d938dcc8b7b62854b36160b45',
         };
 
-        const badgeDto: BadgeDto = {
+        const profileDto: ProfileDto = {
             content: content,
             authSig: authSig,
         };
 
-        return badgeDto;
+        return profileDto;
     }
 }
