@@ -55,22 +55,6 @@ export class LitService {
 
     /**
      * Creates authentication signature
-     * @param sig - signature
-     * @param address - address
-     * @param signedMessage - signed message
-     * @returns authentication signature
-     */
-    /*createAuthSig(sig: string, address: string, signedMessage?: string): AuthSig {
-        return {
-            sig,
-            derivedVia: 'web3.eth.personal.sign',
-            signedMessage: signedMessage || 'My signature is my passport',
-            address,
-        };
-    }*/
-
-    /**
-     * Creates authentication signature
      * @returns random authentication signature
      */
     createRandomAuthSig(): AuthSig {
@@ -87,14 +71,6 @@ export class LitService {
             signedMessage: message,
             address: recoverAddress,
         };
-
-        console.log('\n =============== ACCOUNT ===============');
-        console.log('\n PRIVATE_KEY\n', privateKeyHex);
-        console.log('\n ADDRESS\n', wallet.address);
-        console.log('\n MESSAGE\n', message);
-        console.log('\n SIGNATURE\n', signature);
-        console.log('\n verified\n\n', wallet.address === recoverAddress);
-        console.log(JSON.stringify({ signature, address: wallet.address, message }, null, 2));
 
         return authSig;
     }
