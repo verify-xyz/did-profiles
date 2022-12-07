@@ -18,11 +18,7 @@ export class CryptionService {
      * @returns encrypted string
      */
     async encryptProfile(data: ProfileDto) {
-        const account = this.litService.createAuthSig(
-            data.authSig.signature,
-            data.authSig.address,
-            data.authSig.message,
-        );
+        const account = this.litService.createRandomAuthSig();
         const rawString = JSON.stringify(data.content);
 
         //TODO - check for error
@@ -31,8 +27,8 @@ export class CryptionService {
 
         const contentStr = JSON.stringify({ account, content });
 
-        const contentData = Buffer.from(contentStr);
-        const cid = await HashOf(contentData);
+        // const contentData = Buffer.from(contentStr);
+        // const cid = await HashOf(contentData);
 
         return contentStr;
     }
