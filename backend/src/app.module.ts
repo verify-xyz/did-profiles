@@ -8,10 +8,13 @@ import { LitService } from './lit/lit.service';
 import { CryptionService } from './cryption/cryption.service';
 import { IpfsApiService } from './ipfs-api/ipfs-api.service';
 import { HttpModule } from '@nestjs/axios';
+import { RegisterModule } from './register/register.module';
+import { RegisterController } from './register/register.controller';
+import { RegisterService } from './register/register.service';
 
 @Module({
-    imports: [ConfigModule.forRoot(), IpfsApiModule, CryptionModule, HttpModule],
-    controllers: [AppController],
-    providers: [AppService, LitService, CryptionService, IpfsApiService],
+    imports: [ConfigModule.forRoot(), IpfsApiModule, CryptionModule, HttpModule, RegisterModule],
+    controllers: [AppController, RegisterController],
+    providers: [AppService, LitService, CryptionService, IpfsApiService, RegisterService],
 })
 export class AppModule {}
