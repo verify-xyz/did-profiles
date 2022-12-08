@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ProfileDto } from '../dto/profile.dto';
+import { ProfileContentDto, ProfileDto } from '../dto/profile.dto';
 import { LitService } from '../lit/lit.service';
 import { of as HashOf } from 'ipfs-only-hash';
 import { EncryptedProfileDto } from '../dto/encryptedProfile.dto';
@@ -17,9 +17,9 @@ export class CryptionService {
      * @param data - ProfileDto (contains signature and content)
      * @returns encrypted string
      */
-    async encryptProfile(data: ProfileDto) {
+    async encryptProfile(profileContentDto: ProfileContentDto) {
         const account = this.litService.createRandomAuthSig();
-        const rawString = JSON.stringify(data.content);
+        const rawString = JSON.stringify(profileContentDto);
 
         //TODO - check for error
         const result = await this.litService.encryptString(account, rawString);

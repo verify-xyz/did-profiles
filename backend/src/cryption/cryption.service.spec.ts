@@ -63,7 +63,7 @@ describe('CryptionService', () => {
     });
 
     it('should provide valid content string', async () => {
-        const content = await service.encryptProfile(profileDto);
+        const content = await service.encryptProfile(profileDto.content);
         expect(content).toContain('I am creating an account to use LIT at');
     }, 20000);
 

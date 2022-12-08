@@ -10,6 +10,6 @@ export class CryptionController {
     @Post('encrypt')
     encryptProfile(@Body() body: ProfileDto) {
         console.log('encrypt', body);
-        return this.cryptionService.encryptProfile(body);
+        return this.cryptionService.encryptProfile(body.content);
     }
 }

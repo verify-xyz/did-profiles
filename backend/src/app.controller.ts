@@ -1,7 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CryptionService } from './cryption/cryption.service';
-import { ProfileDto } from './dto/profile.dto';
+import { ProfileContentDto, ProfileDto } from './dto/profile.dto';
 import { EncryptedProfileDto } from './dto/encryptedProfile.dto';
 import { IpfsApiService } from './ipfs-api/ipfs-api.service';
 
@@ -20,9 +20,9 @@ export class AppController {
 
     @Get('add/:text')
     async encryptAndAddToIpfs(@Param('text') text: string): Promise<string> {
-        const profileDto: ProfileDto = this.appService.createHardCodedProfileDto(text);
+        const profileContentDto: ProfileContentDto = this.appService.createHardCodedProfileContentDto(text);
 
-        const encryptedString: string = await this.cryptionService.encryptProfile(profileDto);
+        const encryptedString: string = await this.cryptionService.encryptProfile(profileContentDto);
         const result = await this.ipfsApiService.addStringToIpfs(encryptedString);
 
         const response = { hash: result };
