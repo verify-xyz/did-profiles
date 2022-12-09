@@ -48,7 +48,7 @@ textarea:focus, input:focus {
 
 .appGridContainer01 {
     display: grid;
-    grid-template-columns: [column1] 10vw [column2] 30vw [column3] 60px [end];
+    grid-template-columns: [column1] 10vw [column2] 30vw [column3] 120px [end];
     grid-template-rows: [row1] 30px [row2] 30px [row3] 30px;
     grid-column-gap: 50px;
     grid-row-gap: 50px;
@@ -56,7 +56,15 @@ textarea:focus, input:focus {
 
 .appGridContainer02 {
     display: grid;
-    grid-template-columns: [column1] 10vw [column2] 30vw [column3] 60px [end];
+    grid-template-columns: [column1] 10vw [column2] 30vw [column3] 120px [end];
+    grid-template-rows: [row1] 30px [row2] 30px [row3] 30px;
+    grid-column-gap: 50px;
+    grid-row-gap: 50px;
+}
+
+.appGridContainer03 {
+    display: grid;
+    grid-template-columns: [column1] 10vw [column2] 30vw [column3] 120px [end];
     grid-template-rows: [row1] 30px [row2] 30px [row3] 30px;
     grid-column-gap: 50px;
     grid-row-gap: 50px;
