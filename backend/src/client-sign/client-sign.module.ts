@@ -5,5 +5,6 @@ import { ClientSignService } from './client-sign.service';
 @Module({
     controllers: [ClientSignController],
     providers: [ClientSignService],
+    exports: [ClientSignService],
 })
 export class ClientSignModule {}

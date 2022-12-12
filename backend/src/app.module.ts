@@ -16,8 +16,8 @@ import { ClientSignController } from './client-sign/client-sign.controller';
 import { ClientSignService } from './client-sign/client-sign.service';
 
 @Module({
-    imports: [ConfigModule.forRoot(), IpfsApiModule, CryptionModule, HttpModule, RegisterModule, ClientSignModule],
-    controllers: [AppController, RegisterController, ClientSignController],
-    providers: [AppService, LitService, CryptionService, IpfsApiService, RegisterService, ClientSignService],
+    imports: [ConfigModule.forRoot(), HttpModule, RegisterModule],
+    controllers: [AppController],
+    providers: [AppService, LitService, CryptionService, IpfsApiService, ClientSignService],
 })
 export class AppModule {}
