@@ -3,17 +3,18 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { JsonRpcProvider } from '@ethersproject/providers';
 
 export class EthrNetworkConfiguration {
-    constructor(chainId, name, provider, rpcUrl) {
+    constructor(chainId, name, provider, rpcUrl, registry) {
         this.chainId = chainId;
         this.name = name;
         this.provider = provider;
-        this.rpcurl = rpcUrl;
+        this.rpcUrl = rpcUrl;
+        this.registry = registry;
     }
 }
 
 export class NetworkUtils {
-    network1 = new EthrNetworkConfiguration(null, 'mainnet', null, 'https://mainnet.infura.io/v3/' + process.env.INFURA_NETWORK_ID);
-    network2 = new EthrNetworkConfiguration(null, 'goerli', null, 'https://goerli.infura.io/v3/' + process.env.INFURA_NETWORK_ID);
+    network1 = new EthrNetworkConfiguration(null, 'mainnet', null, 'https://mainnet.infura.io/v3/' + process.env.REACT_APP_INFURA_NETWORK_ID, null);
+    network2 = new EthrNetworkConfiguration(null, 'goerli', null, 'https://goerli.infura.io/v3/' + process.env.REACT_APP_INFURA_NETWORK_ID, null);
     networks = [this.network1, this.network2];
 
     constructor() {
@@ -43,6 +44,8 @@ export class NetworkUtils {
         let provider = networkConfig.provider;
 
         if (!provider) {
+            console.log(`rpcUrl: ${networkConfig.rpcUrl}`);
+            console.log(`name: ${networkConfig.name}`);
             provider = new JsonRpcProvider(networkConfig.rpcUrl, networkConfig.name);
         }
 

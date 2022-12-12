@@ -3,6 +3,7 @@ import { Wallet } from 'ethers';
 
 import { SigningKey } from '@ethersproject/signing-key';
 import { NetworkUtils } from './network-utils';
+import { Buffer } from 'buffer';
 
 export class ClientSign {
     networkUtils = new NetworkUtils();
@@ -19,8 +20,18 @@ export class ClientSign {
     // privateKey is the user's DID key. This signature will be used to write a service attribute to the EthrDID contract.
     async createSignatureAddService(network, service) {
         const provider = this.networkUtils.getNetworkProviderFor(network);
+        console.log(`network: ${network}`);
+        console.log(`service.type: ${service.type}`);
+        console.log(`service.serviceEndpoint: ${service.serviceEndpoint}`);
 
+        console.log('provider----------------------------------------');
+        console.log(provider);
+        // provider.connection.url = 'https://goerli.infura.io/v3/eee90ba565f04be7880a63ee41082f17';
+
+        console.log(process.env.REACT_APP_TEST_DID_KEY);
         const wallet = new Wallet(process.env.REACT_APP_TEST_DID_KEY, provider);
+        console.log('wallet----------------------------------------');
+        console.log(wallet);
 
         const did = `did:ethr:${network}:${wallet.address}`;
 

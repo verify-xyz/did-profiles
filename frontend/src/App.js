@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './styles/styleApp.css';
 import ServerAPI from './api/serverAPI.js';
 import { RegisterServiceDto, ClientSignatureBody, RegisterServiceBody } from './dto/register.dto';
-// import { ClientSign } from './network/client-sign';
+import { ClientSign } from './network/client-sign';
 
 function App() {
     const [message, setMessage] = useState('');
@@ -61,8 +61,18 @@ function App() {
         window.document.getElementById('serverSignatureID').value = '';
 
         const clientSigBody = createHardCodedClientSignatureBody();
-        const clientSigBodyJSON = JSON.stringify(clientSigBody);
-        const clientSignature = await ServerAPI.postClientSignature(clientSigBodyJSON);
+
+        // CLIENT SIGN AT SERVER SIDE
+        // const clientSigBodyJSON = JSON.stringify(clientSigBody);
+        // const clientSignature = await ServerAPI.postClientSignature(clientSigBodyJSON);
+
+        // CLIENT SIGN AT CLIENT SIDE
+        const clientSign = new ClientSign();
+        console.log('network-------------------------------');
+        console.log(clientSigBody.network);
+        console.log('service-------------------------------');
+        console.log(clientSigBody.service);
+        const clientSignature = await clientSign.createSignatureAddService(clientSigBody.network, clientSigBody.service);
 
         window.document.getElementById('clientSignatureID').value = clientSignature;
     };
@@ -72,6 +82,7 @@ function App() {
      */
     async function serverRegisterButtonClickedHandler() {
         window.document.getElementById('serverSignatureID').value = '';
+
         const registerServiceBody = createHardCodedRegisterServiceBody();
         const registerServiceBodyJSON = JSON.stringify(registerServiceBody);
         const registerHash = await ServerAPI.postRegisterService(registerServiceBodyJSON);

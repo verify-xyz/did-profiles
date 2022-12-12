@@ -24,6 +24,7 @@ export class ClientSignService {
         service: { type: string; serviceEndpoint: string },
     ): Promise<string> {
         const provider = this.networkUtils.getNetworkProviderFor(network);
+        console.log(provider);
 
         const wallet = new Wallet(process.env.TEST_DID_KEY, provider);
 
