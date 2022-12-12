@@ -21,7 +21,6 @@ function App() {
         const response = await ServerAPI.sendMessageToIPFS(message);
         const hash = response.hash;
 
-        // Update address field with received HASH from the server
         window.document.getElementById('addressID').value = hash;
     };
 
@@ -33,7 +32,6 @@ function App() {
         const response = await ServerAPI.getMessageFromIPFS(hash);
         const receivedMessage = await response.text;
 
-        // Update received message field with received MESSAGE from the server
         window.document.getElementById('receivedMessageID').value = receivedMessage;
     };
 
@@ -67,24 +65,18 @@ function App() {
         const clientSignature = await ServerAPI.postClientSignature(clientSigBodyJSON);
 
         window.document.getElementById('clientSignatureID').value = clientSignature;
-
-        console.log('client signature received from backend: ');
-        console.log(clientSignature);
     };
 
     /**
      * Server register button click - handler function
      */
     async function serverRegisterButtonClickedHandler() {
-        const clientSignature = window.document.getElementById('clientSignatureID').value;
-        console.log(clientSignature);
+        window.document.getElementById('serverSignatureID').value = '';
         const registerServiceBody = createHardCodedRegisterServiceBody();
         const registerServiceBodyJSON = JSON.stringify(registerServiceBody);
         const registerHash = await ServerAPI.postRegisterService(registerServiceBodyJSON);
-        window.document.getElementById('serverSignatureID').value = registerHash;
 
-        console.log('register hash received from backend: ');
-        console.log(registerHash);
+        window.document.getElementById('serverSignatureID').value = registerHash;
     };
 
     /**

@@ -55,7 +55,6 @@ class ServerAPI {
         });
 
         const content = await rawResponse.json();
-        console.log('content----------------------------------------------------------');
         console.log(content);
 
         return content;
