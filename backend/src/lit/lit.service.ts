@@ -11,7 +11,7 @@ const client = new LitJsSdk.LitNodeClient({
     debug: false,
     alertWhenUnauthorized: false,
 });
-const chain = 'ethereum'; //goerli
+const chain = 'goerli';
 const cabanaProfilePublicCondition = '0x0000000000000000000000000000000000000000';
 const cabanaProfilePrivateCondition = '0x000000000000000000000000000000000000dEaD';
 
@@ -24,7 +24,7 @@ const cabanaProfilePrivateCondition = '0x000000000000000000000000000000000000dEa
 const evmContractConditionsPublicView = [
     {
         contractAddress: '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b',
-        chain: 'ethereum', //goerli
+        chain: 'goerli',
         functionName: 'identityOwner',
         functionParams: [':userAddress'],
         functionAbi: {

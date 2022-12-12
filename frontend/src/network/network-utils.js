@@ -2,6 +2,14 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { JsonRpcProvider } from '@ethersproject/providers';
 
 export class EthrNetworkConfiguration {
+    /**
+     * Constructs EthrNetworkConfiguration object
+     * @param {id} chainId - chain ID
+     * @param {string} name - name
+     * @param {provider} provider - provider
+     * @param {string} rpcUrl - RPC URL
+     * @param {registry} registry - registry
+     */
     constructor(chainId, name, provider, rpcUrl, registry) {
         this.chainId = chainId;
         this.name = name;
@@ -14,14 +22,23 @@ export class EthrNetworkConfiguration {
 export class NetworkUtils {
     network1 = new EthrNetworkConfiguration(null, 'mainnet', null, 'https://mainnet.infura.io/v3/' + process.env.REACT_APP_INFURA_NETWORK_ID, null);
     network2 = new EthrNetworkConfiguration(null, 'goerli', null, 'https://goerli.infura.io/v3/' + process.env.REACT_APP_INFURA_NETWORK_ID, null);
+    // network2 = new EthrNetworkConfiguration(null, 'goerli', null, 'https://goerli.etherscan.io/address/0xcfc5720bbeecbee3133c8bb8f4902dee1c88cedd', null);
     networks = [this.network1, this.network2];
 
+    /**
+     * Constructs NetworkUtils object
+     */
     constructor() {
         if (!process.env.REACT_APP_INFURA_NETWORK_ID) {
             throw new Error('Missing env - INFURA_NETWORK_ID');
         }
     }
 
+    /**
+     * Gets network
+     * @param {network} networkSpecifier - network specifier
+     * @returns network
+     */
     getNetworkFor(networkSpecifier) {
         let networkNameOrId = networkSpecifier || 'mainnet';
         if (
@@ -37,6 +54,11 @@ export class NetworkUtils {
         return network;
     }
 
+    /**
+     * Gets network provider
+     * @param {network} network - network
+     * @returns network provider
+     */
     getNetworkProviderFor(network) {
         const networkConfig = this.getNetworkFor(network);
 
