@@ -11,10 +11,13 @@ import { HttpModule } from '@nestjs/axios';
 import { RegisterModule } from './register/register.module';
 import { RegisterController } from './register/register.controller';
 import { RegisterService } from './register/register.service';
+import { ClientSignModule } from './client-sign/client-sign.module';
+import { ClientSignController } from './client-sign/client-sign.controller';
+import { ClientSignService } from './client-sign/client-sign.service';
 
 @Module({
-    imports: [ConfigModule.forRoot(), IpfsApiModule, CryptionModule, HttpModule, RegisterModule],
-    controllers: [AppController, RegisterController],
-    providers: [AppService, LitService, CryptionService, IpfsApiService, RegisterService],
+    imports: [ConfigModule.forRoot(), IpfsApiModule, CryptionModule, HttpModule, RegisterModule, ClientSignModule],
+    controllers: [AppController, RegisterController, ClientSignController],
+    providers: [AppService, LitService, CryptionService, IpfsApiService, RegisterService, ClientSignService],
 })
 export class AppModule {}

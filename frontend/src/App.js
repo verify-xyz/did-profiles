@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './styles/styleApp.css';
 import ServerAPI from './api/serverAPI.js';
 import { RegisterServiceDto, ClientSignatureBody } from './dto/register.dto';
-import { ClientSign } from './network/client-sign';
+// import { ClientSign } from './network/client-sign';
 
 function App() {
     const [message, setMessage] = useState('');
@@ -58,15 +58,23 @@ function App() {
     /**
      * Client register button click - handler function
      */
-    function clientRegisterButtonClickedHandler() {
+    async function clientRegisterButtonClickedHandler() {
         // const inputAddress = window.document.getElementById('addressID').value;
         // getMessageFromIPFS(inputAddress);
         // setAddress(inputAddress);
         const clientSigBody = createHardCodedClientSignatureBody();
         console.log('clientSigBody--------------------');
         console.log(clientSigBody);
-        const clientSign = new ClientSign();
-        clientSign.createSignatureAddService(clientSigBody.network, clientSigBody.service);
+
+        // const clientSign = new ClientSign();
+        // clientSign.createSignatureAddService(clientSigBody.network, clientSigBody.service);
+
+        const clientSigBodyJSON = JSON.stringify(clientSigBody);
+
+        // ServerAPI.postOrderToServer(clientSigBodyJSON);
+        const clientSignature = await ServerAPI.postClientSignature(clientSigBodyJSON);
+        console.log('client signature received from backend: ');
+        console.log(clientSignature);
     };
 
     /**
@@ -108,6 +116,7 @@ function App() {
                 <label className="appLabelAddress">Client:</label>
                 <input className="appInputAddress" id="clientSignature" readOnly></input>
                 <button className="appButtonFetch" onClick={clientRegisterButtonClickedHandler}>Client Signature</button>
+                {/* <button className="appButtonFetch" onClick={async() => { await clientRegisterButtonClickedHandler(); } }>Client Signature</button> */}
 
                 <label className="appLabel">Server:</label>
                 <input className="appInput" id="serverSignature" readOnly></input>
