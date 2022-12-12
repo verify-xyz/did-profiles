@@ -15,7 +15,7 @@ export class RegisterController {
             did,
             network,
             {
-                type: 'test',
+                type: service.type,
                 serviceEndpoint: this.configService.get('SERVICE_ENDPOINT') + signature,
                 ttl: 31536000,
                 ...service,
