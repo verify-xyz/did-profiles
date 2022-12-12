@@ -1,5 +1,4 @@
 import { BigNumber } from '@ethersproject/bignumber';
-// import {Provider} from "@ethersproject/abstract-provider";
 import { JsonRpcProvider } from '@ethersproject/providers';
 
 export class EthrNetworkConfiguration {
@@ -44,8 +43,6 @@ export class NetworkUtils {
         let provider = networkConfig.provider;
 
         if (!provider) {
-            console.log(`rpcUrl: ${networkConfig.rpcUrl}`);
-            console.log(`name: ${networkConfig.name}`);
             provider = new JsonRpcProvider(networkConfig.rpcUrl, networkConfig.name);
         }
 

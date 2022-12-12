@@ -68,10 +68,6 @@ function App() {
 
         // CLIENT SIGN AT CLIENT SIDE
         const clientSign = new ClientSign();
-        console.log('network-------------------------------');
-        console.log(clientSigBody.network);
-        console.log('service-------------------------------');
-        console.log(clientSigBody.service);
         const clientSignature = await clientSign.createSignatureAddService(clientSigBody.network, clientSigBody.service);
 
         window.document.getElementById('clientSignatureID').value = clientSignature;
