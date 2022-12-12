@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './styles/styleApp.css';
 import ServerAPI from './api/serverAPI.js';
-import { RegisterServiceDto, ClientSignatureBody } from './dto/register.dto';
+import { RegisterServiceDto, ClientSignatureBody, RegisterServiceBody } from './dto/register.dto';
 // import { ClientSign } from './network/client-sign';
 
 function App() {
@@ -56,23 +56,18 @@ function App() {
     };
 
     /**
-     * Client register button click - handler function
+     * Client signature button click - handler function
      */
-    async function clientRegisterButtonClickedHandler() {
-        // const inputAddress = window.document.getElementById('addressID').value;
-        // getMessageFromIPFS(inputAddress);
-        // setAddress(inputAddress);
+    async function clientSignatureButtonClickedHandler() {
+        window.document.getElementById('clientSignatureID').value = '';
+        window.document.getElementById('serverSignatureID').value = '';
+
         const clientSigBody = createHardCodedClientSignatureBody();
-        console.log('clientSigBody--------------------');
-        console.log(clientSigBody);
-
-        // const clientSign = new ClientSign();
-        // clientSign.createSignatureAddService(clientSigBody.network, clientSigBody.service);
-
         const clientSigBodyJSON = JSON.stringify(clientSigBody);
-
-        // ServerAPI.postOrderToServer(clientSigBodyJSON);
         const clientSignature = await ServerAPI.postClientSignature(clientSigBodyJSON);
+
+        window.document.getElementById('clientSignatureID').value = clientSignature;
+
         console.log('client signature received from backend: ');
         console.log(clientSignature);
     };
@@ -80,17 +75,37 @@ function App() {
     /**
      * Server register button click - handler function
      */
-    function serverRegisterButtonClickedHandler() {
-        // const inputAddress = window.document.getElementById('addressID').value;
-        // getMessageFromIPFS(inputAddress);
-        // setAddress(inputAddress);
+    async function serverRegisterButtonClickedHandler() {
+        const clientSignature = window.document.getElementById('clientSignatureID').value;
+        console.log(clientSignature);
+        const registerServiceBody = createHardCodedRegisterServiceBody();
+        const registerServiceBodyJSON = JSON.stringify(registerServiceBody);
+        const registerHash = await ServerAPI.postRegisterService(registerServiceBodyJSON);
+        window.document.getElementById('serverSignatureID').value = registerHash;
+
+        console.log('register hash received from backend: ');
+        console.log(registerHash);
     };
 
+    /**
+     * Creates hard coded client signature body
+     * @returns client signature
+     */
     function createHardCodedClientSignatureBody() {
         const regService = new RegisterServiceDto('test', 'https://ipfs.io/ipfs/ID');
         const clientSigBody = new ClientSignatureBody('goerli', regService);
-        console.log(clientSigBody);
         return clientSigBody;
+    }
+
+    /**
+     * Creates hard coded register service body
+     */
+    function createHardCodedRegisterServiceBody() {
+        const did = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
+        const signature = window.document.getElementById('clientSignatureID').value;
+        const service = new RegisterServiceDto('test', 'https://ipfs.io/ipfs/ID');
+        const registerServiceBody = new RegisterServiceBody(did, signature, service);
+        return registerServiceBody;
     }
 
     return (
@@ -114,12 +129,12 @@ function App() {
 
             <div className="appGridContainer03">
                 <label className="appLabelAddress">Client:</label>
-                <input className="appInputAddress" id="clientSignature" readOnly></input>
-                <button className="appButtonFetch" onClick={clientRegisterButtonClickedHandler}>Client Signature</button>
-                {/* <button className="appButtonFetch" onClick={async() => { await clientRegisterButtonClickedHandler(); } }>Client Signature</button> */}
+                <input className="appInputAddress" id="clientSignatureID" readOnly></input>
+                <button className="appButtonFetch" onClick={clientSignatureButtonClickedHandler}>Client Signature</button>
+                {/* <button className="appButtonFetch" onClick={async() => { await clientSignatureButtonClickedHandler(); } }>Client Signature</button> */}
 
                 <label className="appLabel">Server:</label>
-                <input className="appInput" id="serverSignature" readOnly></input>
+                <input className="appInput" id="serverSignatureID" readOnly></input>
                 <button className="appButtonFetch" onClick={serverRegisterButtonClickedHandler}>Register</button>
             </div>
         </div>

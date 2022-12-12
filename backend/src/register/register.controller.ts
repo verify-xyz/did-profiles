@@ -9,6 +9,9 @@ export class RegisterController {
     @Post('register')
     async registerBadge(@Body() { did, signature, service }: RegisterDto) {
         console.log('register', did);
+        console.log('did: ' + did);
+        console.log('signature: ' + signature);
+        console.log('service: ' + service);
 
         const network = did.match(/^did:ethr:(.+):/)?.[1];
 
@@ -26,6 +29,6 @@ export class RegisterController {
 
         console.log(txHash);
 
-        return txHash;
+        return JSON.stringify(txHash);
     }
 }

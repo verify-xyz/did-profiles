@@ -11,3 +11,11 @@ export class ClientSignatureBody {
         this.service = service;
     }
 }
+
+export class RegisterServiceBody {
+    constructor(did, signature, service) {
+        this.did = did;
+        this.signature = signature;
+        this.service = service;
+    }
+}
