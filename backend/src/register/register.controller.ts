@@ -10,7 +10,6 @@ export class RegisterController {
     @Post('register')
     async registerProfile(@Body() { did, signature, service }: RegisterDto) {
         const network = did.match(/^did:ethr:(.+):/)?.[1];
-        console.log(service);
 
         const txHash = await this.registerService.addService(
             did,

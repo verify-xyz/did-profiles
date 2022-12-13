@@ -88,7 +88,6 @@ function App() {
      */
     function createHardCodedClientSignatureBody() {
         const regService = new RegisterServiceDto('test', 'https://ipfs.io/ipfs/ID', getIpfsHash());
-        console.log(regService);
         const clientSigBody = new ClientSignatureBody('goerli', regService);
         return clientSigBody;
     }
