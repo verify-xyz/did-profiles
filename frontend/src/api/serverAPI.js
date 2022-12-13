@@ -18,6 +18,47 @@ class ServerAPI {
         const response = await fetch('/read/' + hash);
         return await response.json();
     }
+
+    /**
+     * Posts client signature
+     * @param {string} bodyJSON JSON body of the POST request
+     * @returns client signature
+     */
+    static async postClientSignature(bodyJSON) {
+        const rawResponse = await fetch('/client/signature', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: bodyJSON
+        });
+
+        const content = await rawResponse.json();
+
+        return content;
+    };
+
+    /**
+     * Posts register service
+     * @param {string} bodyJSON JSON body of the POST request
+     * @returns register hash
+     */
+    static async postRegisterService(bodyJSON) {
+        const rawResponse = await fetch('/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: bodyJSON
+        });
+
+        const content = await rawResponse.json();
+        console.log(content);
+
+        return content;
+    };
 }
 
 export default ServerAPI;
