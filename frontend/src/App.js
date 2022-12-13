@@ -62,10 +62,6 @@ function App() {
 
         const clientSigBody = createHardCodedClientSignatureBody();
 
-        // CLIENT SIGN AT SERVER SIDE
-        // const clientSigBodyJSON = JSON.stringify(clientSigBody);
-        // const clientSignature = await ServerAPI.postClientSignature(clientSigBodyJSON);
-
         // CLIENT SIGN AT CLIENT SIDE
         const clientSign = new ClientSign();
         const clientSignature = await clientSign.createSignatureAddService(clientSigBody.network, clientSigBody.service);
@@ -91,7 +87,8 @@ function App() {
      * @returns client signature
      */
     function createHardCodedClientSignatureBody() {
-        const regService = new RegisterServiceDto('test', 'https://ipfs.io/ipfs/ID');
+        const regService = new RegisterServiceDto('test', 'https://ipfs.io/ipfs/ID', getIpfsHash());
+        console.log(regService);
         const clientSigBody = new ClientSignatureBody('goerli', regService);
         return clientSigBody;
     }
@@ -102,9 +99,22 @@ function App() {
     function createHardCodedRegisterServiceBody() {
         const did = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
         const signature = window.document.getElementById('clientSignatureID').value;
-        const service = new RegisterServiceDto('test', 'https://ipfs.io/ipfs/ID');
+        const service = new RegisterServiceDto('test', 'https://ipfs.io/ipfs/ID', getIpfsHash());
         const registerServiceBody = new RegisterServiceBody(did, signature, service);
         return registerServiceBody;
+    }
+
+    /**
+     * Gets IPFS hash
+     * @returns IPFS hash
+     */
+    function getIpfsHash() {
+        let ipfsHash = window.document.getElementById('addressID').value;
+        if (ipfsHash === '' || ipfsHash === null || ipfsHash === undefined) {
+            ipfsHash = 'QmXYi5FvRE68KjhEWVaMjg3Mp1mF5ZRhk38TDoLdJKnzv7';
+        }
+
+        return ipfsHash;
     }
 
     return (

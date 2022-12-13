@@ -1,7 +1,8 @@
 export class RegisterServiceDto {
-    constructor(type, serviceEndpoint) {
+    constructor(type, serviceEndpoint, ipfsHash) {
         this.type = type;
         this.serviceEndpoint = serviceEndpoint;
+        this.ipfsHash = ipfsHash;
     }
 }
 

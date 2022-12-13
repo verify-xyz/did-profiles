@@ -7,6 +7,9 @@ export class RegisterServiceDto {
 
     @IsString()
     serviceEndpoint: string;
+
+    @IsString()
+    ipfsHash: string;
 }
 
 export class RegisterDto {
