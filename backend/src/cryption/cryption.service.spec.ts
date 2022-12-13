@@ -5,7 +5,7 @@ import { LitService } from '../lit/lit.service';
 import { CryptionService } from './cryption.service';
 
 const content: ProfileContentDto = {
-    template: 'message',
+    template: '111',
     credentials: 1,
     attributes: { a: '2' },
 };
@@ -23,17 +23,17 @@ const profileDto: ProfileDto = {
 };
 
 const encryptedAccountDto: EncryptedAccountDto = {
-    sig: '0x15517d32074a8c88df9df9a8959c2ff7bd6e2ae47f2badbab6adf028c2e2335a02b52dbc0fb7f412b6ebe3059c75986ee333b367b4ef1566edfe037040f16bd51c',
-    derivedVia: '0xB9e2CccDa89C74723badF95484DeD691379AEAae',
-    signedMessage: 'I am creating an account to use LIT at 2022-12-07T13:32:29.564Z',
-    address: '0xB9e2CccDa89C74723badF95484DeD691379AEAae',
+    sig: '0x686b095a9d51456d3ea798140cf38645bc106c071e4f83bec539ad6a1e65773d57474b3075827f296cce0f7ba582d7acb929e0891411c6e17af78891c4caf8c11b',
+    derivedVia: '0x7405cB310289DC8BBd2b4BE4A16DAA2882c57c74',
+    signedMessage: 'I am creating an account to use LIT at 2022-12-13T09:04:20.628Z',
+    address: '0x7405cB310289DC8BBd2b4BE4A16DAA2882c57c74',
 };
 
 const encryptedContentDto: EncryptedContentDto = {
     encryptedString:
-        'kJACaIVQzPtj6dbJnhB5s6pcxfJ3iXYMx1nc6yDhsIrbu/N1NfXgELQEbQK11hkvWKLW4qRmXW9oiFV79OUDGcdivzRIHSpMGuMOSKyVGu0=',
+        'UQcBg5Ghx6Qs6tVTgPTJv9P1Sg9W0BglyIN2CPbL7KHisNJjKJ9aeJSB8TR0zyWPYVDR35N6fe0WnX3XFLlSFlg0303c8faKulVK041oNvs=',
     encryptedSymmetricKey:
-        'Sm1oaFQYyjvPy2Zu7LzvdJ4gE33AAbZMKhICvK9K+PFf/lAbM3x5HMUxwPLhUG4PQ+l0xuyu3kOs/Obkh1R/+fKHTubFKLZnkfebS9Ta0hBYlPgwO6/63kqQap4zvd+urEhLt9DuKonpDdOfdFlEZ5yoBKu5dEoGblNmcpHOY10AAAAAAAAAIMIH95voFS8kIjz0jk7NCUofxlXBIreDcTkERpgZ1fCM2p+E2fJWgZxFhHkyYVc4lQ==',
+        'fHsaPuUHf/g72pMBtiyqa1uLkMtLfC7aEV7b+qHdw5iBPoCUAEm3ZcXh3xJWbvQU55MFn4soDulWCFqvdoNTWKcG+Yn5oXn9+mB1LHqsRtcFqj47hXtn+eSZ2SSqlXmhY+tizlSZlozu9zN5rCtuau3k5aE4CSn4vaotyhfqlMgAAAAAAAAAICEi/swirMobuZUH3DBE55Fkb3fgmxNJZiZ6oyUEpYwCO+xmmsrYf4YbjWKla6hrkw==',
 };
 
 const encryptedProfileDto: EncryptedProfileDto = {
