@@ -38,8 +38,6 @@ describe('IpfsApiService', () => {
     });
 
     it('add & read a string', async () => {
-        //const address = config.get('TEST_DID_ADDRESS');
-
         const hash = await service.addStringToIpfs('aaa');
         const text = await service.getStringFromIpfs(hash);
 
