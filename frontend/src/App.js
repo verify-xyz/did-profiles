@@ -7,6 +7,7 @@ import { ClientSign } from './network/client-sign';
 function App() {
     const [message, setMessage] = useState('');
     const [address, setAddress] = useState('');
+    const [txRecord, setTxRecord] = useState('');
 
     useEffect(() => {
         console.log(message);
@@ -38,29 +39,55 @@ function App() {
     /**
      * Send button clicked - handler function
      */
-    function sendButtonClickedHandler() {
+    async function sendButtonClickedHandler() {
         const inputMessage = window.document.getElementById('messageID').value;
-        sendMessageToIPFS(inputMessage);
         setMessage(inputMessage);
+
+        // Disable button until after response
+        const btn = window.document.getElementById('step1Btn');
+        btn.setAttribute('disabled', 'disabled');
+
+        // Clear subsequent fields
+        window.document.getElementById('clientSignatureID').value = '';
+        window.document.getElementById('serverSignatureID').value = '';
+        window.document.getElementById('receivedMessageID').value = '';
+        window.document.getElementById('addressID').value = '';
+
+        await sendMessageToIPFS(inputMessage);
+
+        btn.removeAttribute('disabled');
     };
 
     /**
      * Fetch button click - handler function
      */
-    function fetchButtonClickedHandler() {
+    async function fetchButtonClickedHandler() {
         const inputAddress = window.document.getElementById('addressID').value;
-        getMessageFromIPFS(inputAddress);
         setAddress(inputAddress);
+
+        // Disable button until after response
+        const btn = window.document.getElementById('step2Btn');
+        btn.setAttribute('disabled', 'disabled');
+
+        // Clear subsequent fields
+        window.document.getElementById('clientSignatureID').value = '';
+        window.document.getElementById('serverSignatureID').value = '';
+        window.document.getElementById('receivedMessageID').value = '';
+
+        await getMessageFromIPFS(inputAddress);
+
+        btn.removeAttribute('disabled');
     };
 
     /**
      * Client signature button click - handler function
      */
     async function clientSignatureButtonClickedHandler() {
+        const clientSigBody = createHardCodedClientSignatureBody();
+
+        // Clear subsequent fields
         window.document.getElementById('clientSignatureID').value = '';
         window.document.getElementById('serverSignatureID').value = '';
-
-        const clientSigBody = createHardCodedClientSignatureBody();
 
         // CLIENT SIGN AT CLIENT SIDE
         const clientSign = new ClientSign();
@@ -73,6 +100,11 @@ function App() {
      * Server register button click - handler function
      */
     async function serverRegisterButtonClickedHandler() {
+        // Disable button until after response
+        const btn = window.document.getElementById('step3Btn');
+        btn.setAttribute('disabled', 'disabled');
+
+        // Clear subsequent fields
         window.document.getElementById('serverSignatureID').value = '';
 
         const registerServiceBody = createHardCodedRegisterServiceBody();
@@ -80,6 +112,10 @@ function App() {
         const registerHash = await ServerAPI.postRegisterService(registerServiceBodyJSON);
 
         window.document.getElementById('serverSignatureID').value = registerHash;
+
+        setTxRecord('https://goerli.etherscan.io/tx/' + registerHash);
+
+        btn.removeAttribute('disabled');
     };
 
     /**
@@ -118,24 +154,30 @@ function App() {
 
     return (
         <div className="appMainContainer">
-            <h1 className="appHeader">Simple React App</h1>
+            <h1 className="appHeader">DID Profiles Testing App</h1>
 
-            <div className="appGridContainer01">
+            <div className="appGridContainer appGridContainer01">
+                <label className="stepLabel">Step #1 </label><div>Send a message, encrypt and post to IPFS</div><div></div>
+
                 <label className="appLabel">Message:</label>
                 <input className="appInput" id='messageID'></input>
-                <button className="appButtonSend" onClick={sendButtonClickedHandler}>Send</button>
+                <button className="appButtonSend" id="step1Btn" onClick={sendButtonClickedHandler}>Send</button>
             </div>
 
-            <div className="appGridContainer02">
-                <label className="appLabelAddress">Address:</label>
+            <div className="appGridContainer appGridContainer02">
+                <label className="stepLabel">Step #2</label><div>Fetch IPFS content by hash and decrypt</div><div></div>
+
+                <label className="appLabelAddress">IPFS Hash:</label>
                 <input className="appInputAddress" id="addressID" readOnly></input>
-                <button className="appButtonFetch" onClick={fetchButtonClickedHandler}>Fetch</button>
+                <button className="appButtonFetch" id="step2Btn" onClick={fetchButtonClickedHandler}>Fetch</button>
 
                 <label className="appLabel">Message:</label>
                 <input className="appInput" id="receivedMessageID" readOnly></input>
             </div>
 
-            <div className="appGridContainer03">
+            <div className="appGridContainer appGridContainer03">
+                <label className="stepLabel">Step #3</label><div>Sign transaction with client key and register the content in smart-contract</div><div></div>
+
                 <label className="appLabelAddress">Client:</label>
                 <input className="appInputAddress" id="clientSignatureID" readOnly></input>
                 <button className="appButtonFetch" onClick={clientSignatureButtonClickedHandler}>Client Signature</button>
@@ -143,7 +185,9 @@ function App() {
 
                 <label className="appLabel">Server:</label>
                 <input className="appInput" id="serverSignatureID" readOnly></input>
-                <button className="appButtonFetch" onClick={serverRegisterButtonClickedHandler}>Register</button>
+                <button className="appButtonFetch" onClick={serverRegisterButtonClickedHandler} id="step3Btn">Register</button>
+
+                {(txRecord && <a href={txRecord} target="_blank" rel="noreferrer">{txRecord}</a>)}
             </div>
         </div>
     );
