@@ -83,6 +83,21 @@ function App() {
     };
 
     /**
+     * Resolve button click - handler function
+     */
+    async function resolveButtonClickedHandler() {
+        window.document.getElementById('resolveID').value = '';
+        const url = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
+        const response = await ServerAPI.getResolve(url);
+
+        let receivedMessage = 'Request failed. Please try again.';
+        if (response?.didDocument?.verificationMethod[0]?.id) {
+            receivedMessage = await response.didDocument.verificationMethod[0].id;
+        }
+        window.document.getElementById('resolveID').value = receivedMessage;
+    };
+
+    /**
      * Creates hard coded client signature body
      * @returns client signature
      */
@@ -144,6 +159,12 @@ function App() {
                 <label className="appLabel">Server:</label>
                 <input className="appInput" id="serverSignatureID" readOnly></input>
                 <button className="appButtonFetch" onClick={serverRegisterButtonClickedHandler}>Register</button>
+            </div>
+
+            <div className="appGridContainer04">
+                <label className="appLabel">Authentication:</label>
+                <input className="appInput" id="resolveID" readOnly></input>
+                <button className="appButtonFetch" onClick={resolveButtonClickedHandler}>Resolve</button>
             </div>
         </div>
     );
