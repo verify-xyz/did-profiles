@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { DIDResolutionOptions, DIDResolutionResult, Resolvable, Resolver } from 'did-resolver';
-
 import { getResolver as ethrDidResolver } from 'ethr-did-resolver';
 
 @Injectable()
 export class DidResolverService {
     private didResolver: Resolvable;
 
+    /**
+     * Constructs DidResolverService object
+     */
     constructor() {
         if (!process.env.INFURA_NETWORK_ID) {
             throw new Error('Missing env - INFURA_NETWORK_ID');
@@ -17,6 +19,12 @@ export class DidResolverService {
         });
     }
 
+    /**
+     * Resolve function
+     * @param didUrl - URL
+     * @param options - options
+     * @returns resolved object
+     */
     async resolve(didUrl: string, options?: DIDResolutionOptions): Promise<DIDResolutionResult> {
         console.log('Resolving %s', didUrl);
 
