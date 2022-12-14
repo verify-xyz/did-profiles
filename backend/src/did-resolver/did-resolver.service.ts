@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { DIDResolutionOptions, DIDResolutionResult, Resolvable, Resolver } from 'did-resolver';
 import { getResolver as ethrDidResolver } from 'ethr-did-resolver';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class DidResolverService {
     private didResolver: Resolvable;
+    private infuraNetworkID: string;
 
     /**
      * Constructs DidResolverService object
      */
-    constructor() {
-        if (!process.env.INFURA_NETWORK_ID) {
-            throw new Error('Missing env - INFURA_NETWORK_ID');
-        }
+    constructor(private readonly configService: ConfigService) {
+        this.infuraNetworkID = this.configService.get('INFURA_NETWORK_ID');
 
         this.didResolver = new Resolver({
-            ...ethrDidResolver({ infuraProjectId: process.env.INFURA_NETWORK_ID }),
+            ...ethrDidResolver({ infuraProjectId: this.infuraNetworkID }),
         });
     }
 

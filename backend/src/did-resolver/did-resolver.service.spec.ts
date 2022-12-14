@@ -1,15 +1,19 @@
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { DidResolverService } from './did-resolver.service';
 
 describe('DidResolverService', () => {
     let service: DidResolverService;
+    let config: ConfigService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [DidResolverService],
+            imports: [ConfigModule],
+            providers: [DidResolverService, ConfigService],
         }).compile();
 
         service = module.get<DidResolverService>(DidResolverService);
+        config = module.get<ConfigService>(ConfigService);
     });
 
     it('should be defined', () => {
@@ -17,7 +21,8 @@ describe('DidResolverService', () => {
     });
 
     it('resolve a DID', async () => {
-        const did = `did:ethr:goerli:${process.env.TEST_DID_ADDRESS}`;
+        const address = config.get('TEST_DID_ADDRESS');
+        const did = `did:ethr:goerli:${address}`;
 
         const didDoc = await service.resolve(did);
 

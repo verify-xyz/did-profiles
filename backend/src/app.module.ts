@@ -9,10 +9,11 @@ import { HttpModule } from '@nestjs/axios';
 import { RegisterModule } from './register/register.module';
 import { DidResolverController } from './did-resolver/did-resolver.controller';
 import { DidResolverService } from './did-resolver/did-resolver.service';
+import { DidResolverModule } from './did-resolver/did-resolver.module';
 
 @Module({
-    imports: [ConfigModule.forRoot(), HttpModule, RegisterModule],
-    controllers: [AppController, DidResolverController],
-    providers: [AppService, LitService, CryptionService, IpfsApiService, DidResolverService],
+    imports: [ConfigModule.forRoot(), HttpModule, RegisterModule, DidResolverModule],
+    controllers: [AppController],
+    providers: [AppService, LitService, CryptionService, IpfsApiService],
 })
 export class AppModule {}
