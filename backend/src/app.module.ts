@@ -7,10 +7,12 @@ import { CryptionService } from './cryption/cryption.service';
 import { IpfsApiService } from './ipfs-api/ipfs-api.service';
 import { HttpModule } from '@nestjs/axios';
 import { RegisterModule } from './register/register.module';
+import { DidResolverController } from './did-resolver/did-resolver.controller';
+import { DidResolverService } from './did-resolver/did-resolver.service';
 
 @Module({
     imports: [ConfigModule.forRoot(), HttpModule, RegisterModule],
-    controllers: [AppController],
-    providers: [AppService, LitService, CryptionService, IpfsApiService],
+    controllers: [AppController, DidResolverController],
+    providers: [AppService, LitService, CryptionService, IpfsApiService, DidResolverService],
 })
 export class AppModule {}
