@@ -13,10 +13,6 @@ export class DidResolverService {
      */
     constructor(private readonly configService: ConfigService) {
         this.infuraNetworkID = this.configService.get('INFURA_NETWORK_ID');
-
-        this.didResolver = new Resolver({
-            ...ethrDidResolver({ infuraProjectId: this.infuraNetworkID }),
-        });
     }
 
     /**
@@ -27,6 +23,10 @@ export class DidResolverService {
      */
     async resolve(didUrl: string, options?: DIDResolutionOptions): Promise<DIDResolutionResult> {
         console.log('Resolving %s', didUrl);
+
+        this.didResolver = new Resolver({
+            ...ethrDidResolver({ infuraProjectId: this.infuraNetworkID }),
+        });
 
         const resolverOptions = {
             accept: 'application/did+ld+json',
