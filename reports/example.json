@@ -1,0 +1,12 @@
+{
+  "account": {
+    "sig": "0xfdc2e00f7bb6aa91a312598cf9fb3e3bbdf89700a0041706eb89a11ba3212dae172ff85a2e824e3dfb83b36494cca11747a7d5f0899fc66c2964bc2db9cdfacb1b",
+    "derivedVia": "0x3074b7445C8C2CC1f43DF763f254be8a478257cB",
+    "signedMessage": "I am creating an account to use LIT at 2022-12-14T20:49:17.007Z",
+    "address": "0x3074b7445C8C2CC1f43DF763f254be8a478257cB"
+  },
+  "content": {
+    "encryptedString": "XGbE2mvQq+AWGO4XKWbbWFWVVkWwmFbd7a4OTfuYV/n5sUaP9zvdclzot8FHfi0Oa32wsjJJ8t5qNgqCMi6UfcEqFl60IR25utmKT5CorGY2Qh3NZ/8ckssti+YBShE9",
+    "encryptedSymmetricKey": "+xocviLFNWP6hODpi8aD6oPgY4ialGdciLijrChpBXMRv9Sh1LqcgO+LlElG5DoSZB22g6IyziZn9NP7OdeYku/0Mud4fE8kNqpH6s/708aC+ych09pNladAxiEz73+lFmdxVaj7YiY2tIXAyr3o9fU6vhmI+WJW6ENMRadtCDsAAAAAAAAAIEB98uLO1C/4jgOZCPIEAEYEt32SPnK3L/nAObx9Wz9KPrkzHhsoRIF7NSKEhrgOkQ=="
+  }
+}

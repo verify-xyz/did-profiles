@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "DID Profiles",
+  "name": "DID Profiles Testing App",
   "icons": [
     {
       "src": "favicon.ico",
