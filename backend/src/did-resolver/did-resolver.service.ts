@@ -33,13 +33,21 @@ export class DidResolverService {
             ...options,
         };
 
+        console.log('didResolver.resolve----------------------------------------');
         const resolution = await this.didResolver.resolve(didUrl, resolverOptions);
+        console.log('didResolver.resolve finished-------------------------------');
+
+        console.log('resolution-----------------------------------------');
+        console.log(resolution);
 
         const defaults: DIDResolutionResult = {
             didDocumentMetadata: {},
             didResolutionMetadata: {},
             didDocument: null,
         };
+
+        console.log('defaults-------------------------------------------');
+        console.log(defaults);
 
         return {
             ...defaults,

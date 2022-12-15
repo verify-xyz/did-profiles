@@ -122,15 +122,35 @@ function App() {
      * Resolve button click - handler function
      */
     async function resolveButtonClickedHandler() {
+        // Disable button until after response
+        const btn = window.document.getElementById('step4Btn');
+        btn.setAttribute('disabled', 'disabled');
+        const interval = setInterval(timer, 1000);
+
+        window.document.getElementById('timerID').textContent = '0';
         window.document.getElementById('resolveID').value = '';
+        window.document.getElementById('serviceEndpointID').value = '';
+
         const url = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
         const response = await ServerAPI.getResolve(url);
+        console.log(response);
 
-        let receivedMessage = 'Request failed. Please try again.';
+        let verificationMethod = 'Request failed. Please try again.';
+        let serviceEndpoint = '';
+
         if (response?.didDocument?.verificationMethod[0]?.id) {
-            receivedMessage = await response.didDocument.verificationMethod[0].id;
+            verificationMethod = await response.didDocument.verificationMethod[0].id;
         }
-        window.document.getElementById('resolveID').value = receivedMessage;
+
+        if (response?.didDocument?.service[0]?.serviceEndpoint) {
+            serviceEndpoint = await response.didDocument.service[0].serviceEndpoint;
+        }
+
+        window.document.getElementById('resolveID').value = verificationMethod;
+        window.document.getElementById('serviceEndpointID').value = serviceEndpoint;
+
+        btn.removeAttribute('disabled');
+        clearInterval(interval);
     };
 
     /**
@@ -165,6 +185,14 @@ function App() {
         }
 
         return ipfsHash;
+    }
+
+    function timer() {
+        let value = parseInt(document.getElementById('timerID').textContent.match(/\d+$/)[0], 10);
+        value = isNaN(value) ? 0 : value;
+        value++;
+        document.getElementById('timerID').textContent = value;
+        console.log(value);
     }
 
     return (
@@ -206,10 +234,17 @@ function App() {
             </div>
 
             <div className="appGridContainer appGridContainer04">
-                <label className="stepLabel">Step #4</label><div>Resolve</div><div></div>
+                <label className="stepLabel">Step #4</label>
+                <div>Resolve</div>
+                <div></div>
+
                 <label className="appLabel">Authentication:</label>
                 <input className="appInput" id="resolveID" readOnly></input>
-                <button className="appButtonFetch" onClick={resolveButtonClickedHandler}>Resolve</button>
+                <button className="appButtonFetch" onClick={resolveButtonClickedHandler} id="step4Btn">Resolve</button>
+
+                <label className="appLabel">Service endpoint:</label>
+                <input className="appInput" id="serviceEndpointID" readOnly></input>
+                <label className="appLabel" id="timerID">0</label>
             </div>
         </div>
     );
