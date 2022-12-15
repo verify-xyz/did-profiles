@@ -205,7 +205,8 @@ function App() {
                 {(txRecord && <a href={txRecord} target="_blank" rel="noreferrer">{txRecord}</a>)}
             </div>
 
-            <div className="appGridContainer04">
+            <div className="appGridContainer appGridContainer04">
+                <label className="stepLabel">Step #4</label><div>Resolve</div><div></div>
                 <label className="appLabel">Authentication:</label>
                 <input className="appInput" id="resolveID" readOnly></input>
                 <button className="appButtonFetch" onClick={resolveButtonClickedHandler}>Resolve</button>
