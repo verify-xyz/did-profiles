@@ -44,6 +44,18 @@ textarea:focus, input:focus {
 
 .appHeader {
     min-height: 10px;
+    margin-bottom: 40px;
+}
+
+.stepLabel {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.appGridContainer {
+    border: #282c34 1px solid;
+    padding: 40px;
+    margin: 20px;
 }
 
 .appGridContainer01 {
@@ -91,6 +103,11 @@ textarea:focus, input:focus {
     white-space: nowrap;
     text-align: center;
     font-weight: bold;
+}
+
+.appButtonSend:disabled, .appButtonFetch:disabled {
+    pointer-events: none;
+    background-color: darkgray;
 }
 
 .appButtonSend:hover {
