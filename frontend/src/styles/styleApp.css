@@ -91,6 +91,14 @@ textarea:focus, input:focus {
     grid-row-gap: 50px;
 }
 
+.appGridContainer05 {
+    display: grid;
+    grid-template-columns: [column1] 10vw [column2] 30vw [column3] 120px [end];
+    grid-template-rows: [row1] 30px [row2] 30px [row3] 30px;
+    grid-column-gap: 50px;
+    grid-row-gap: 50px;
+}
+
 .appButtonSend, .appButtonFetch {
     border-width: 0px;
     border-radius: 10px;

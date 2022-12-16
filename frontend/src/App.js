@@ -3,15 +3,18 @@ import './styles/styleApp.css';
 import ServerAPI from './api/serverAPI.js';
 import { RegisterServiceDto, ClientSignatureBody, RegisterServiceBody } from './dto/register.dto';
 import { ClientSign } from './network/client-sign';
+import { ToggleButton } from './components/toggleButton';
 
 function App() {
     const [message, setMessage] = useState('');
     const [address, setAddress] = useState('');
     const [txRecord, setTxRecord] = useState('');
+    // const [toggleValue, setToggleValue] = useState('private');
 
     useEffect(() => {
         console.log(message);
         console.log(address);
+        // console.log(toggleValue);
     });
 
     /**
@@ -89,7 +92,6 @@ function App() {
         window.document.getElementById('clientSignatureID').value = '';
         window.document.getElementById('serverSignatureID').value = '';
 
-        // CLIENT SIGN AT CLIENT SIDE
         const clientSign = new ClientSign();
         const clientSignature = await clientSign.createSignatureAddService(clientSigBody.network, clientSigBody.service);
 
@@ -195,6 +197,11 @@ function App() {
         console.log(value);
     }
 
+    function childToParent(childData) {
+        console.log(`Data received from child: ${childData}`);
+        // setToggleValue(childData);
+    };
+
     return (
         <div className="appMainContainer">
             <h1 className="appHeader">DID Profiles Testing App</h1>
@@ -245,6 +252,18 @@ function App() {
                 <label className="appLabel">Service endpoint:</label>
                 <input className="appInput" id="serviceEndpointID" readOnly></input>
                 <label className="appLabel" id="timerID">0</label>
+            </div>
+
+            <div className="appGridContainer appGridContainer05">
+                <label className="stepLabel">Step #5</label>
+                <div>Private/Public Transaction</div>
+                <div></div>
+
+                <ToggleButton setValue={childToParent}></ToggleButton><div></div><div></div>
+
+                <label className="appLabel">Authentication:</label>
+                <input className="appInput" id="resolveID" readOnly></input>
+                <button className="appButtonFetch" onClick={resolveButtonClickedHandler} id="step5Btn">Resolve</button>
             </div>
         </div>
     );
