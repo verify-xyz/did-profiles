@@ -10,11 +10,12 @@ function App() {
     const [address, setAddress] = useState('');
     const [txRecord, setTxRecord] = useState('');
     // const [toggleValue, setToggleValue] = useState('private');
+    let toggleValue = 'private';
 
     useEffect(() => {
         console.log(message);
         console.log(address);
-        // console.log(toggleValue);
+        console.log(toggleValue);
     });
 
     /**
@@ -189,6 +190,9 @@ function App() {
         return ipfsHash;
     }
 
+    /**
+     * Measures time in [s] needed for Resolve response
+     */
     function timer() {
         let value = parseInt(document.getElementById('timerID').textContent.match(/\d+$/)[0], 10);
         value = isNaN(value) ? 0 : value;
@@ -197,9 +201,14 @@ function App() {
         console.log(value);
     }
 
+    /**
+     * Passes data from ToggleButton to parent
+     * @param {string} childData - private/public
+     */
     function childToParent(childData) {
         console.log(`Data received from child: ${childData}`);
-        // setToggleValue(childData);
+        toggleValue = childData;
+        console.log(`toggleValue: ${toggleValue}`);
     };
 
     return (
