@@ -16,10 +16,10 @@ describe('DidResolverService', () => {
                     useValue: {
                         get: jest.fn((key: string) => {
                             if (key === 'INFURA_NETWORK_ID') {
-                                return 'eee90ba565f04be7880a63ee41082f17';
+                                return process.env.INFURA_NETWORK_ID;
                             }
                             if (key === 'TEST_DID_ADDRESS') {
-                                return '93fc3735ef4eee84c6c311f6f7afe56620a7e2e96dbffc0ef92e913f8b7c1fa4';
+                                return process.env.TEST_DID_ADDRESS;;
                             }
                             return null;
                         }),
@@ -45,5 +45,5 @@ describe('DidResolverService', () => {
         console.log(JSON.stringify(didDoc, null, 2));
 
         expect(didDoc).toBeTruthy();
-    });
+    }, 200000);
 });
