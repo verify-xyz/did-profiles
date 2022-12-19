@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DIDResolutionOptions, DIDResolutionResult, Resolvable, Resolver } from 'did-resolver';
-import { getResolver as ethrDidResolver } from 'ethr-did-resolver';
+import { getResolver as ethrDidResolver } from './ethr-did-resolver-PATCH/resolver';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()

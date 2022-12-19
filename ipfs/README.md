@@ -6,7 +6,7 @@ It also describes how to add and read an arbitrary string using Postman.
 ## Installation
 - Download IPFS installation from this link: https://dist.ipfs.tech/#kubo. Choose the library for your OS.
 - Unpack the .zip file and use terminal (**cd kubo**) to enter kubo folder which contains **ipfs.exe**
-- Execude command: **ipfs init** (this will initialize IPFS and create default configuration)
+- Execute command: **ipfs init** (this will initialize IPFS and create default configuration)
 
 ## Configuration
 - Open the config file. For example, it's Windows location is: **C:\Users\UserName\\.ipfs\config**
