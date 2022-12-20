@@ -32,7 +32,7 @@ export class RegisterService {
         network: string,
         service: { serviceEndpoint: string; type: string; ttl: number },
         signature: string,
-    ): Promise<string> {
+    ): Promise<object> {
         const attrName = 'did/svc/' + service.type;
         const attrValue = service.serviceEndpoint;
         const ttl = service.ttl;
@@ -55,7 +55,7 @@ export class RegisterService {
             gasLimit,
         });
 
-        return metaEthrDid.setAttributeSigned(
+        const meta = await metaEthrDid.setAttributeSigned(
             attrName,
             attrValue,
             ttl,
@@ -68,6 +68,11 @@ export class RegisterService {
                 gasLimit,
             },
         );
+
+        return {
+            meta: meta,
+            serviceEndpoint: attrValue,
+        };
     }
 
     /**

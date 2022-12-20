@@ -109,14 +109,16 @@ function App() {
 
         // Clear subsequent fields
         window.document.getElementById('serverSignatureID').value = '';
+        window.document.getElementById('serviceEndpointID').value = '';
 
         const registerServiceBody = createHardCodedRegisterServiceBody();
         const registerServiceBodyJSON = JSON.stringify(registerServiceBody);
         const registerHash = await ServerAPI.postRegisterService(registerServiceBodyJSON);
 
-        window.document.getElementById('serverSignatureID').value = registerHash;
+        window.document.getElementById('serverSignatureID').value = registerHash.meta;
+        window.document.getElementById('serviceEndpointID').value = registerHash.serviceEndpoint;
 
-        setTxRecord('https://goerli.etherscan.io/tx/' + registerHash);
+        setTxRecord('https://goerli.etherscan.io/tx/' + registerHash.meta);
 
         btn.removeAttribute('disabled');
     };
@@ -132,25 +134,25 @@ function App() {
 
         // window.document.getElementById('timerID').textContent = '0';
         window.document.getElementById('resolveID').value = '';
-        window.document.getElementById('serviceEndpointID').value = '';
+        // window.document.getElementById('serviceEndpointID').value = '';
 
         const url = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
         const response = await ServerAPI.getResolve(url);
         console.log(response);
 
         let verificationMethod = 'Request failed. Please try again.';
-        let serviceEndpoint = '';
+        // let serviceEndpoint = '';
 
         if (response?.didDocument?.verificationMethod[0]?.id) {
             verificationMethod = await response.didDocument.verificationMethod[0].id;
         }
 
-        if (response?.didDocument?.service[0]?.serviceEndpoint) {
+        /* if (response?.didDocument?.service[0]?.serviceEndpoint) {
             serviceEndpoint = await response.didDocument.service[0].serviceEndpoint;
-        }
+        } */
 
         window.document.getElementById('resolveID').value = verificationMethod;
-        window.document.getElementById('serviceEndpointID').value = serviceEndpoint;
+        // window.document.getElementById('serviceEndpointID').value = serviceEndpoint;
 
         btn.removeAttribute('disabled');
         clearInterval(interval);
@@ -175,7 +177,7 @@ function App() {
      */
     function createHardCodedClientSignatureBody() {
         const cid = getIpfsHash();
-        const regService = new RegisterServiceDto('verify_xyz_profiles', 'https://ipfs.io/ipfs/' + cid, cid);
+        const regService = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
         const clientSigBody = new ClientSignatureBody('goerli', regService);
         return clientSigBody;
     }
@@ -187,7 +189,7 @@ function App() {
         const did = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
         const signature = window.document.getElementById('clientSignatureID').value;
         const cid = getIpfsHash();
-        const service = new RegisterServiceDto('verify_xyz_profiles', 'https://ipfs.io/ipfs/' + cid, cid);
+        const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
         const registerServiceBody = new RegisterServiceBody(did, signature, service);
         return registerServiceBody;
     }
