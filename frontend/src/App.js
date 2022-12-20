@@ -158,9 +158,35 @@ function App() {
         clearInterval(interval);
     };
 
+    /**
+     * Sends register service endpoint ipfs hash to server and gets decryptrd content
+     */
     async function fetch4ButtonClickedHandler() {
+        window.document.getElementById('decryptedContentID').value = '';
+        const btn = window.document.getElementById('step4BtnFetch');
+        btn.setAttribute('disabled', 'disabled');
+
         const serviceEndpoint = window.document.getElementById('serviceEndpointID').value;
         console.log(serviceEndpoint);
+        const urlParameter = getUrlParameter(serviceEndpoint);
+        const message = await ServerAPI.getMessageFromIPFS(urlParameter);
+
+        window.document.getElementById('decryptedContentID').value = message.text;
+
+        btn.removeAttribute('disabled');
+    }
+
+    /**
+     * Extracts url parameter from url
+     * @param {url} url - url
+     * @returns url parameter
+     */
+    function getUrlParameter(url) {
+        while (url.includes('/')) {
+            url = url.substring(url.indexOf('/') + 1);
+        }
+
+        return url;
     }
 
     async function clientSignatureStep5ButtonClickedHandler() {
