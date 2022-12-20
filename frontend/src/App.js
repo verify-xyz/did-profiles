@@ -130,7 +130,7 @@ function App() {
         btn.setAttribute('disabled', 'disabled');
         const interval = setInterval(timer, 1000);
 
-        window.document.getElementById('timerID').textContent = '0';
+        // window.document.getElementById('timerID').textContent = '0';
         window.document.getElementById('resolveID').value = '';
         window.document.getElementById('serviceEndpointID').value = '';
 
@@ -155,6 +155,19 @@ function App() {
         btn.removeAttribute('disabled');
         clearInterval(interval);
     };
+
+    async function fetch4ButtonClickedHandler() {
+        const serviceEndpoint = window.document.getElementById('serviceEndpointID').value;
+        console.log(serviceEndpoint);
+    }
+
+    async function clientSignatureStep5ButtonClickedHandler() {
+
+    }
+
+    async function writeStep5ButtonClickedHandler() {
+
+    }
 
     /**
      * Creates hard coded client signature body
@@ -196,11 +209,11 @@ function App() {
      * Measures time in [s] needed for Resolve response
      */
     function timer() {
-        let value = parseInt(document.getElementById('timerID').textContent.match(/\d+$/)[0], 10);
+        /* let value = parseInt(document.getElementById('timerID').textContent.match(/\d+$/)[0], 10);
         value = isNaN(value) ? 0 : value;
         value++;
         document.getElementById('timerID').textContent = value;
-        console.log(value);
+        console.log(value); */
     }
 
     /**
@@ -262,7 +275,11 @@ function App() {
 
                 <label className="appLabel">Service endpoint:</label>
                 <input className="appInput" id="serviceEndpointID" readOnly></input>
-                <label className="appLabel" id="timerID">0</label>
+                <button className="appButtonFetch" onClick={fetch4ButtonClickedHandler} id="step4BtnFetch">Fetch</button>
+
+                <label className="appLabel">Decrypted content:</label>
+                <input className="appInput" id="decryptedContentID" readOnly></input>
+                <div></div>
             </div>
 
             <div className="appGridContainer appGridContainer05">
@@ -272,9 +289,13 @@ function App() {
 
                 <ToggleButton setValue={childToParent}></ToggleButton><div></div><div></div>
 
-                <label className="appLabel">Authentication:</label>
-                <input className="appInput" id="resolveID" readOnly></input>
-                <button className="appButtonFetch" onClick={resolveButtonClickedHandler} id="step5Btn">Resolve</button>
+                <label className="appLabel">Client:</label>
+                <input className="appInput" id="clientSignatureStep5ID" readOnly></input>
+                <button className="appButtonFetch" onClick={clientSignatureStep5ButtonClickedHandler} id="step5BtnClientSig">Client Signature</button>
+
+                <label className="appLabel">Write:</label>
+                <input className="appInput" id="writeStep5ID" readOnly></input>
+                <button className="appButtonFetch" onClick={writeStep5ButtonClickedHandler} id="step5BtnWrite">Write</button>
             </div>
         </div>
     );
