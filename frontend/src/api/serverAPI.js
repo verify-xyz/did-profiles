@@ -59,6 +59,16 @@ class ServerAPI {
 
         return content;
     };
+
+    /**
+     * Gets the message from IPFS
+     * @param {string} hash - Hash code of the message previously added to IPFS
+     * @returns String related to the hash code
+     */
+    static async getResolve(url) {
+        const response = await fetch('/resolve/' + url);
+        return await response.json();
+    };
 }
 
 export default ServerAPI;

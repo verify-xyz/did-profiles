@@ -41,9 +41,15 @@ export class IpfsApiService {
     async getStringFromIpfs(hash: string) {
         const url = `${this.ipfsUrlRead}/${hash}`;
 
-        const response = await this.httpService.get(url).toPromise();
-        const text = response.data;
+        try {
+            const response = await this.httpService.get(url).toPromise();
+            const text = response.data;
 
-        return text;
+            return text;
+        } catch (error) {
+            console.log(error);
+
+            return 'Getting ipfs data for the provided hash code failed';
+        }
     }
 }

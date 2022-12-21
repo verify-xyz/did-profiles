@@ -40,6 +40,7 @@ textarea:focus, input:focus {
     min-height: 100vh;
     align-items: center;
     justify-content: space-around;
+    margin-bottom: 50px;
 }
 
 .appHeader {
@@ -78,6 +79,22 @@ textarea:focus, input:focus {
     display: grid;
     grid-template-columns: [column1] 10vw [column2] 30vw [column3] 120px [end];
     grid-template-rows: [row1] 30px [row2] 30px [row3] 30px;
+    grid-column-gap: 50px;
+    grid-row-gap: 50px;
+}
+
+.appGridContainer04 {
+    display: grid;
+    grid-template-columns: [column1] 10vw [column2] 30vw [column3] 120px [end];
+    grid-template-rows: [row1] 30px [row2] 30px [row3] 30px [row4] 30px;
+    grid-column-gap: 50px;
+    grid-row-gap: 50px;
+}
+
+.appGridContainer05 {
+    display: grid;
+    grid-template-columns: [column1] 10vw [column2] 30vw [column3] 120px [end];
+    grid-template-rows: [row1] 30px [row2] 30px [row3] 30px [row4] 30px;
     grid-column-gap: 50px;
     grid-row-gap: 50px;
 }

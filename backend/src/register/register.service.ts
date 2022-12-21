@@ -3,6 +3,7 @@ import { EthrDID } from 'ethr-did';
 import { Wallet } from 'ethers';
 import { splitSignature } from '@ethersproject/bytes';
 import { NetworkUtils } from './network.utils';
+import { ConfigService } from '@nestjs/config';
 
 const DEFAULT_GAS_LIMIT = 100000;
 
@@ -10,20 +11,28 @@ const DEFAULT_GAS_LIMIT = 100000;
 export class RegisterService {
     private networkUtils: NetworkUtils;
 
-    constructor() {
-        if (!process.env.GAS_PAYER_KEY) {
-            throw new Error('Missing env - GAS_PAYER_KEY');
-        }
-
+    /**
+     * Constructs RegisterService object
+     * @param configService - config service
+     */
+    constructor(private readonly configService: ConfigService) {
         this.networkUtils = new NetworkUtils();
     }
 
+    /**
+     * Adds service
+     * @param did Adds service
+     * @param network - network
+     * @param service - service object
+     * @param signature - signature
+     * @returns string
+     */
     async addService(
         did: string,
         network: string,
         service: { serviceEndpoint: string; type: string; ttl: number },
         signature: string,
-    ): Promise<string> {
+    ): Promise<object> {
         const attrName = 'did/svc/' + service.type;
         const attrValue = service.serviceEndpoint;
         const ttl = service.ttl;
@@ -38,7 +47,7 @@ export class RegisterService {
 
         const canonicalSignature = splitSignature(signature);
 
-        const metaEthrDid = await this.getEthrDidController(did, network, process.env.GAS_PAYER_KEY);
+        const metaEthrDid = await this.getEthrDidController(did, network, this.configService.get('GAS_PAYER_KEY'));
         console.log('ethrDid.addServiceSigned %o', {
             attrName,
             attrValue,
@@ -46,7 +55,7 @@ export class RegisterService {
             gasLimit,
         });
 
-        return metaEthrDid.setAttributeSigned(
+        const meta = await metaEthrDid.setAttributeSigned(
             attrName,
             attrValue,
             ttl,
@@ -59,8 +68,20 @@ export class RegisterService {
                 gasLimit,
             },
         );
+
+        return {
+            meta: meta,
+            serviceEndpoint: attrValue,
+        };
     }
 
+    /**
+     * Gets ethr did controller
+     * @param did Gets ethr did controller
+     * @param network - network
+     * @param privateKey - private key
+     * @returns EthrDID object
+     */
     private async getEthrDidController(did: string, network: string, privateKey: string): Promise<EthrDID> {
         console.log('getEthrDidController', did, network);
 
