@@ -54,42 +54,6 @@ export class ClientSign {
     }
 
     /**
-     * Generates the signature needed for server-side /register. privateKey is the user's DID key.
-     * This signature will be used to write a service attribute to the EthrDID contract.
-     * @param {*} network - network
-     * @param {*} service - service
-     * @returns - client signature
-     */
-    async createSignatureAddService2(network, service) {
-        const provider = this.networkUtils.getNetworkProviderFor(network);
-        const wallet = new Wallet(process.env.REACT_APP_TEST_DID_KEY, provider);
-        const did = `did:ethr:${network}:${wallet.address}`;
-
-        const ethrDid = new EthrDID({
-            identifier: did,
-            provider,
-            txSigner: wallet
-        });
-
-        const attrName = 'did/svc/' + service.type;
-        const attrValue = service.serviceEndpoint;
-        const ttl = 31536000;
-
-        const metaHash = await ethrDid.createSetAttributeHash(
-            attrName,
-            attrValue,
-            ttl
-        );
-
-        const ethRawSign = this.eth_rawSign(
-            process.env.REACT_APP_TEST_DID_KEY,
-            Buffer.from(strip0x(metaHash), 'hex')
-        );
-
-        return { ethRawSign, ethrDid };
-    }
-
-    /**
      * Creates signing key
      * @param {any} managedKey - managed key
      * @param {string} data - data
@@ -97,20 +61,6 @@ export class ClientSign {
      */
     eth_rawSign(managedKey, data) {
         return new SigningKey('0x' + strip0x(managedKey)).signDigest(data).compact;
-    }
-
-    /**
-     * Changes the owner
-     * @param {*} clientSignature - client signature
-     * @param {*} newOwner - new owner
-     * @returns - client signature
-     */
-    async changeOwner(network, service, newOwner) {
-        const result = this.createSignatureAddService2(network, service);
-        const ethrRawSign = result.ethRawSign;
-        const ethrDid = result.ethrDid;
-
-        ethrDid.changeOwner(ethrRawSign, 'cabanaProfilePrivateCondition');
     }
 }
 
