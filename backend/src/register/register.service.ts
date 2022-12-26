@@ -76,6 +76,63 @@ export class RegisterService {
     }
 
     /**
+     * Adds service
+     * @param did Adds service
+     * @param network - network
+     * @param service - service object
+     * @param signature - signature
+     * @returns string
+     */
+    async addServiceWithAccess(
+        did: string,
+        network: string,
+        service: { serviceEndpoint: string; type: string; ttl: number },
+        signature: string,
+        access: string,
+    ): Promise<object> {
+        const attrName = 'did/svc/' + service.type;
+        const attrValue = service.serviceEndpoint;
+        const ttl = service.ttl;
+        const gasLimit = DEFAULT_GAS_LIMIT;
+
+        console.log('ethrDid.setAttribute %o', {
+            attrName,
+            attrValue,
+            ttl,
+            gasLimit,
+        });
+
+        const canonicalSignature = splitSignature(signature);
+
+        const metaEthrDid = await this.getEthrDidController(did, network, this.configService.get('GAS_PAYER_KEY'));
+        console.log('ethrDid.addServiceSigned %o', {
+            attrName,
+            attrValue,
+            ttl,
+            gasLimit,
+        });
+
+        const meta = await metaEthrDid.setAttributeSigned(
+            attrName,
+            attrValue,
+            ttl,
+            {
+                sigV: canonicalSignature.v,
+                sigR: canonicalSignature.r,
+                sigS: canonicalSignature.s,
+            },
+            {
+                gasLimit,
+            },
+        );
+
+        return {
+            meta: meta,
+            serviceEndpoint: attrValue,
+        };
+    }
+
+    /**
      * Gets ethr did controller
      * @param did Gets ethr did controller
      * @param network - network

@@ -61,6 +61,27 @@ class ServerAPI {
     };
 
     /**
+     * Posts register service
+     * @param {string} bodyJSON JSON body of the POST request
+     * @returns register hash
+     */
+    static async postRegisterServiceWithAccess(bodyJSON) {
+        const rawResponse = await fetch('/register/access', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: bodyJSON
+        });
+
+        const content = await rawResponse.json();
+        console.log(content);
+
+        return content;
+    };
+
+    /**
      * Gets the message from IPFS
      * @param {string} hash - Hash code of the message previously added to IPFS
      * @returns String related to the hash code

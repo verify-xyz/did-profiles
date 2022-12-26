@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './styles/styleApp.css';
 import ServerAPI from './api/serverAPI.js';
-import { RegisterServiceDto, ClientSignatureBody, RegisterServiceBody } from './dto/register.dto';
+import { RegisterServiceDto, ClientSignatureBody, RegisterServiceBody, RegisterServiceBodyWithAccess } from './dto/register.dto';
 import { ClientSign } from './network/client-sign';
 import { ToggleButton } from './components/toggleButton';
 
@@ -218,7 +218,7 @@ function App() {
 
         const registerServiceBody = createHardCodedRegisterServiceBodyStep5();
         const registerServiceBodyJSON = JSON.stringify(registerServiceBody);
-        const registerHash = await ServerAPI.postRegisterService(registerServiceBodyJSON);
+        const registerHash = await ServerAPI.postRegisterServiceWithAccess(registerServiceBodyJSON);
 
         window.document.getElementById('writeStep5ID').value = registerHash.serviceEndpoint;
 
@@ -256,8 +256,8 @@ function App() {
         const signature = window.document.getElementById('clientSignatureStep5ID').value;
         const cid = getIpfsHash();
         const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
-        const registerServiceBody = new RegisterServiceBody(did, signature, service);
-        return registerServiceBody;
+        const registerServiceBodyWithAccess = new RegisterServiceBodyWithAccess(did, signature, service, toggleValue);
+        return registerServiceBodyWithAccess;
     }
 
     /**
