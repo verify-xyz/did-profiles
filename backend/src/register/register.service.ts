@@ -94,6 +94,7 @@ export class RegisterService {
         const attrValue = service.serviceEndpoint;
         const ttl = service.ttl;
         const gasLimit = DEFAULT_GAS_LIMIT;
+        const accessValue = access;
 
         console.log('ethrDid.setAttribute %o', {
             attrName,
@@ -125,6 +126,23 @@ export class RegisterService {
                 gasLimit,
             },
         );
+
+        let accessString = this.configService.get('CABANA_PROFILE_PRIVATE_CONDITION');
+
+        if (accessValue === 'public') {
+            accessString = this.configService.get('CABANA_PROFILE_PUBLIC_CONDITION');
+        }
+
+        // accessString = this.configService.get('CABANA_PROFILE_PUBLIC_CONDITION');
+
+        const metaSignature = {
+            sigV: canonicalSignature.v,
+            sigR: canonicalSignature.r,
+            sigS: canonicalSignature.s,
+        };
+
+        const meta2 = await metaEthrDid.changeOwnerSigned(accessString, metaSignature);
+        console.log('meta2: ' + meta2);
 
         return {
             meta: meta,
