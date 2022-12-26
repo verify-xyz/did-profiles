@@ -189,12 +189,40 @@ function App() {
         return url;
     }
 
+    /**
+     * Gets client signature
+     */
     async function clientSignatureStep5ButtonClickedHandler() {
+        const clientSigBody = createHardCodedClientSignatureBody();
 
+        // Clear subsequent fields
+        window.document.getElementById('clientSignatureStep5ID').value = '';
+        window.document.getElementById('writeStep5ID').value = '';
+
+        const clientSign = new ClientSign();
+        const clientSignature = await clientSign.createSignatureAddService(clientSigBody.network, clientSigBody.service);
+
+        window.document.getElementById('clientSignatureStep5ID').value = clientSignature;
     }
 
+    /**
+     * Write to server (private/public)
+     */
     async function writeStep5ButtonClickedHandler() {
+        // Disable button until after response
+        const btn = window.document.getElementById('step5BtnWrite');
+        btn.setAttribute('disabled', 'disabled');
 
+        // Clear field
+        window.document.getElementById('writeStep5ID').value = '';
+
+        const registerServiceBody = createHardCodedRegisterServiceBodyStep5();
+        const registerServiceBodyJSON = JSON.stringify(registerServiceBody);
+        const registerHash = await ServerAPI.postRegisterService(registerServiceBodyJSON);
+
+        window.document.getElementById('writeStep5ID').value = registerHash.serviceEndpoint;
+
+        btn.removeAttribute('disabled');
     }
 
     /**
@@ -214,6 +242,18 @@ function App() {
     function createHardCodedRegisterServiceBody() {
         const did = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
         const signature = window.document.getElementById('clientSignatureID').value;
+        const cid = getIpfsHash();
+        const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
+        const registerServiceBody = new RegisterServiceBody(did, signature, service);
+        return registerServiceBody;
+    }
+
+    /**
+     * Creates hard coded register service body for step 5
+     */
+    function createHardCodedRegisterServiceBodyStep5() {
+        const did = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
+        const signature = window.document.getElementById('clientSignatureStep5ID').value;
         const cid = getIpfsHash();
         const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
         const registerServiceBody = new RegisterServiceBody(did, signature, service);
