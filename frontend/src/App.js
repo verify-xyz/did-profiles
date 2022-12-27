@@ -281,7 +281,6 @@ function App() {
      */
     function changeAccessPrivatePublic() {
         setAccess(!access);
-        console.log('!access: ' + !access);
     };
 
     return (
