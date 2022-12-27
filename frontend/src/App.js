@@ -279,7 +279,7 @@ function App() {
      * Passes data from ToggleButton to parent
      * @param {string} childData - private/public
      */
-    function childToParent() {
+    function changeAccessPrivatePublic() {
         setAccess(!access);
         console.log('!access: ' + !access);
     };
@@ -345,7 +345,7 @@ function App() {
                 <div>Private/Public Transaction</div>
                 <div></div>
 
-                <ToggleButton onToggle={childToParent} isToggled={access}></ToggleButton><div></div><div></div>
+                <ToggleButton onToggle={changeAccessPrivatePublic} isToggled={access}></ToggleButton><div></div><div></div>
 
                 <label className="appLabel">Client:</label>
                 <input className="appInput" id="clientSignatureStep5ID" readOnly></input>
