@@ -9,13 +9,12 @@ function App() {
     const [message, setMessage] = useState('');
     const [address, setAddress] = useState('');
     const [txRecord, setTxRecord] = useState('');
-    // const [toggleValue, setToggleValue] = useState('private');
-    let toggleValue = 'private';
+    const [access, setAccess] = useState(false);
 
     useEffect(() => {
         console.log(message);
         console.log(address);
-        console.log(toggleValue);
+        console.log('access: ' + access);
     });
 
     /**
@@ -256,7 +255,10 @@ function App() {
         const signature = window.document.getElementById('clientSignatureStep5ID').value;
         const cid = getIpfsHash();
         const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
-        const registerServiceBodyWithAccess = new RegisterServiceBodyWithAccess(did, signature, service, toggleValue);
+        const accessValue = access ? 'public' : 'private';
+        console.log('accessValue: ' + accessValue);
+
+        const registerServiceBodyWithAccess = new RegisterServiceBodyWithAccess(did, signature, service, accessValue);
         return registerServiceBodyWithAccess;
     }
 
@@ -274,24 +276,12 @@ function App() {
     }
 
     /**
-     * Measures time in [s] needed for Resolve response
-     */
-    function timer() {
-        /* let value = parseInt(document.getElementById('timerID').textContent.match(/\d+$/)[0], 10);
-        value = isNaN(value) ? 0 : value;
-        value++;
-        document.getElementById('timerID').textContent = value;
-        console.log(value); */
-    }
-
-    /**
      * Passes data from ToggleButton to parent
      * @param {string} childData - private/public
      */
-    function childToParent(childData) {
-        console.log(`Data received from child: ${childData}`);
-        toggleValue = childData;
-        console.log(`toggleValue: ${toggleValue}`);
+    function childToParent() {
+        setAccess(!access);
+        console.log('!access: ' + !access);
     };
 
     return (
@@ -355,7 +345,7 @@ function App() {
                 <div>Private/Public Transaction</div>
                 <div></div>
 
-                <ToggleButton setValue={childToParent}></ToggleButton><div></div><div></div>
+                <ToggleButton onToggle={childToParent} isToggled={access}></ToggleButton><div></div><div></div>
 
                 <label className="appLabel">Client:</label>
                 <input className="appInput" id="clientSignatureStep5ID" readOnly></input>
