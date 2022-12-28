@@ -134,7 +134,7 @@ function App() {
         window.document.getElementById('resolveID').value = '';
         // window.document.getElementById('serviceEndpointID').value = '';
 
-        const url = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
+        const url = 'did:ethr:goerli:0x1EC289b32aCF67C7943665eDf8214B3184D6c516';
         const response = await ServerAPI.getResolve(url);
         console.log(response);
 
@@ -261,7 +261,7 @@ function App() {
      * Creates hard coded register service body
      */
     function createHardCodedRegisterServiceBody() {
-        const did = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
+        const did = 'did:ethr:goerli:0x1EC289b32aCF67C7943665eDf8214B3184D6c516';
         const signature = window.document.getElementById('clientSignatureID').value;
         const cid = getIpfsHash();
         const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
@@ -273,7 +273,7 @@ function App() {
      * Creates hard coded register service body for step 5
      */
     function createHardCodedRegisterServiceBodyStep5() {
-        const did = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
+        const did = 'did:ethr:goerli:0x1EC289b32aCF67C7943665eDf8214B3184D6c516';
         const signature = window.document.getElementById('clientSignatureStep5ID').value;
         const cid = getIpfsHash();
         const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_INFURA_IPFS_URL + cid, cid);
