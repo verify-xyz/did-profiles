@@ -4,6 +4,7 @@ import {ConfigService} from "@nestjs/config";
 
 describe('register', () => {
     let service: RegisterService;
+    let configService: ConfigService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -11,6 +12,7 @@ describe('register', () => {
         }).compile();
 
         service = module.get<RegisterService>(RegisterService);
+        configService = module.get<ConfigService>(ConfigService);
     });
 
     it('should be defined', () => {
@@ -20,7 +22,7 @@ describe('register', () => {
     it('should get current access state', async () => {
         const result = await service.getOwner('did:ethr:goerli:' + process.env.TEST_DID_ADDRESS);
         const isPublic = result === process.env.TEST_DID_ADDRESS;
-        const isPrivate = result === '0x000000000000000000000000000000000000dEaD';
+        const isPrivate = result === configService.get('CABANA_PROFILE_PRIVATE_CONDITION');
         console.log('result', result)
         expect(isPublic || isPrivate).toBeTruthy();
     }, 20000);
