@@ -129,7 +129,6 @@ function App() {
         // Disable button until after response
         const btn = window.document.getElementById('step4Btn');
         btn.setAttribute('disabled', 'disabled');
-        const interval = setInterval(timer, 1000);
 
         // window.document.getElementById('timerID').textContent = '0';
         window.document.getElementById('resolveID').value = '';
@@ -154,7 +153,6 @@ function App() {
         // window.document.getElementById('serviceEndpointID').value = serviceEndpoint;
 
         btn.removeAttribute('disabled');
-        clearInterval(interval);
     };
 
     /**
