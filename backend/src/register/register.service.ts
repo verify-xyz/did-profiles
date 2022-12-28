@@ -121,6 +121,7 @@ export class RegisterService {
         if (accessValue === 'public') {
             accessString = this.configService.get('CABANA_PROFILE_PUBLIC_CONDITION');
         }
+        console.log('accessString: ' + accessString);
 
         // accessString = this.configService.get('CABANA_PROFILE_PUBLIC_CONDITION');
 
@@ -130,7 +131,7 @@ export class RegisterService {
             sigS: canonicalSignature.s,
         };
 
-        const meta = await metaEthrDid.changeOwnerSigned(newOwnerSignature, metaSignature);
+        const meta = await metaEthrDid.changeOwnerSigned(accessString, metaSignature);
         console.log('meta: ' + meta);
 
         return {
