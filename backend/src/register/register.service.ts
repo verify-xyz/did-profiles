@@ -4,6 +4,7 @@ import { Wallet } from 'ethers';
 import { splitSignature } from '@ethersproject/bytes';
 import { NetworkUtils } from './network.utils';
 import { ConfigService } from '@nestjs/config';
+import {interpretIdentifier, EthrDidController} from "../did-resolver/ethr-did-resolver-PATCH";
 
 const DEFAULT_GAS_LIMIT = 100000;
 
@@ -73,6 +74,14 @@ export class RegisterService {
             meta: meta,
             serviceEndpoint: attrValue,
         };
+    }
+
+    async getOwner(did: string) {
+        const {network, address} = interpretIdentifier(did)
+        const provider = this.networkUtils.getNetworkProviderFor(network);
+        const controller = new EthrDidController(did,null,null,null, provider);
+
+        return controller.getOwner(address);
     }
 
     /**
