@@ -35,7 +35,7 @@ export class RegisterController {
 
         const network = did.match(/^did:ethr:(.+):/)?.[1];
 
-        const txHash = await this.registerService.addServiceWithAccess(
+        const txHash = await this.registerService.changeOwner(
             did,
             network,
             {

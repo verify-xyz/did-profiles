@@ -76,22 +76,23 @@ export class RegisterService {
     }
 
     /**
-     * Adds service
-     * @param did Adds service
+     * Changes owner
+     * @param did - did
      * @param network - network
      * @param service - service object
      * @param signature - signature
      * @returns string
      */
-    async addServiceWithAccess(
+    async changeOwner(
         did: string,
         network: string,
         service: { serviceEndpoint: string; type: string; ttl: number },
-        signature: string,
+        newOwnerSignature: string,
         access: string,
     ): Promise<object> {
         const attrName = 'did/svc/' + service.type;
         const attrValue = service.serviceEndpoint;
+        // const attrValue = this.configService.get('INFURA_IPFS_URL');
         const ttl = service.ttl;
         const gasLimit = DEFAULT_GAS_LIMIT;
         const accessValue = access;
@@ -103,7 +104,9 @@ export class RegisterService {
             gasLimit,
         });
 
-        const canonicalSignature = splitSignature(signature);
+        console.log('signature: ' + newOwnerSignature);
+
+        const canonicalSignature = splitSignature(newOwnerSignature);
 
         const metaEthrDid = await this.getEthrDidController(did, network, this.configService.get('GAS_PAYER_KEY'));
         console.log('ethrDid.addServiceSigned %o', {
@@ -112,20 +115,6 @@ export class RegisterService {
             ttl,
             gasLimit,
         });
-
-        const meta = await metaEthrDid.setAttributeSigned(
-            attrName,
-            attrValue,
-            ttl,
-            {
-                sigV: canonicalSignature.v,
-                sigR: canonicalSignature.r,
-                sigS: canonicalSignature.s,
-            },
-            {
-                gasLimit,
-            },
-        );
 
         let accessString = this.configService.get('CABANA_PROFILE_PRIVATE_CONDITION');
 
@@ -141,8 +130,8 @@ export class RegisterService {
             sigS: canonicalSignature.s,
         };
 
-        const meta2 = await metaEthrDid.changeOwnerSigned(accessString, metaSignature);
-        console.log('meta2: ' + meta2);
+        const meta = await metaEthrDid.changeOwnerSigned(newOwnerSignature, metaSignature);
+        console.log('meta: ' + meta);
 
         return {
             meta: meta,
@@ -159,6 +148,7 @@ export class RegisterService {
      */
     private async getEthrDidController(did: string, network: string, privateKey: string): Promise<EthrDID> {
         console.log('getEthrDidController', did, network);
+        console.log('PRIVATE KEY: ' + privateKey);
 
         const provider = this.networkUtils.getNetworkProviderFor(network);
 

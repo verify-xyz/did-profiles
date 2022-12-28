@@ -190,14 +190,20 @@ function App() {
      * Gets client signature
      */
     async function clientSignatureStep5ButtonClickedHandler() {
-        const clientSigBody = createHardCodedClientSignatureBody();
+        const clientSigBody = createHardCodedClientSignatureBodyStep5();
 
         // Clear subsequent fields
         window.document.getElementById('clientSignatureStep5ID').value = '';
         window.document.getElementById('writeStep5ID').value = '';
 
+        let newOwner = window.document.getElementById('clientSignatureID').value;
+        if (newOwner === '' || newOwner === null || newOwner === undefined) {
+            newOwner = '0x556fff2b8b075aa961c4800314da4d1ce99ad08c0fb70d150b2a32e74aeea1f4588a1d647b87705323eb296de29572893e67152bec245466ea860e6e5c2871df';
+        }
+        newOwner = '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b';
+
         const clientSign = new ClientSign();
-        const clientSignature = await clientSign.createSignatureAddService(clientSigBody.network, clientSigBody.service);
+        const clientSignature = await clientSign.createSignatureChangeOwner(clientSigBody.network, newOwner);
 
         window.document.getElementById('clientSignatureStep5ID').value = clientSignature;
     }
@@ -234,6 +240,17 @@ function App() {
     }
 
     /**
+     * Creates hard coded client signature body
+     * @returns client signature
+     */
+    function createHardCodedClientSignatureBodyStep5() {
+        const cid = getIpfsHash();
+        const regService = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL1 + cid, cid);
+        const clientSigBody = new ClientSignatureBody('goerli', regService);
+        return clientSigBody;
+    }
+
+    /**
      * Creates hard coded register service body
      */
     function createHardCodedRegisterServiceBody() {
@@ -252,7 +269,7 @@ function App() {
         const did = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
         const signature = window.document.getElementById('clientSignatureStep5ID').value;
         const cid = getIpfsHash();
-        const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
+        const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_INFURA_IPFS_URL + cid, cid);
         const accessValue = access ? 'public' : 'private';
         console.log('accessValue: ' + accessValue);
 

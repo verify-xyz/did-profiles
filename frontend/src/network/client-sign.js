@@ -54,6 +54,31 @@ export class ClientSign {
     }
 
     /**
+     * Changes owner hash
+     * @param {any} network - network
+     * @param {string} newOwner - newOwner
+     * @returns new owner hash
+     */
+    async createSignatureChangeOwner(network, newOwner) {
+        const provider = this.networkUtils.getNetworkProviderFor(network);
+        const wallet = new Wallet(process.env.REACT_APP_TEST_DID_KEY, provider);
+        const did = `did:ethr:${network}:${wallet.address}`;
+
+        const ethrDid = new EthrDID({
+            identifier: did,
+            provider,
+            txSigner: wallet
+        });
+
+        const metaHash = await ethrDid.createChangeOwnerHash(newOwner);
+
+        return this.eth_rawSign(
+            process.env.REACT_APP_TEST_DID_KEY,
+            Buffer.from(strip0x(metaHash), 'hex')
+        );
+    }
+
+    /**
      * Creates signing key
      * @param {any} managedKey - managed key
      * @param {string} data - data
