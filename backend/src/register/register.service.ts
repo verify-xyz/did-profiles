@@ -4,7 +4,7 @@ import { Wallet } from 'ethers';
 import { splitSignature } from '@ethersproject/bytes';
 import { NetworkUtils } from './network.utils';
 import { ConfigService } from '@nestjs/config';
-import {interpretIdentifier} from "../did-resolver/ethr-did-resolver-PATCH";
+import { interpretIdentifier, EthrDidController } from '../did-resolver/ethr-did-resolver-PATCH';
 
 const DEFAULT_GAS_LIMIT = 100000;
 
@@ -76,8 +76,12 @@ export class RegisterService {
         };
     }
 
+    /**
+     * Gets owner
+     * @param did - did
+     * @returns - owner's address
+     */
     async getOwner(did: string) {
-
         const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
 
         return metaEthrDid.lookupOwner();
@@ -108,7 +112,6 @@ export class RegisterService {
         const canonicalSignature = splitSignature(newOwnerSignature);
 
         const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
-
 
         let accessString = this.configService.get('CABANA_PROFILE_PRIVATE_CONDITION');
 

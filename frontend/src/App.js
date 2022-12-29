@@ -130,27 +130,19 @@ function App() {
         const btn = window.document.getElementById('step4Btn');
         btn.setAttribute('disabled', 'disabled');
 
-        // window.document.getElementById('timerID').textContent = '0';
         window.document.getElementById('resolveID').value = '';
-        // window.document.getElementById('serviceEndpointID').value = '';
 
-        const url = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
+        const url = `did:ethr:goerli:${process.env.REACT_APP_ADDRESS}`;
         const response = await ServerAPI.getResolve(url);
         console.log(response);
 
         let verificationMethod = 'Request failed. Please try again.';
-        // let serviceEndpoint = '';
 
         if (response?.didDocument?.verificationMethod[0]?.id) {
             verificationMethod = await response.didDocument.verificationMethod[0].id;
         }
 
-        /* if (response?.didDocument?.service[0]?.serviceEndpoint) {
-            serviceEndpoint = await response.didDocument.service[0].serviceEndpoint;
-        } */
-
         window.document.getElementById('resolveID').value = verificationMethod;
-        // window.document.getElementById('serviceEndpointID').value = serviceEndpoint;
 
         btn.removeAttribute('disabled');
     };
@@ -196,18 +188,13 @@ function App() {
         window.document.getElementById('clientSignatureStep5ID').value = '';
         window.document.getElementById('writeStep5ID').value = '';
 
-        /* let newOwner = window.document.getElementById('clientSignatureID').value;
-        if (newOwner === '' || newOwner === null || newOwner === undefined) {
-            newOwner = '0x556fff2b8b075aa961c4800314da4d1ce99ad08c0fb70d150b2a32e74aeea1f4588a1d647b87705323eb296de29572893e67152bec245466ea860e6e5c2871df';
-        } */
-        // newOwner = '0xdca7ef03e98e0dc2b855be647c39abe984fcf21b';
-        // newOwner = '0x61b2141e7803f071c5142670f9fb23d4c1d52a8c23c65cae5140f59ecfabf858ce79f44ecf448e70b0bbf3b24daecd46b8dce352847d329e58d78ba2c87f6b68';
-
-        let newOwner = '0x0000000000000000000000000000000000000000'; // public
+        let newOwner = process.env.REACT_APP_PUBLIC_CABANA_PROFILE;
         if (access === false) {
-            newOwner = '0x000000000000000000000000000000000000dEaD'; // private
+            newOwner = process.env.REACT_APP_PRIVATE_CABANA_PROFILE;
         }
-        console.log('newOwner: ' + newOwner);
+
+        // Hard code to public for now
+        newOwner = process.env.REACT_APP_PUBLIC_CABANA_PROFILE;
 
         const clientSign = new ClientSign();
         const clientSignature = await clientSign.createSignatureChangeOwner(clientSigBody.network, newOwner);
@@ -261,7 +248,7 @@ function App() {
      * Creates hard coded register service body
      */
     function createHardCodedRegisterServiceBody() {
-        const did = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
+        const did = `did:ethr:goerli:${process.env.REACT_APP_ADDRESS}`;
         const signature = window.document.getElementById('clientSignatureID').value;
         const cid = getIpfsHash();
         const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
@@ -273,7 +260,7 @@ function App() {
      * Creates hard coded register service body for step 5
      */
     function createHardCodedRegisterServiceBodyStep5() {
-        const did = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
+        const did = `did:ethr:goerli:${process.env.REACT_APP_ADDRESS}`;
         const signature = window.document.getElementById('clientSignatureStep5ID').value;
         const cid = getIpfsHash();
         const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_INFURA_IPFS_URL + cid, cid);
