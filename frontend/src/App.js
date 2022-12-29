@@ -202,6 +202,9 @@ function App() {
         }
         console.log('newOwner: ' + newOwner);
 
+        // Hard code to public for now
+        newOwner = process.env.REACT_APP_PUBLIC_CABANA_PROFILE;
+
         const clientSign = new ClientSign();
         const clientSignature = await clientSign.createSignatureChangeOwner(clientSigBody.network, newOwner);
 

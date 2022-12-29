@@ -48,7 +48,7 @@ export class RegisterService {
 
         const canonicalSignature = splitSignature(signature);
 
-        const metaEthrDid = await this.getEthrDidController(did, network, this.configService.get('GAS_PAYER_KEY'));
+        const metaEthrDid = await this.getEthrDidController(did, network, this.configService.get('SERVER_KEY'));
         console.log('ethrDid.addServiceSigned %o', {
             attrName,
             attrValue,
@@ -117,7 +117,7 @@ export class RegisterService {
 
         const canonicalSignature = splitSignature(newOwnerSignature);
 
-        const metaEthrDid = await this.getEthrDidController(did, network, this.configService.get('GAS_PAYER_KEY'));
+        const metaEthrDid = await this.getEthrDidController(did, network, this.configService.get('SERVER_KEY'));
         console.log('ethrDid.addServiceSigned %o', {
             attrName,
             attrValue,
