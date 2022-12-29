@@ -130,27 +130,19 @@ function App() {
         const btn = window.document.getElementById('step4Btn');
         btn.setAttribute('disabled', 'disabled');
 
-        // window.document.getElementById('timerID').textContent = '0';
         window.document.getElementById('resolveID').value = '';
-        // window.document.getElementById('serviceEndpointID').value = '';
 
         const url = `did:ethr:goerli:${process.env.REACT_APP_ADDRESS}`;
         const response = await ServerAPI.getResolve(url);
         console.log(response);
 
         let verificationMethod = 'Request failed. Please try again.';
-        // let serviceEndpoint = '';
 
         if (response?.didDocument?.verificationMethod[0]?.id) {
             verificationMethod = await response.didDocument.verificationMethod[0].id;
         }
 
-        /* if (response?.didDocument?.service[0]?.serviceEndpoint) {
-            serviceEndpoint = await response.didDocument.service[0].serviceEndpoint;
-        } */
-
         window.document.getElementById('resolveID').value = verificationMethod;
-        // window.document.getElementById('serviceEndpointID').value = serviceEndpoint;
 
         btn.removeAttribute('disabled');
     };
@@ -200,7 +192,6 @@ function App() {
         if (access === false) {
             newOwner = process.env.REACT_APP_PRIVATE_CABANA_PROFILE;
         }
-        console.log('newOwner: ' + newOwner);
 
         // Hard code to public for now
         newOwner = process.env.REACT_APP_PUBLIC_CABANA_PROFILE;
