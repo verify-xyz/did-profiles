@@ -101,11 +101,11 @@ export class RegisterService {
         service: { serviceEndpoint: string; type: string; ttl: number },
         newOwnerSignature: string,
         access: string,
-    ): Promise<string> {
-
-        if (access === 'public') {
+    ): Promise<object> {
+        /* if (access === 'public') {
             return this.changeOwnerToPublic(did);
-        }
+        } */
+        const attrValue = service.serviceEndpoint;
 
         console.log('signature: ' + newOwnerSignature);
 
@@ -117,7 +117,7 @@ export class RegisterService {
 
         console.log('accessString: ' + accessString);
 
-        // accessString = this.configService.get('CABANA_PROFILE_PUBLIC_CONDITION');
+        accessString = this.configService.get('CABANA_PROFILE_PUBLIC_CONDITION');
 
         const metaSignature = {
             sigV: canonicalSignature.v,
@@ -128,11 +128,13 @@ export class RegisterService {
         const meta = await metaEthrDid.changeOwnerSigned(accessString, metaSignature);
         console.log('meta: ' + meta);
 
-        return meta;
+        return {
+            meta: meta,
+            serviceEndpoint: attrValue,
+        };
     }
 
     private async changeOwnerToPublic(did: string) {
-
         const controller = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
 
         return controller.changeOwner(this.configService.get('CABANA_PROFILE_PUBLIC_CONDITION'));
@@ -146,7 +148,7 @@ export class RegisterService {
      * @returns EthrDID object
      */
     private async getEthrDidController(did: string, privateKey: string): Promise<EthrDID> {
-        const {network} = interpretIdentifier(did);
+        const { network } = interpretIdentifier(did);
         console.log('getEthrDidController', did, network);
         //console.log('PRIVATE KEY: ' + privateKey);
 
