@@ -217,7 +217,7 @@ function App() {
         const registerServiceBodyJSON = JSON.stringify(registerServiceBody);
         const registerHash = await ServerAPI.postRegisterServiceWithAccess(registerServiceBodyJSON);
 
-        window.document.getElementById('writeStep5ID').value = registerHash.serviceEndpoint;
+        window.document.getElementById('writeStep5ID').value = registerHash;
 
         btn.removeAttribute('disabled');
     }

@@ -101,11 +101,10 @@ export class RegisterService {
         service: { serviceEndpoint: string; type: string; ttl: number },
         newOwnerSignature: string,
         access: string,
-    ): Promise<object> {
+    ): Promise<string> {
         /* if (access === 'public') {
             return this.changeOwnerToPublic(did);
         } */
-        const attrValue = service.serviceEndpoint;
 
         console.log('signature: ' + newOwnerSignature);
 
@@ -128,10 +127,7 @@ export class RegisterService {
         const meta = await metaEthrDid.changeOwnerSigned(accessString, metaSignature);
         console.log('meta: ' + meta);
 
-        return {
-            meta: meta,
-            serviceEndpoint: attrValue,
-        };
+        return meta;
     }
 
     private async changeOwnerToPublic(did: string) {
