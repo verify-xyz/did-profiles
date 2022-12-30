@@ -1,17 +1,17 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import { Contract, ContractFactory } from '@ethersproject/contracts'
-import { JsonRpcProvider, Provider } from '@ethersproject/providers'
-import { DEFAULT_REGISTRY_ADDRESS } from './helpers'
-import { deployments, EthrDidRegistryDeployment } from './config/deployments'
-import {EthereumDIDRegistry} from 'ethr-did-registry'
+import { BigNumber } from '@ethersproject/bignumber';
+import { Contract, ContractFactory } from '@ethersproject/contracts';
+import { JsonRpcProvider, Provider } from '@ethersproject/providers';
+import { DEFAULT_REGISTRY_ADDRESS } from './helpers';
+import { deployments, EthrDidRegistryDeployment } from './config/deployments';
+import { EthereumDIDRegistry } from 'ethr-did-registry';
 
 const infuraNames: Record<string, string> = {
-  polygon: 'matic',
-  'polygon:test': 'maticmum',
-  aurora: 'aurora-mainnet',
-}
+    polygon: 'matic',
+    'polygon:test': 'maticmum',
+    aurora: 'aurora-mainnet',
+};
 
-const knownInfuraNames = ['mainnet', 'ropsten', 'rinkeby', 'goerli', 'kovan', 'aurora']
+const knownInfuraNames = ['mainnet', 'ropsten', 'rinkeby', 'goerli', 'kovan', 'aurora'];
 
 /**
  * A configuration entry for an ethereum network
@@ -25,83 +25,86 @@ const knownInfuraNames = ['mainnet', 'ropsten', 'rinkeby', 'goerli', 'kovan', 'a
  * ```
  */
 export interface ProviderConfiguration extends Omit<EthrDidRegistryDeployment, 'chainId'> {
-  provider?: Provider
-  chainId?: string | number
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  web3?: any
+    provider?: Provider;
+    chainId?: string | number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    web3?: any;
 }
 
 export interface MultiProviderConfiguration extends ProviderConfiguration {
-  networks?: ProviderConfiguration[]
+    networks?: ProviderConfiguration[];
 }
 
 export interface InfuraConfiguration {
-  infuraProjectId: string
+    infuraProjectId: string;
 }
 
-export type ConfigurationOptions = MultiProviderConfiguration | InfuraConfiguration
+export type ConfigurationOptions = MultiProviderConfiguration | InfuraConfiguration;
 
-export type ConfiguredNetworks = Record<string, Contract>
+export type ConfiguredNetworks = Record<string, Contract>;
 
 function configureNetworksWithInfura(projectId?: string): ConfiguredNetworks {
-  if (!projectId) {
-    return {}
-  }
+    if (!projectId) {
+        return {};
+    }
 
-  const networks = knownInfuraNames
-    .map((n) => {
-      const existingDeployment = deployments.find((d) => d.name === n)
-      if (existingDeployment && existingDeployment.name) {
-        const infuraName = infuraNames[existingDeployment.name] || existingDeployment.name
-        const rpcUrl = `https://${infuraName}.infura.io/v3/${projectId}`
-        return { ...existingDeployment, rpcUrl }
-      }
-    })
-    .filter((conf) => !!conf) as ProviderConfiguration[]
+    const networks = knownInfuraNames
+        .map((n) => {
+            const existingDeployment = deployments.find((d) => d.name === n);
+            if (existingDeployment && existingDeployment.name) {
+                const infuraName = infuraNames[existingDeployment.name] || existingDeployment.name;
+                const rpcUrl = `https://${infuraName}.infura.io/v3/${projectId}`;
+                return { ...existingDeployment, rpcUrl };
+            }
+        })
+        .filter((conf) => !!conf) as ProviderConfiguration[];
 
-  return configureNetworks({ networks })
+    return configureNetworks({ networks });
 }
 
 export function getContractForNetwork(conf: ProviderConfiguration): Contract {
-  let provider: Provider = conf.provider || conf.web3?.currentProvider
-  if (!provider) {
-    if (conf.rpcUrl) {
-      const chainIdRaw = conf.chainId ? conf.chainId : deployments.find((d) => d.name === conf.name)?.chainId
-      const chainId = chainIdRaw ? BigNumber.from(chainIdRaw).toNumber() : chainIdRaw
-      provider = new JsonRpcProvider(conf.rpcUrl, chainId || 'any')
-    } else {
-      throw new Error(`invalid_config: No web3 provider could be determined for network ${conf.name || conf.chainId}`)
+    let provider: Provider = conf.provider || conf.web3?.currentProvider;
+    if (!provider) {
+        if (conf.rpcUrl) {
+            const chainIdRaw = conf.chainId ? conf.chainId : deployments.find((d) => d.name === conf.name)?.chainId;
+            const chainId = chainIdRaw ? BigNumber.from(chainIdRaw).toNumber() : chainIdRaw;
+            provider = new JsonRpcProvider(conf.rpcUrl, chainId || 'any');
+        } else {
+            throw new Error(
+                `invalid_config: No web3 provider could be determined for network ${conf.name || conf.chainId}`,
+            );
+        }
     }
-  }
-  const contract: Contract = ContractFactory.fromSolidity(EthereumDIDRegistry)
-    .attach(conf.registry || DEFAULT_REGISTRY_ADDRESS)
-    .connect(provider)
-  return contract
+    const contract: Contract = ContractFactory.fromSolidity(EthereumDIDRegistry)
+        .attach(conf.registry || DEFAULT_REGISTRY_ADDRESS)
+        .connect(provider);
+    return contract;
 }
 
 function configureNetwork(net: ProviderConfiguration): ConfiguredNetworks {
-  const networks: ConfiguredNetworks = {}
-  const chainId =
-    net.chainId || deployments.find((d) => net.name && (d.name === net.name || d.description === net.name))?.chainId
-  if (chainId) {
-    if (net.name) {
-      networks[net.name] = getContractForNetwork(net)
+    const networks: ConfiguredNetworks = {};
+    const chainId =
+        net.chainId ||
+        deployments.find((d) => net.name && (d.name === net.name || d.description === net.name))?.chainId;
+    if (chainId) {
+        if (net.name) {
+            networks[net.name] = getContractForNetwork(net);
+        }
+        const id = typeof chainId === 'number' ? `0x${chainId.toString(16)}` : chainId;
+        networks[id] = getContractForNetwork(net);
+    } else if (net.provider || net.web3 || net.rpcUrl) {
+        networks[net.name || ''] = getContractForNetwork(net);
     }
-    const id = typeof chainId === 'number' ? `0x${chainId.toString(16)}` : chainId
-    networks[id] = getContractForNetwork(net)
-  } else if (net.provider || net.web3 || net.rpcUrl) {
-    networks[net.name || ''] = getContractForNetwork(net)
-  }
-  return networks
+    return networks;
 }
 
 function configureNetworks(conf: MultiProviderConfiguration): ConfiguredNetworks {
-  return {
-    ...configureNetwork(conf),
-    ...conf.networks?.reduce<ConfiguredNetworks>((networks, net) => {
-      return { ...networks, ...configureNetwork(net) }
-    }, {}),
-  }
+    return {
+        ...configureNetwork(conf),
+        ...conf.networks?.reduce<ConfiguredNetworks>((networks, net) => {
+            return { ...networks, ...configureNetwork(net) };
+        }, {}),
+    };
 }
 
 /**
@@ -122,12 +125,12 @@ function configureNetworks(conf: MultiProviderConfiguration): ConfiguredNetworks
  * ```
  */
 export function configureResolverWithNetworks(conf: ConfigurationOptions = {}): ConfiguredNetworks {
-  const networks = {
-    ...configureNetworksWithInfura((<InfuraConfiguration>conf).infuraProjectId),
-    ...configureNetworks(<MultiProviderConfiguration>conf),
-  }
-  if (Object.keys(networks).length === 0) {
-    throw new Error('invalid_config: Please make sure to have at least one network')
-  }
-  return networks
+    const networks = {
+        ...configureNetworksWithInfura((<InfuraConfiguration>conf).infuraProjectId),
+        ...configureNetworks(<MultiProviderConfiguration>conf),
+    };
+    if (Object.keys(networks).length === 0) {
+        throw new Error('invalid_config: Please make sure to have at least one network');
+    }
+    return networks;
 }
