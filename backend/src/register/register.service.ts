@@ -102,38 +102,41 @@ export class RegisterService {
         newOwnerSignature: string,
         access: string,
     ): Promise<string> {
-        /* if (access === 'public') {
-            return this.changeOwnerToPublic(did);
-        } */
-
         console.log('signature: ' + newOwnerSignature);
 
         const canonicalSignature = splitSignature(newOwnerSignature);
-
-        const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
-
-        let accessString = this.configService.get('CABANA_PROFILE_PRIVATE_CONDITION');
-
-        console.log('accessString: ' + accessString);
-
-        accessString = this.configService.get('CABANA_PROFILE_PUBLIC_CONDITION');
-
         const metaSignature = {
             sigV: canonicalSignature.v,
             sigR: canonicalSignature.r,
             sigS: canonicalSignature.s,
         };
 
-        const meta = await metaEthrDid.changeOwnerSigned(accessString, metaSignature);
+        if (access === 'public') {
+            return this.changeOwnerToPublic(did, metaSignature);
+        }
+
+        const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
+
+        const accessString = this.configService.get('CABANA_PROFILE_PRIVATE_CONDITION');
+
+        console.log('accessString: ' + accessString);
+
+        const meta = await metaEthrDid.changeOwner(accessString);
         console.log('meta: ' + meta);
 
         return meta;
     }
 
-    private async changeOwnerToPublic(did: string) {
+    /**
+     * Changes owner to public
+     * @param did - did
+     * @param metaSignature - meta signature
+     * @returns hash
+     */
+    private async changeOwnerToPublic(did: string, metaSignature: any) {
         const controller = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
 
-        return controller.changeOwner(this.configService.get('CABANA_PROFILE_PUBLIC_CONDITION'));
+        return controller.changeOwnerSigned(this.configService.get('CABANA_PROFILE_PUBLIC_CONDITION'), metaSignature);
     }
 
     /**
