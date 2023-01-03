@@ -1,4 +1,4 @@
-import {Body, Controller, Get, HttpException, HttpStatus, Param, Post} from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RegisterDto, RegisterDtoWithAccess } from '../dto/register.dto';
 import { RegisterService } from './register.service';
@@ -36,12 +36,11 @@ export class RegisterController {
         console.log(currentOwner, isPrivate);
 
         if (access === 'public') {
-          if (!isPrivate) {
-            throw new HttpException('Access is already public', HttpStatus.PRECONDITION_FAILED)
-          }
-        }
-        else if (isPrivate) {
-          throw new HttpException('Access is already private', HttpStatus.PRECONDITION_FAILED)
+            if (!isPrivate) {
+                throw new HttpException('Access is already public', HttpStatus.PRECONDITION_FAILED);
+            }
+        } else if (isPrivate) {
+            throw new HttpException('Access is already private', HttpStatus.PRECONDITION_FAILED);
         }
 
         const txHash = await this.registerService.changeOwner(

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import {RegisterService} from "./register.service";
-import {ConfigService} from "@nestjs/config";
+import { RegisterService } from './register.service';
+import { ConfigService } from '@nestjs/config';
 
 describe('register', () => {
     let service: RegisterService;
@@ -23,7 +23,7 @@ describe('register', () => {
         const result = await service.getOwner('did:ethr:goerli:' + process.env.TEST_DID_ADDRESS);
         const isPublic = result === process.env.TEST_DID_ADDRESS;
         const isPrivate = result === configService.get('PROFILE_PRIVATE_CONDITION');
-        console.log('result', result)
+        console.log('result', result);
         expect(isPublic || isPrivate).toBeTruthy();
     }, 20000);
 });

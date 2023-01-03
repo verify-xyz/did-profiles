@@ -100,7 +100,6 @@ export class RegisterService {
         newOwnerSignature: string,
         access: string,
     ): Promise<string> {
-
         if (access === 'public') {
             return this.changeOwnerToPublic(did);
         }
@@ -109,8 +108,7 @@ export class RegisterService {
 
         const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
 
-
-        let privateOwner = this.configService.get('PROFILE_PRIVATE_CONDITION');
+        const privateOwner = this.configService.get('PROFILE_PRIVATE_CONDITION');
 
         console.log('privateOwner: ' + privateOwner);
 
@@ -129,7 +127,6 @@ export class RegisterService {
     }
 
     private async changeOwnerToPublic(did: string) {
-
         const controller = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
 
         return controller.changeOwner(this.configService.get('PROFILE_PUBLIC_CONDITION'));
