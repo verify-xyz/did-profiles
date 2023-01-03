@@ -22,7 +22,7 @@ describe('register', () => {
     it('should get current access state', async () => {
         const result = await service.getOwner('did:ethr:goerli:' + process.env.TEST_DID_ADDRESS);
         const isPublic = result === process.env.TEST_DID_ADDRESS;
-        const isPrivate = result === configService.get('CABANA_PROFILE_PRIVATE_CONDITION');
+        const isPrivate = result === configService.get('PROFILE_PRIVATE_CONDITION');
         console.log('result', result)
         expect(isPublic || isPrivate).toBeTruthy();
     }, 20000);

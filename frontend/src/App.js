@@ -188,13 +188,14 @@ function App() {
         window.document.getElementById('clientSignatureStep5ID').value = '';
         window.document.getElementById('writeStep5ID').value = '';
 
-        let newOwner = process.env.REACT_APP_PUBLIC_CABANA_PROFILE;
+        let newOwner = process.env.REACT_APP_PROFILE_PUBLIC_CONDITION;
         if (access === false) {
-            newOwner = process.env.REACT_APP_PRIVATE_CABANA_PROFILE;
+            newOwner = process.env.REACT_APP_PROFILE_PRIVATE_CONDITION;
+            // newOwner = '0xCfC5720bbeECbEe3133c8bB8f4902dEe1c88ceDD'; // private
         }
 
         // Hard code to public for now
-        newOwner = process.env.REACT_APP_PUBLIC_CABANA_PROFILE;
+        // newOwner = process.env.REACT_APP_PROFILE_PUBLIC_CONDITION;
 
         const clientSign = new ClientSign();
         const clientSignature = await clientSign.createSignatureChangeOwner(clientSigBody.network, newOwner);

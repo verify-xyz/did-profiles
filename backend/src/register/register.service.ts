@@ -4,7 +4,7 @@ import { Wallet } from 'ethers';
 import { splitSignature } from '@ethersproject/bytes';
 import { NetworkUtils } from './network.utils';
 import { ConfigService } from '@nestjs/config';
-import { interpretIdentifier, EthrDidController } from '../did-resolver/ethr-did-resolver-PATCH';
+import { interpretIdentifier } from '../did-resolver/ethr-did-resolver-PATCH';
 
 const DEFAULT_GAS_LIMIT = 100000;
 
@@ -30,7 +30,6 @@ export class RegisterService {
      */
     async addService(
         did: string,
-        network: string,
         service: { serviceEndpoint: string; type: string; ttl: number },
         signature: string,
     ): Promise<object> {
@@ -97,46 +96,43 @@ export class RegisterService {
      */
     async changeOwner(
         did: string,
-        network: string,
         service: { serviceEndpoint: string; type: string; ttl: number },
         newOwnerSignature: string,
         access: string,
     ): Promise<string> {
+
+        if (access === 'public') {
+            return this.changeOwnerToPublic(did);
+        }
+
         console.log('signature: ' + newOwnerSignature);
 
+        const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
+
+
+        let privateOwner = this.configService.get('PROFILE_PRIVATE_CONDITION');
+
+        console.log('privateOwner: ' + privateOwner);
+
         const canonicalSignature = splitSignature(newOwnerSignature);
+
         const metaSignature = {
             sigV: canonicalSignature.v,
             sigR: canonicalSignature.r,
             sigS: canonicalSignature.s,
         };
 
-        if (access === 'public') {
-            return this.changeOwnerToPublic(did, metaSignature);
-        }
-
-        const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
-
-        const accessString = this.configService.get('CABANA_PROFILE_PRIVATE_CONDITION');
-
-        console.log('accessString: ' + accessString);
-
-        const meta = await metaEthrDid.changeOwner(accessString);
+        const meta = await metaEthrDid.changeOwnerSigned(privateOwner, metaSignature);
         console.log('meta: ' + meta);
 
         return meta;
     }
 
-    /**
-     * Changes owner to public
-     * @param did - did
-     * @param metaSignature - meta signature
-     * @returns hash
-     */
-    private async changeOwnerToPublic(did: string, metaSignature: any) {
+    private async changeOwnerToPublic(did: string) {
+
         const controller = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
 
-        return controller.changeOwnerSigned(this.configService.get('CABANA_PROFILE_PUBLIC_CONDITION'), metaSignature);
+        return controller.changeOwner(this.configService.get('PROFILE_PUBLIC_CONDITION'));
     }
 
     /**
