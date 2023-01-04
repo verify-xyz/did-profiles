@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ProfileContentDto, ProfileDto } from '../dto/profile.dto';
+import { ProfileContentDto } from '../dto/profile.dto';
 import { LitService } from '../lit/lit.service';
-import { of as HashOf } from 'ipfs-only-hash';
 import { EncryptedProfileDto } from '../dto/encryptedProfile.dto';
 
 @Injectable()
@@ -26,9 +25,6 @@ export class CryptionService {
         const content = await this.serializeLitEncrypt(result);
 
         const contentStr = JSON.stringify({ account, content });
-
-        // const contentData = Buffer.from(contentStr);
-        // const cid = await HashOf(contentData);
 
         return contentStr;
     }
