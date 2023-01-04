@@ -191,11 +191,7 @@ function App() {
         let newOwner = process.env.REACT_APP_PROFILE_PUBLIC_CONDITION;
         if (access === false) {
             newOwner = process.env.REACT_APP_PROFILE_PRIVATE_CONDITION;
-            // newOwner = '0xCfC5720bbeECbEe3133c8bB8f4902dEe1c88ceDD'; // private
         }
-
-        // Hard code to public for now
-        // newOwner = process.env.REACT_APP_PROFILE_PUBLIC_CONDITION;
 
         const clientSign = new ClientSign();
         const clientSignature = await clientSign.createSignatureChangeOwner(clientSigBody.network, newOwner);
