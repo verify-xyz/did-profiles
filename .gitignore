@@ -12,6 +12,12 @@
 /frontend/build
 /frontend/.env
 
+/frontend/testing-app/node_modules
+/frontend/testing-app/.pnp
+/frontend/testing-app/.pnp.js
+/frontend/testing-app/build
+/frontend/testing-app/.env
+
 # Logs
 logs
 *.log
