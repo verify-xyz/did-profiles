@@ -20,3 +20,17 @@ export class RegisterServiceBody {
         this.service = service;
     }
 }
+
+export const Access = {
+    public: 'PUBLIC',
+    private: 'PRIVATE'
+};
+
+export class RegisterServiceBodyWithAccess {
+    constructor(did, signature, service, access) {
+        this.did = did;
+        this.signature = signature;
+        this.service = service;
+        this.access = access;
+    }
+}

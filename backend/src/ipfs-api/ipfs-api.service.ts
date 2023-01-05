@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
+import { AxiosRequestConfig } from 'axios';
 
 @Injectable()
 export class IpfsApiService {
@@ -41,8 +42,12 @@ export class IpfsApiService {
     async getStringFromIpfs(hash: string) {
         const url = `${this.ipfsUrlRead}/${hash}`;
 
+        const config: AxiosRequestConfig = {
+            timeout: 2000,
+        };
+
         try {
-            const response = await this.httpService.get(url).toPromise();
+            const response = await this.httpService.get(url, config).toPromise();
             const text = response.data;
 
             return text;

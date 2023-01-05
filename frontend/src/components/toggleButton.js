@@ -1,28 +1,13 @@
-import React, { /* useState, */ useEffect } from 'react';
+import React from 'react';
 import '../styles/styleToggleButton.css';
 
 // eslint-disable-next-line react/prop-types
-export const ToggleButton = ({ setValue }) => {
-    let value = 'private';
-
-    useEffect(() => {
-
-    });
-
-    function checkboxClickedHandler() {
-        if (value === 'private') {
-            value = 'public';
-        } else {
-            value = 'private';
-        }
-        setValue(value);
-    }
-
+export const ToggleButton = ({ onToggle, isToggled }) => {
     return (
         <div className='toggleButtonMainContainer' >
             <label>Private</label>
             <label className="switch">
-                <input type="checkbox" onClick={checkboxClickedHandler}></input>
+                <input type="checkbox" onChange={onToggle} checked={isToggled}></input>
                 <span className="slider round"></span>
             </label>
             <label>Public</label>

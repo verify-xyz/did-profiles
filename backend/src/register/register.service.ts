@@ -4,6 +4,7 @@ import { Wallet } from 'ethers';
 import { splitSignature } from '@ethersproject/bytes';
 import { NetworkUtils } from './network.utils';
 import { ConfigService } from '@nestjs/config';
+import { interpretIdentifier } from '../did-resolver/ethr-did-resolver-PATCH';
 
 const DEFAULT_GAS_LIMIT = 100000;
 
@@ -29,7 +30,6 @@ export class RegisterService {
      */
     async addService(
         did: string,
-        network: string,
         service: { serviceEndpoint: string; type: string; ttl: number },
         signature: string,
     ): Promise<object> {
@@ -47,7 +47,7 @@ export class RegisterService {
 
         const canonicalSignature = splitSignature(signature);
 
-        const metaEthrDid = await this.getEthrDidController(did, network, this.configService.get('GAS_PAYER_KEY'));
+        const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
         console.log('ethrDid.addServiceSigned %o', {
             attrName,
             attrValue,
@@ -76,14 +76,73 @@ export class RegisterService {
     }
 
     /**
+     * Gets owner
+     * @param did - did
+     * @returns - owner's address
+     */
+    async getOwner(did: string) {
+        const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
+
+        return metaEthrDid.lookupOwner();
+    }
+
+    /**
+     * Changes owner
+     * @param did - did
+     * @param network - network
+     * @param service - service object
+     * @param signature - signature
+     * @returns string
+     */
+    async changeOwner(
+        did: string,
+        service: { serviceEndpoint: string; type: string; ttl: number },
+        newOwnerSignature: string,
+        access: string,
+    ): Promise<string> {
+        if (access === 'public') {
+            return this.changeOwnerToPublic(did);
+        }
+
+        console.log('signature: ' + newOwnerSignature);
+
+        const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
+
+        const privateOwner = this.configService.get('PROFILE_PRIVATE_CONDITION');
+
+        console.log('privateOwner: ' + privateOwner);
+
+        const canonicalSignature = splitSignature(newOwnerSignature);
+
+        const metaSignature = {
+            sigV: canonicalSignature.v,
+            sigR: canonicalSignature.r,
+            sigS: canonicalSignature.s,
+        };
+
+        const meta = await metaEthrDid.changeOwnerSigned(privateOwner, metaSignature);
+        console.log('meta: ' + meta);
+
+        return meta;
+    }
+
+    private async changeOwnerToPublic(did: string) {
+        const controller = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
+
+        return controller.changeOwner(this.configService.get('PROFILE_PUBLIC_CONDITION'));
+    }
+
+    /**
      * Gets ethr did controller
      * @param did Gets ethr did controller
      * @param network - network
      * @param privateKey - private key
      * @returns EthrDID object
      */
-    private async getEthrDidController(did: string, network: string, privateKey: string): Promise<EthrDID> {
+    private async getEthrDidController(did: string, privateKey: string): Promise<EthrDID> {
+        const { network } = interpretIdentifier(did);
         console.log('getEthrDidController', did, network);
+        //console.log('PRIVATE KEY: ' + privateKey);
 
         const provider = this.networkUtils.getNetworkProviderFor(network);
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './styles/styleApp.css';
 import ServerAPI from './api/serverAPI.js';
-import { RegisterServiceDto, ClientSignatureBody, RegisterServiceBody } from './dto/register.dto';
+import { RegisterServiceDto, ClientSignatureBody, RegisterServiceBody, RegisterServiceBodyWithAccess } from './dto/register.dto';
 import { ClientSign } from './network/client-sign';
 import { ToggleButton } from './components/toggleButton';
 
@@ -9,13 +9,12 @@ function App() {
     const [message, setMessage] = useState('');
     const [address, setAddress] = useState('');
     const [txRecord, setTxRecord] = useState('');
-    // const [toggleValue, setToggleValue] = useState('private');
-    let toggleValue = 'private';
+    const [access, setAccess] = useState(false);
 
     useEffect(() => {
         console.log(message);
         console.log(address);
-        console.log(toggleValue);
+        console.log('access: ' + access);
     });
 
     /**
@@ -43,7 +42,7 @@ function App() {
     /**
      * Send button clicked - handler function
      */
-    async function sendButtonClickedHandler() {
+    async function step1SendButtonClickedHandler() {
         const inputMessage = window.document.getElementById('messageID').value;
         setMessage(inputMessage);
 
@@ -65,7 +64,7 @@ function App() {
     /**
      * Fetch button click - handler function
      */
-    async function fetchButtonClickedHandler() {
+    async function step2FetchButtonClickedHandler() {
         const inputAddress = window.document.getElementById('addressID').value;
         setAddress(inputAddress);
 
@@ -86,7 +85,7 @@ function App() {
     /**
      * Client signature button click - handler function
      */
-    async function clientSignatureButtonClickedHandler() {
+    async function step3ClientSignatureButtonClickedHandler() {
         const clientSigBody = createHardCodedClientSignatureBody();
 
         // Clear subsequent fields
@@ -102,7 +101,7 @@ function App() {
     /**
      * Server register button click - handler function
      */
-    async function serverRegisterButtonClickedHandler() {
+    async function step3ServerRegisterButtonClickedHandler() {
         // Disable button until after response
         const btn = window.document.getElementById('step3Btn');
         btn.setAttribute('disabled', 'disabled');
@@ -126,42 +125,32 @@ function App() {
     /**
      * Resolve button click - handler function
      */
-    async function resolveButtonClickedHandler() {
+    async function step4ResolveButtonClickedHandler() {
         // Disable button until after response
         const btn = window.document.getElementById('step4Btn');
         btn.setAttribute('disabled', 'disabled');
-        const interval = setInterval(timer, 1000);
 
-        // window.document.getElementById('timerID').textContent = '0';
         window.document.getElementById('resolveID').value = '';
-        // window.document.getElementById('serviceEndpointID').value = '';
 
-        const url = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
+        const url = `did:ethr:goerli:${process.env.REACT_APP_ADDRESS}`;
         const response = await ServerAPI.getResolve(url);
         console.log(response);
 
         let verificationMethod = 'Request failed. Please try again.';
-        // let serviceEndpoint = '';
 
         if (response?.didDocument?.verificationMethod[0]?.id) {
             verificationMethod = await response.didDocument.verificationMethod[0].id;
         }
 
-        /* if (response?.didDocument?.service[0]?.serviceEndpoint) {
-            serviceEndpoint = await response.didDocument.service[0].serviceEndpoint;
-        } */
-
         window.document.getElementById('resolveID').value = verificationMethod;
-        // window.document.getElementById('serviceEndpointID').value = serviceEndpoint;
 
         btn.removeAttribute('disabled');
-        clearInterval(interval);
     };
 
     /**
      * Sends register service endpoint ipfs hash to server and gets decryptrd content
      */
-    async function fetch4ButtonClickedHandler() {
+    async function step4FetchButtonClickedHandler() {
         window.document.getElementById('decryptedContentID').value = '';
         const btn = window.document.getElementById('step4BtnFetch');
         btn.setAttribute('disabled', 'disabled');
@@ -189,12 +178,45 @@ function App() {
         return url;
     }
 
-    async function clientSignatureStep5ButtonClickedHandler() {
+    /**
+     * Gets client signature
+     */
+    async function step5ClientSignatureButtonClickedHandler() {
+        const clientSigBody = createHardCodedClientSignatureBodyStep5();
 
+        // Clear subsequent fields
+        window.document.getElementById('clientSignatureStep5ID').value = '';
+        window.document.getElementById('writeStep5ID').value = '';
+
+        let newOwner = process.env.REACT_APP_PROFILE_PUBLIC_CONDITION;
+        if (access === false) {
+            newOwner = process.env.REACT_APP_PROFILE_PRIVATE_CONDITION;
+        }
+
+        const clientSign = new ClientSign();
+        const clientSignature = await clientSign.createSignatureChangeOwner(clientSigBody.network, newOwner);
+
+        window.document.getElementById('clientSignatureStep5ID').value = clientSignature;
     }
 
-    async function writeStep5ButtonClickedHandler() {
+    /**
+     * Write to server (private/public)
+     */
+    async function step5WriteButtonClickedHandler() {
+        // Disable button until after response
+        const btn = window.document.getElementById('step5BtnWrite');
+        btn.setAttribute('disabled', 'disabled');
 
+        // Clear field
+        window.document.getElementById('writeStep5ID').value = '';
+
+        const registerServiceBody = createHardCodedRegisterServiceBodyStep5();
+        const registerServiceBodyJSON = JSON.stringify(registerServiceBody);
+        const registerHash = await ServerAPI.postRegisterServiceWithAccess(registerServiceBodyJSON);
+
+        window.document.getElementById('writeStep5ID').value = registerHash;
+
+        btn.removeAttribute('disabled');
     }
 
     /**
@@ -209,15 +231,41 @@ function App() {
     }
 
     /**
+     * Creates hard coded client signature body
+     * @returns client signature
+     */
+    function createHardCodedClientSignatureBodyStep5() {
+        const cid = getIpfsHash();
+        const regService = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_INFURA_IPFS_URL + cid, cid);
+        const clientSigBody = new ClientSignatureBody('goerli', regService);
+        return clientSigBody;
+    }
+
+    /**
      * Creates hard coded register service body
      */
     function createHardCodedRegisterServiceBody() {
-        const did = 'did:ethr:goerli:0x5Cd0a02E159896845658796c350162aFE8bEA01d';
+        const did = `did:ethr:goerli:${process.env.REACT_APP_ADDRESS}`;
         const signature = window.document.getElementById('clientSignatureID').value;
         const cid = getIpfsHash();
         const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
         const registerServiceBody = new RegisterServiceBody(did, signature, service);
         return registerServiceBody;
+    }
+
+    /**
+     * Creates hard coded register service body for step 5
+     */
+    function createHardCodedRegisterServiceBodyStep5() {
+        const did = `did:ethr:goerli:${process.env.REACT_APP_ADDRESS}`;
+        const signature = window.document.getElementById('clientSignatureStep5ID').value;
+        const cid = getIpfsHash();
+        const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_INFURA_IPFS_URL + cid, cid);
+        const accessValue = access ? 'public' : 'private';
+        console.log('accessValue: ' + accessValue);
+
+        const registerServiceBodyWithAccess = new RegisterServiceBodyWithAccess(did, signature, service, accessValue);
+        return registerServiceBodyWithAccess;
     }
 
     /**
@@ -234,24 +282,11 @@ function App() {
     }
 
     /**
-     * Measures time in [s] needed for Resolve response
-     */
-    function timer() {
-        /* let value = parseInt(document.getElementById('timerID').textContent.match(/\d+$/)[0], 10);
-        value = isNaN(value) ? 0 : value;
-        value++;
-        document.getElementById('timerID').textContent = value;
-        console.log(value); */
-    }
-
-    /**
      * Passes data from ToggleButton to parent
      * @param {string} childData - private/public
      */
-    function childToParent(childData) {
-        console.log(`Data received from child: ${childData}`);
-        toggleValue = childData;
-        console.log(`toggleValue: ${toggleValue}`);
+    function changeAccessPrivatePublic() {
+        setAccess(!access);
     };
 
     return (
@@ -263,7 +298,7 @@ function App() {
 
                 <label className="appLabel">Message:</label>
                 <input className="appInput" id='messageID'></input>
-                <button className="appButtonSend" id="step1Btn" onClick={sendButtonClickedHandler}>Send</button>
+                <button className="appButtonSend" id="step1Btn" onClick={step1SendButtonClickedHandler}>Send</button>
             </div>
 
             <div className="appGridContainer appGridContainer02">
@@ -271,7 +306,7 @@ function App() {
 
                 <label className="appLabelAddress">IPFS Hash:</label>
                 <input className="appInputAddress" id="addressID" readOnly></input>
-                <button className="appButtonFetch" id="step2Btn" onClick={fetchButtonClickedHandler}>Fetch</button>
+                <button className="appButtonFetch" id="step2Btn" onClick={step2FetchButtonClickedHandler}>Fetch</button>
 
                 <label className="appLabel">Message:</label>
                 <input className="appInput" id="receivedMessageID" readOnly></input>
@@ -282,12 +317,12 @@ function App() {
 
                 <label className="appLabelAddress">Client:</label>
                 <input className="appInputAddress" id="clientSignatureID" readOnly></input>
-                <button className="appButtonFetch" onClick={clientSignatureButtonClickedHandler}>Client Signature</button>
+                <button className="appButtonFetch" onClick={step3ClientSignatureButtonClickedHandler}>Client Signature</button>
                 {/* <button className="appButtonFetch" onClick={async() => { await clientSignatureButtonClickedHandler(); } }>Client Signature</button> */}
 
                 <label className="appLabel">Server:</label>
                 <input className="appInput" id="serverSignatureID" readOnly></input>
-                <button className="appButtonFetch" onClick={serverRegisterButtonClickedHandler} id="step3Btn">Register</button>
+                <button className="appButtonFetch" onClick={step3ServerRegisterButtonClickedHandler} id="step3Btn">Register</button>
 
                 {(txRecord && <a href={txRecord} target="_blank" rel="noreferrer">{txRecord}</a>)}
             </div>
@@ -299,11 +334,11 @@ function App() {
 
                 <label className="appLabel">Authentication:</label>
                 <input className="appInput" id="resolveID" readOnly></input>
-                <button className="appButtonFetch" onClick={resolveButtonClickedHandler} id="step4Btn">Resolve</button>
+                <button className="appButtonFetch" onClick={step4ResolveButtonClickedHandler} id="step4Btn">Resolve</button>
 
                 <label className="appLabel">Service endpoint:</label>
                 <input className="appInput" id="serviceEndpointID" readOnly></input>
-                <button className="appButtonFetch" onClick={fetch4ButtonClickedHandler} id="step4BtnFetch">Fetch</button>
+                <button className="appButtonFetch" onClick={step4FetchButtonClickedHandler} id="step4BtnFetch">Fetch</button>
 
                 <label className="appLabel">Decrypted content:</label>
                 <input className="appInput" id="decryptedContentID" readOnly></input>
@@ -315,15 +350,15 @@ function App() {
                 <div>Private/Public Transaction</div>
                 <div></div>
 
-                <ToggleButton setValue={childToParent}></ToggleButton><div></div><div></div>
+                <ToggleButton onToggle={changeAccessPrivatePublic} isToggled={access}></ToggleButton><div></div><div></div>
 
                 <label className="appLabel">Client:</label>
                 <input className="appInput" id="clientSignatureStep5ID" readOnly></input>
-                <button className="appButtonFetch" onClick={clientSignatureStep5ButtonClickedHandler} id="step5BtnClientSig">Client Signature</button>
+                <button className="appButtonFetch" onClick={step5ClientSignatureButtonClickedHandler} id="step5BtnClientSig">Client Signature</button>
 
                 <label className="appLabel">Write:</label>
                 <input className="appInput" id="writeStep5ID" readOnly></input>
-                <button className="appButtonFetch" onClick={writeStep5ButtonClickedHandler} id="step5BtnWrite">Write</button>
+                <button className="appButtonFetch" onClick={step5WriteButtonClickedHandler} id="step5BtnWrite">Write</button>
             </div>
         </div>
     );
