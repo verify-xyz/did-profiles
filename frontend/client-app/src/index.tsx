@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import './styles/styleApp.css';
 import './styles/styleLayout.css';
 import './styles/styleContact.css';
+import './styles/styleWallet.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
