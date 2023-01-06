@@ -9,6 +9,10 @@ import Publish from "./pages/Publish";
 import Manage from "./pages/Manage";
 
 export default function App() {
+    let a: string;
+    a='aaa';
+    console.log(a);
+
     return (
         <BrowserRouter>
             <Routes>
