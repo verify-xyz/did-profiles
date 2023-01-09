@@ -1,9 +1,10 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {Body, Controller, Get, HttpException, HttpStatus, Param, Post} from '@nestjs/common';
 import { AppService } from './app.service';
 import { CryptionService } from './cryption/cryption.service';
-import { ProfileContentDto, ProfileDto } from './dto/profile.dto';
+import {AddContentDto, AuthSigDto, ProfileContentDto, ProfileDto} from './dto/profile.dto';
 import { EncryptedProfileDto } from './dto/encryptedProfile.dto';
 import { IpfsApiService } from './ipfs-api/ipfs-api.service';
+import {AuthSig} from "./types";
 
 @Controller()
 export class AppController {
@@ -18,11 +19,11 @@ export class AppController {
         return this.appService.getHello();
     }
 
-    @Get('add/:text')
-    async encryptAndAddToIpfs(@Param('text') text: string): Promise<string> {
-        const profileContentDto: ProfileContentDto = this.appService.createHardCodedProfileContentDto(text);
+    @Post('add')
+    async encryptAndAddToIpfs(@Body() body: AddContentDto): Promise<string> {
+        const profileContentDto: ProfileContentDto = this.appService.createHardCodedProfileContentDto(body.content);
 
-        const encryptedString: string = await this.cryptionService.encryptProfile(profileContentDto);
+        const encryptedString: string = await this.cryptionService.encryptProfile(profileContentDto, body.authSig);
         const result = await this.ipfsApiService.addStringToIpfs(encryptedString);
 
         const response = { hash: result };
@@ -35,11 +36,18 @@ export class AppController {
     async readFromIpfsAndDecrypt(@Param('hash') hash: string): Promise<string> {
         const encryptedProfileDto: EncryptedProfileDto = await this.ipfsApiService.getStringFromIpfs(hash);
 
-        const decrypted: any = await this.cryptionService.decryptProfile(encryptedProfileDto);
+        try {
+            const decrypted: any = await this.cryptionService.decryptProfile(encryptedProfileDto);
 
-        const response = { text: decrypted.content.template };
-        const json = JSON.stringify(response);
+            const response = {text: decrypted.content.template};
+            const json = JSON.stringify(response);
 
-        return json;
+            return json;
+        }
+        catch(e) {
+            throw new HttpException('Profile is set to private. Unable to decrypt.', HttpStatus.PRECONDITION_REQUIRED)
+        }
     }
+    //did:ethr:goerli:0x32f8D7ae03e2963975F8cA76D1ff1D8D77752b70
 }
+

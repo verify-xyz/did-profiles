@@ -22,7 +22,6 @@ export class EthrNetworkConfiguration {
 export class NetworkUtils {
     network1 = new EthrNetworkConfiguration(null, 'mainnet', null, 'https://mainnet.infura.io/v3/' + process.env.REACT_APP_INFURA_NETWORK_ID, null);
     network2 = new EthrNetworkConfiguration(null, 'goerli', null, 'https://goerli.infura.io/v3/' + process.env.REACT_APP_INFURA_NETWORK_ID, null);
-    // network2 = new EthrNetworkConfiguration(null, 'goerli', null, 'https://goerli.etherscan.io/address/0xcfc5720bbeecbee3133c8bb8f4902dee1c88cedd', null);
     networks = [this.network1, this.network2];
 
     /**

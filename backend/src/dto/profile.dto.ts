@@ -17,10 +17,13 @@ export class AuthSigDto {
     address: string;
 
     @IsString()
-    signature: string;
+    sig: string;
 
     @IsString()
-    message: string;
+    signedMessage: string;
+
+    @IsString()
+    derivedVia: string;
 }
 
 export class ProfileDto {
@@ -33,4 +36,14 @@ export class ProfileDto {
     @ValidateNested()
     @Type(() => ProfileContentDto)
     content: ProfileContentDto;
+}
+
+export class AddContentDto {
+    @IsString()
+    content: string;
+
+    @IsDefined()
+    @ValidateNested()
+    @Type(() => AuthSigDto)
+    authSig: AuthSigDto
 }

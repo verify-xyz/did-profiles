@@ -8,24 +8,12 @@ describe('IpfsApiService', () => {
     let config: ConfigService;
 
     beforeEach(async () => {
+
         const module: TestingModule = await Test.createTestingModule({
             imports: [HttpModule, ConfigModule],
             providers: [
                 IpfsApiService,
-                {
-                    provide: ConfigService,
-                    useValue: {
-                        get: jest.fn((key: string) => {
-                            if (key === 'IPFS_URL_ADD') {
-                                return 'http://localhost:8080/ipfs/add';
-                            }
-                            if (key === 'IPFS_URL_READ') {
-                                return 'http://127.0.0.1:8080/ipfs';
-                            }
-                            return null;
-                        }),
-                    },
-                },
+                ConfigService
             ],
         }).compile();
 

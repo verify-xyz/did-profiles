@@ -5,7 +5,17 @@ class ServerAPI {
      * @returns Hash code of the message added to IPFS
      */
     static async sendMessageToIPFS(message) {
-        const response = await fetch('/add/' + message);
+        const response = await fetch('/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: JSON.stringify({
+                content: message,
+                authSig: JSON.parse(process.env.REACT_APP_CLIENT_AUTH_SIG)
+            })
+        });
         return await response.json();
     }
 
@@ -16,7 +26,8 @@ class ServerAPI {
      */
     static async getMessageFromIPFS(hash) {
         const response = await fetch('/read/' + hash);
-        return await response.json();
+        if (response.ok) return (await response.json()).text;
+        return (await response.json()).message;
     }
 
     /**
@@ -66,7 +77,7 @@ class ServerAPI {
      * @returns register hash
      */
     static async postRegisterServiceWithAccess(bodyJSON) {
-        const rawResponse = await fetch('/register/access', {
+        const response = await fetch('/register/access', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -75,10 +86,9 @@ class ServerAPI {
             body: bodyJSON
         });
 
-        const content = await rawResponse.json();
-        console.log(content);
+        if (response.ok) return response.json();
 
-        return content;
+        return (await response.json()).message;
     };
 
     /**
