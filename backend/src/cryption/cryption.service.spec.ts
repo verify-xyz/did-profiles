@@ -11,10 +11,10 @@ const content: ProfileContentDto = {
 };
 
 const authSig: AuthSigDto = {
-    signature:
-        '0x18a173d68d2f78cc5c13da0dfe36eec2a293285bee6d42547b9577bf26cdc985660ed3dddc4e75d422366cac07e8a9fc77669b10373bef9c7b8e4280252dfddf1b',
-    message: 'I am creating an account to use LITs at 2021-08-04T20:14:04.918Z',
+    sig: '0x18a173d68d2f78cc5c13da0dfe36eec2a293285bee6d42547b9577bf26cdc985660ed3dddc4e75d422366cac07e8a9fc77669b10373bef9c7b8e4280252dfddf1b',
+    signedMessage: 'I am creating an account to use LITs at 2021-08-04T20:14:04.918Z',
     address: '0xdbd360f30097fb6d938dcc8b7b62854b36160b45',
+    derivedVia: 'web3.eth.personal.sign',
 };
 
 const profileDto: ProfileDto = {
@@ -24,7 +24,7 @@ const profileDto: ProfileDto = {
 
 const encryptedAccountDto: EncryptedAccountDto = {
     sig: '0x686b095a9d51456d3ea798140cf38645bc106c071e4f83bec539ad6a1e65773d57474b3075827f296cce0f7ba582d7acb929e0891411c6e17af78891c4caf8c11b',
-    derivedVia: '0x7405cB310289DC8BBd2b4BE4A16DAA2882c57c74',
+    derivedVia: 'web3.eth.personal.sign',
     signedMessage: 'I am creating an account to use LIT at 2022-12-13T09:04:20.628Z',
     address: '0x7405cB310289DC8BBd2b4BE4A16DAA2882c57c74',
 };
@@ -63,7 +63,7 @@ describe('CryptionService', () => {
     });
 
     it('should provide valid content string', async () => {
-        const content = await service.encryptProfile(profileDto.content);
+        const content = await service.encryptProfile(profileDto.content, encryptedAccountDto);
         expect(content).toContain('I am creating an account to use LIT at');
     }, 20000);
 

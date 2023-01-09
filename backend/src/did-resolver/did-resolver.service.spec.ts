@@ -11,20 +11,7 @@ describe('DidResolverService', () => {
             imports: [ConfigModule],
             providers: [
                 DidResolverService,
-                {
-                    provide: ConfigService,
-                    useValue: {
-                        get: jest.fn((key: string) => {
-                            if (key === 'INFURA_NETWORK_ID') {
-                                return process.env.INFURA_NETWORK_ID;
-                            }
-                            if (key === 'TEST_DID_ADDRESS') {
-                                return process.env.TEST_DID_ADDRESS;;
-                            }
-                            return null;
-                        }),
-                    },
-                },
+                ConfigService
             ],
         }).compile();
 
@@ -37,7 +24,7 @@ describe('DidResolverService', () => {
     });
 
     it('resolve a DID', async () => {
-        const address = config.get('TEST_DID_ADDRESS');
+        const address = config.get('CLIENT_ADDRESS');
         const did = `did:ethr:goerli:${address}`;
 
         const didDoc = await service.resolve(did);

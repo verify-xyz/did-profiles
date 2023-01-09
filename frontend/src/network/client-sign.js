@@ -14,8 +14,8 @@ export class ClientSign {
     constructor() {
         this.networkUtils = new NetworkUtils();
 
-        if (!process.env.REACT_APP_TEST_DID_KEY) {
-            throw new Error('Missing env - TEST_DID_KEY');
+        if (!process.env.REACT_APP_CLIENT_PRIVATE_KEY) {
+            throw new Error('Missing env - CLIENT_PRIVATE_KEY');
         }
     }
 
@@ -28,7 +28,7 @@ export class ClientSign {
      */
     async createSignatureAddService(network, service) {
         const provider = this.networkUtils.getNetworkProviderFor(network);
-        const wallet = new Wallet(process.env.REACT_APP_TEST_DID_KEY, provider);
+        const wallet = new Wallet(process.env.REACT_APP_CLIENT_PRIVATE_KEY, provider);
         const did = `did:ethr:${network}:${wallet.address}`;
 
         const ethrDid = new EthrDID({
@@ -48,7 +48,7 @@ export class ClientSign {
         );
 
         return this.eth_rawSign(
-            process.env.REACT_APP_TEST_DID_KEY,
+            process.env.REACT_APP_CLIENT_PRIVATE_KEY,
             Buffer.from(strip0x(metaHash), 'hex')
         );
     }
@@ -61,7 +61,7 @@ export class ClientSign {
      */
     async createSignatureChangeOwner(network, newOwner) {
         const provider = this.networkUtils.getNetworkProviderFor(network);
-        const wallet = new Wallet(process.env.REACT_APP_TEST_DID_KEY, provider);
+        const wallet = new Wallet(process.env.REACT_APP_CLIENT_PRIVATE_KEY, provider);
         const did = `did:ethr:${network}:${wallet.address}`;
 
         const ethrDid = new EthrDID({
@@ -73,7 +73,7 @@ export class ClientSign {
         const metaHash = await ethrDid.createChangeOwnerHash(newOwner);
 
         return this.eth_rawSign(
-            process.env.REACT_APP_TEST_DID_KEY,
+            process.env.REACT_APP_CLIENT_PRIVATE_KEY,
             Buffer.from(strip0x(metaHash), 'hex')
         );
     }

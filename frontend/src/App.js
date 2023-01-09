@@ -15,6 +15,8 @@ function App() {
         console.log(message);
         console.log(address);
         console.log('access: ' + access);
+
+        window.document.getElementById('resolveID').value = 'did:ethr:goerli:' + process.env.REACT_APP_CLIENT_ADDRESS;
     });
 
     /**
@@ -33,10 +35,9 @@ function App() {
      * @param {string} hash - Hash of the message
      */
     async function getMessageFromIPFS(hash) {
-        const response = await ServerAPI.getMessageFromIPFS(hash);
-        const receivedMessage = await response.text;
+        const text = await ServerAPI.getMessageFromIPFS(hash);
 
-        window.document.getElementById('receivedMessageID').value = receivedMessage;
+        window.document.getElementById('receivedMessageID').value = text;
     };
 
     /**
@@ -108,14 +109,14 @@ function App() {
 
         // Clear subsequent fields
         window.document.getElementById('serverSignatureID').value = '';
-        window.document.getElementById('serviceEndpointID').value = '';
+        // window.document.getElementById('serviceEndpointID').value = '';
 
         const registerServiceBody = createHardCodedRegisterServiceBody();
         const registerServiceBodyJSON = JSON.stringify(registerServiceBody);
         const registerHash = await ServerAPI.postRegisterService(registerServiceBodyJSON);
 
         window.document.getElementById('serverSignatureID').value = registerHash.meta;
-        window.document.getElementById('serviceEndpointID').value = registerHash.serviceEndpoint;
+        // window.document.getElementById('serviceEndpointID').value = registerHash.serviceEndpoint;
 
         setTxRecord('https://goerli.etherscan.io/tx/' + registerHash.meta);
 
@@ -130,19 +131,21 @@ function App() {
         const btn = window.document.getElementById('step4Btn');
         btn.setAttribute('disabled', 'disabled');
 
-        window.document.getElementById('resolveID').value = '';
+        window.document.getElementById('decryptedContentID').value = '';
+        window.document.getElementById('serviceEndpointID').value = '';
 
-        const url = `did:ethr:goerli:${process.env.REACT_APP_ADDRESS}`;
+        const url = `did:ethr:goerli:${process.env.REACT_APP_CLIENT_ADDRESS}`;
         const response = await ServerAPI.getResolve(url);
         console.log(response);
 
-        let verificationMethod = 'Request failed. Please try again.';
+        let serviceEndpoint = 'Request failed. Please try again.';
 
-        if (response?.didDocument?.verificationMethod[0]?.id) {
-            verificationMethod = await response.didDocument.verificationMethod[0].id;
+        if (response?.didDocument?.service[0]?.serviceEndpoint) {
+            serviceEndpoint = response.didDocument.service[0].serviceEndpoint;
         }
 
-        window.document.getElementById('resolveID').value = verificationMethod;
+        // window.document.getElementById('resolveID').value = verificationMethod;
+        window.document.getElementById('serviceEndpointID').value = serviceEndpoint;
 
         btn.removeAttribute('disabled');
     };
@@ -160,7 +163,7 @@ function App() {
         const urlParameter = getUrlParameter(serviceEndpoint);
         const message = await ServerAPI.getMessageFromIPFS(urlParameter);
 
-        window.document.getElementById('decryptedContentID').value = message.text;
+        window.document.getElementById('decryptedContentID').value = message;
 
         btn.removeAttribute('disabled');
     }
@@ -188,9 +191,9 @@ function App() {
         window.document.getElementById('clientSignatureStep5ID').value = '';
         window.document.getElementById('writeStep5ID').value = '';
 
-        let newOwner = process.env.REACT_APP_PROFILE_PUBLIC_CONDITION;
+        let newOwner = process.env.REACT_APP_CLIENT_ADDRESS;
         if (access === false) {
-            newOwner = process.env.REACT_APP_PROFILE_PRIVATE_CONDITION;
+            newOwner = process.env.REACT_APP_SERVER_ADDRESS;
         }
 
         const clientSign = new ClientSign();
@@ -236,7 +239,7 @@ function App() {
      */
     function createHardCodedClientSignatureBodyStep5() {
         const cid = getIpfsHash();
-        const regService = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_INFURA_IPFS_URL + cid, cid);
+        const regService = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
         const clientSigBody = new ClientSignatureBody('goerli', regService);
         return clientSigBody;
     }
@@ -245,7 +248,7 @@ function App() {
      * Creates hard coded register service body
      */
     function createHardCodedRegisterServiceBody() {
-        const did = `did:ethr:goerli:${process.env.REACT_APP_ADDRESS}`;
+        const did = `did:ethr:goerli:${process.env.REACT_APP_CLIENT_ADDRESS}`;
         const signature = window.document.getElementById('clientSignatureID').value;
         const cid = getIpfsHash();
         const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
@@ -257,10 +260,10 @@ function App() {
      * Creates hard coded register service body for step 5
      */
     function createHardCodedRegisterServiceBodyStep5() {
-        const did = `did:ethr:goerli:${process.env.REACT_APP_ADDRESS}`;
+        const did = `did:ethr:goerli:${process.env.REACT_APP_CLIENT_ADDRESS}`;
         const signature = window.document.getElementById('clientSignatureStep5ID').value;
         const cid = getIpfsHash();
-        const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_INFURA_IPFS_URL + cid, cid);
+        const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
         const accessValue = access ? 'public' : 'private';
         console.log('accessValue: ' + accessValue);
 
@@ -332,7 +335,7 @@ function App() {
                 <div>Resolve</div>
                 <div></div>
 
-                <label className="appLabel">Authentication:</label>
+                <label className="appLabel">DID:</label>
                 <input className="appInput" id="resolveID" readOnly></input>
                 <button className="appButtonFetch" onClick={step4ResolveButtonClickedHandler} id="step4Btn">Resolve</button>
 
@@ -347,7 +350,7 @@ function App() {
 
             <div className="appGridContainer appGridContainer05">
                 <label className="stepLabel">Step #5</label>
-                <div>Private/Public Transaction</div>
+                <div>Update Access Permissions</div>
                 <div></div>
 
                 <ToggleButton onToggle={changeAccessPrivatePublic} isToggled={access}></ToggleButton><div></div><div></div>
