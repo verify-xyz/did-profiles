@@ -47,9 +47,9 @@ export default function Wallet() {
 
     return (
         <div className="Wallet-mainContainer">
-            <button onClick={connect}>Connect to MetaMask</button>
-            {active ? <span>Connected with <b>{account}</b></span> : <span>Not connected</span>}
-            <button onClick={disconnect}>Disconnect</button>
+            <div onClick={connect} className="Wallet-button">Connect to MetaMask</div>
+            {active ? <span className="Wallet-connection">Connected with <b>{account}</b></span> : <span>Not connected</span>}
+            <div onClick={disconnect} className="Wallet-button">Disconnect</div>
         </div>
     )
 }
