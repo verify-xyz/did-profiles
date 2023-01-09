@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ProfileContentDto } from '../dto/profile.dto';
 import { LitService } from '../lit/lit.service';
 import { EncryptedProfileDto } from '../dto/encryptedProfile.dto';
+import {AuthSig} from "../types";
 
 @Injectable()
 export class CryptionService {
@@ -16,15 +17,15 @@ export class CryptionService {
      * @param data - ProfileDto (contains signature and content)
      * @returns encrypted string
      */
-    async encryptProfile(profileContentDto: ProfileContentDto) {
-        const account = this.litService.createRandomAuthSig();
+    async encryptProfile(profileContentDto: ProfileContentDto, authSig: AuthSig) {
+        // const account = this.litService.createRandomAuthSig();
         const rawString = JSON.stringify(profileContentDto);
 
         //TODO - check for error
-        const result = await this.litService.encryptString(account, rawString);
+        const result = await this.litService.encryptString(authSig, rawString);
         const content = await this.serializeLitEncrypt(result);
 
-        const contentStr = JSON.stringify({ account, content });
+        const contentStr = JSON.stringify({ account: authSig, content });
 
         return contentStr;
     }

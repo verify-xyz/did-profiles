@@ -9,13 +9,13 @@ export class RegisterController {
 
     @Post('register')
     async registerProfile(@Body() { did, signature, service }: RegisterDto) {
+      console.log('registerProfile', did, service)
         const txHash = await this.registerService.addService(
             did,
             {
                 type: service.type,
-                serviceEndpoint: this.configService.get('SERVICE_ENDPOINT') + service.ipfsHash,
-                ttl: 31536000,
-                ...service,
+                serviceEndpoint: service.serviceEndpoint,
+                ttl: 31536000
             },
             signature,
         );
@@ -31,7 +31,7 @@ export class RegisterController {
         console.log('access: ' + access);
 
         const currentOwner = await this.registerService.getOwner(did);
-        const isPrivate = currentOwner === this.configService.get('PROFILE_PRIVATE_CONDITION');
+        const isPrivate = currentOwner === this.configService.get('SERVER_ADDRESS');
 
         console.log(currentOwner, isPrivate);
 
@@ -47,9 +47,8 @@ export class RegisterController {
             did,
             {
                 type: service.type,
-                serviceEndpoint: this.configService.get('SERVICE_ENDPOINT') + service.ipfsHash,
-                ttl: 31536000,
-                ...service,
+                serviceEndpoint: service.serviceEndpoint,
+                ttl: 31536000
             },
             signature,
             access,

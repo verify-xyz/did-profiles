@@ -20,9 +20,9 @@ describe('register', () => {
     });
 
     it('should get current access state', async () => {
-        const result = await service.getOwner('did:ethr:goerli:' + configService.get('TEST_ADDRESS'));
-        const isPublic = result === configService.get('TEST_ADDRESS');
-        const isPrivate = result === configService.get('PROFILE_PRIVATE_CONDITION');
+        const result = await service.getOwner('did:ethr:goerli:' + configService.get('CLIENT_ADDRESS'));
+        const isPublic = result === configService.get('CLIENT_ADDRESS');
+        const isPrivate = result === configService.get('SERVER_ADDRESS');
         console.log('result', result);
         expect(isPublic || isPrivate).toBeTruthy();
     }, 20000);

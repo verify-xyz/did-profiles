@@ -4,7 +4,7 @@ import { Wallet } from 'ethers';
 import { splitSignature } from '@ethersproject/bytes';
 import { NetworkUtils } from './network.utils';
 import { ConfigService } from '@nestjs/config';
-import { interpretIdentifier } from '../did-resolver/ethr-did-resolver-PATCH';
+import {interpretIdentifier} from "ethr-did-resolver";
 
 const DEFAULT_GAS_LIMIT = 100000;
 
@@ -47,7 +47,7 @@ export class RegisterService {
 
         const canonicalSignature = splitSignature(signature);
 
-        const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
+        const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_PRIVATE_KEY'));
         console.log('ethrDid.addServiceSigned %o', {
             attrName,
             attrValue,
@@ -81,7 +81,7 @@ export class RegisterService {
      * @returns - owner's address
      */
     async getOwner(did: string) {
-        const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
+        const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_PRIVATE_KEY'));
 
         return metaEthrDid.lookupOwner();
     }
@@ -106,9 +106,9 @@ export class RegisterService {
 
         console.log('signature: ' + newOwnerSignature);
 
-        const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
+        const metaEthrDid = await this.getEthrDidController(did, this.configService.get('SERVER_PRIVATE_KEY'));
 
-        const privateOwner = this.configService.get('PROFILE_PRIVATE_CONDITION');
+        const privateOwner = this.configService.get('SERVER_ADDRESS');
 
         console.log('privateOwner: ' + privateOwner);
 
@@ -127,9 +127,9 @@ export class RegisterService {
     }
 
     private async changeOwnerToPublic(did: string) {
-        const controller = await this.getEthrDidController(did, this.configService.get('SERVER_KEY'));
+        const controller = await this.getEthrDidController(did, this.configService.get('SERVER_PRIVATE_KEY'));
 
-        return controller.changeOwner(this.configService.get('PROFILE_PUBLIC_CONDITION'));
+        return controller.changeOwner(controller.address);//this.configService.get('PROFILE_PUBLIC_CONDITION'));
     }
 
     /**
