@@ -11,7 +11,6 @@ export default function Wallet() {
 
     async function connect() {
         try {
-            console.log(injected);
             await activate(injected);
 
             if (active) {
@@ -36,7 +35,6 @@ export default function Wallet() {
     }
 
     async function personalSign() {
-        console.log('personal sign');
         const date = new Date();
         const exampleMessage = `I am creating an account to use LIT at ${date}`;
 
@@ -56,7 +54,6 @@ export default function Wallet() {
 
     useEffect(() => {
         const connectWalletOnPageLoad = async () => {
-            console.log('Connect wallet on page load');
             if (localStorage?.getItem('isWalletConnected') === 'true') {
                 try {
                     await activate(injected)
