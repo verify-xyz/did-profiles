@@ -48,7 +48,7 @@ export default function Wallet() {
                 params: [msg, from, 'Example password'],
             });
             setPersonalSignResult(sign);
-            localStorage.setItem('personalsignResult', sign);
+            localStorage.setItem('personalSignResult', sign);
         } catch (err) {
             console.error(err);
         }
