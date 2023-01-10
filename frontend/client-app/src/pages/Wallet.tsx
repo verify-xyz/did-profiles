@@ -1,21 +1,12 @@
 import { useWeb3React } from "@web3-react/core"
 import { useEffect, useState } from "react"
 import { injected } from "../utils/connector";
-import { MetaMaskInpageProvider } from '@metamask/providers';
 import { Buffer } from 'buffer';
-// import { Buffer } from 'node:buffer';
-
-/*declare global {
-    interface Window {
-        ethereum?: MetaMaskInpageProvider
-    }
-}*/
 
 declare var window: any;
 
 export default function Wallet() {
     const { active, account, library, connector, activate, deactivate } = useWeb3React();
-    // const ethereum = window.ethereum as MetaMaskInpageProvider;
     const [personalSignResult, setPersonalSignResult] = useState('Not signed');
 
     async function connect() {
