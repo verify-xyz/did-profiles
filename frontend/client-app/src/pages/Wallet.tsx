@@ -37,8 +37,9 @@ export default function Wallet() {
 
     async function personalSign() {
         console.log('personal sign');
+        const date = new Date();
+        const exampleMessage = `I am creating an account to use LIT at ${date}`;
 
-        const exampleMessage = 'Example `personal_sign` message';
         try {
             const from = account;
             const msg = `0x${Buffer.from(exampleMessage, 'utf8').toString('hex')}`;
@@ -47,6 +48,7 @@ export default function Wallet() {
                 params: [msg, from, 'Example password'],
             });
             setPersonalSignResult(sign);
+            localStorage.setItem('personalsignResult', sign);
         } catch (err) {
             console.error(err);
         }
@@ -73,7 +75,7 @@ export default function Wallet() {
             {active ? <span className="Wallet-connection">Connected with <b>{account}</b></span> : <span className="Wallet-connection">Not connected</span>}
             <div onClick={disconnect} className="Wallet-button">Disconnect</div>
             <div onClick={personalSign} className="Wallet-button Wallet-button-personal-sign">Personal Sign</div>
-            <span className='Wallet-personal-sign-result'><label>Personal sign result:</label> {personalSignResult}</span>
+            <label className='Wallet-personal-sign-result'>Personal sign result: <b>{personalSignResult}</b> </label>
         </div>
     )
 }
