@@ -1,0 +1,21 @@
+.Layout-header {  
+    /* flex-container */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    /* miscellaneous */
+    font-size: 1.5rem;
+    font-weight: 400;
+    white-space: nowrap;
+    background-color: #1482b5;
+    z-index: 7;
+}
+
+.Layout-menuItem {
+    padding: 10px;
+}
+
+.Layout-menuItem:hover {
+    background-color: #1d6f96;
+}
