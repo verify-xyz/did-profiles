@@ -7,6 +7,7 @@ import './styles/styleApp.css';
 import './styles/styleLayout.css';
 import './styles/styleContact.css';
 import './styles/styleWallet.css';
+import './styles/stylePublish.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
