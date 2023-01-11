@@ -1,10 +1,10 @@
-import {Body, Controller, Get, HttpException, HttpStatus, Param, Post} from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CryptionService } from './cryption/cryption.service';
-import {AddContentDto, AuthSigDto, ProfileContentDto, ProfileDto} from './dto/profile.dto';
+import { AddContentDto, AuthSigDto, ProfileContentDto, ProfileDto } from './dto/profile.dto';
 import { EncryptedProfileDto } from './dto/encryptedProfile.dto';
 import { IpfsApiService } from './ipfs-api/ipfs-api.service';
-import {AuthSig} from "./types";
+import { AuthSig } from './types';
 
 @Controller()
 export class AppController {
@@ -21,6 +21,7 @@ export class AppController {
 
     @Post('add')
     async encryptAndAddToIpfs(@Body() body: AddContentDto): Promise<string> {
+        console.log(body);
         const profileContentDto: ProfileContentDto = this.appService.createHardCodedProfileContentDto(body.content);
 
         const encryptedString: string = await this.cryptionService.encryptProfile(profileContentDto, body.authSig);
@@ -39,15 +40,13 @@ export class AppController {
         try {
             const decrypted: any = await this.cryptionService.decryptProfile(encryptedProfileDto);
 
-            const response = {text: decrypted.content.template};
+            const response = { text: decrypted.content.template };
             const json = JSON.stringify(response);
 
             return json;
-        }
-        catch(e) {
-            throw new HttpException('Profile is set to private. Unable to decrypt.', HttpStatus.PRECONDITION_REQUIRED)
+        } catch (e) {
+            throw new HttpException('Profile is set to private. Unable to decrypt.', HttpStatus.PRECONDITION_REQUIRED);
         }
     }
     //did:ethr:goerli:0x32f8D7ae03e2963975F8cA76D1ff1D8D77752b70
 }
-

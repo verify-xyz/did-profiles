@@ -45,5 +45,5 @@ export class AddContentDto {
     @IsDefined()
     @ValidateNested()
     @Type(() => AuthSigDto)
-    authSig: AuthSigDto
+    authSig: AuthSigDto;
 }
