@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ProfileContentDto } from '../dto/profile.dto';
 import { LitService } from '../lit/lit.service';
 import { EncryptedProfileDto } from '../dto/encryptedProfile.dto';
-import {AuthSig} from "../types";
+import { AuthSig } from '../types';
 
 @Injectable()
 export class CryptionService {
