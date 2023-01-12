@@ -17,10 +17,10 @@ class ServerAPI {
             body: JSON.stringify({
                 content: message,
                 authSig: {
-                    address: '0xB8809F1FbD3682f2a2b45d6dd7379962f4ffaB96', // process.env.REACT_APP_CLIENT_ADDRESS,
-                    sig: '0x0d7e7c3e2207c4d086343673b2caca1a6fd6cf8bc1310ae16aca2b85b35d9828469769fcddd09b4ea568d1edd3b991f5c176fae6b8944159d0419329f2affa771c', // process.env.REACT_APP_CLIENT_AUTH_SIG,
-                    signedMessage: 'I am creating an account to use LIT at 2023-01-11T12:48:17.069Z', // `I am creating an account to use LIT at ${date}`,
-                    derivedVia: 'web3.eth.personal.sign'
+                    address: process.env.REACT_APP_CLIENT_ADDRESS,
+                    sig: process.env.REACT_APP_CLIENT_AUTH_SIG,
+                    signedMessage: process.env.REACT_APP_CLIENT_SIGNED_MESSAGE,
+                    derivedVia: process.env.REACT_APP_CLIENT_DERIVED_VIA
                 }
             })
         });
