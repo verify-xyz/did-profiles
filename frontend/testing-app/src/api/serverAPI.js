@@ -24,7 +24,13 @@ class ServerAPI {
                 }
             })
         });
-        return await response.json();
+
+        if (response.ok) {
+            return await response.json();
+        } else {
+            console.log('Sending message to IPFS resulted in an error');
+            throw new Error((await response.json()).message);
+        }
     }
 
     /**
