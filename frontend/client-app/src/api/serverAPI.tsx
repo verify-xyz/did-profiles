@@ -4,10 +4,8 @@ class ServerAPI {
      * @param {string} message - Message that should be added to IPFS
      * @returns Hash code of the message added to IPFS
      */
-    static async sendMessageToIPFS(message: string) {
-        const sig: string = process.env.REACT_APP_CLIENT_AUTH_SIG ?? '';
-        console.log('sig--------------------------------------------');
-        console.log(sig);
+     static async sendMessageToIPFS(message: string) {
+        console.log('message: ' + message);
 
         const response = await fetch('/add', {
             method: 'POST',
@@ -17,10 +15,21 @@ class ServerAPI {
             },
             body: JSON.stringify({
                 content: message,
-                authSig: JSON.parse(sig)
+                authSig: {
+                    address: process.env.REACT_APP_CLIENT_ADDRESS,
+                    sig: process.env.REACT_APP_CLIENT_AUTH_SIG,
+                    signedMessage: process.env.REACT_APP_CLIENT_SIGNED_MESSAGE,
+                    derivedVia: process.env.REACT_APP_CLIENT_DERIVED_VIA
+                }
             })
         });
-        return await response.json();
+
+        if (response.ok) {
+            return await response.json();
+        } else {
+            console.log('Sending message to IPFS resulted in an error');
+            throw new Error((await response.json()).message);
+        }
     }
 
     /**

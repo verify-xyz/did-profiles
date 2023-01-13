@@ -6,7 +6,6 @@ class ServerAPI {
      */
     static async sendMessageToIPFS(message) {
         console.log('message: ' + message);
-        // const date = new Date();
 
         const response = await fetch('/add', {
             method: 'POST',
