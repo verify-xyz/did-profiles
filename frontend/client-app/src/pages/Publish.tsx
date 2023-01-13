@@ -4,20 +4,14 @@ import {LitAuthSig, useLitAuthSig} from "../hooks/useLitAuthSig";
 import {EthrDID} from "ethr-did";
 import {Web3Provider} from "@ethersproject/providers";
 
-declare var window: any;
-
 export default function Publish() {
-    const [hash, setHash] = useState('');
-    const [metaMask, setMetaMask] = useState('');
 
     const { authSig, personalSign, account } = useLitAuthSig();
 
     console.log(authSig);
 
     async function buttonPublishClickedHandler() {
-        // SEND MESSAGE TO IPFS AND RECEIVE HASH
         const msg = (document.getElementById('messageID') as HTMLInputElement).value;
-        setMessage(message);
         console.log(msg);
 
         if (msg) {
@@ -28,28 +22,10 @@ export default function Publish() {
             }
 
             const response = await ServerAPI.sendMessageToIPFS(activeAuthSig, msg);
-        setHash(response.hash);
-        console.log('Received hash: ' + response.hash);
-
-        // SIGN TO METAMASK
-        const provider = new Web3Provider(window.ethereum);
-        const meta = await provider.send("eth_requestAccounts", []);
-        setMetaMask(meta[0]);
-        console.log(meta[0]);
-        const signer = provider.getSigner();
-        console.log(signer);
-        const address = meta[0];
-
-        // EthrDid
-        const ethrDid = new EthrDID({
-            provider, 
-            identifier: `did:ethr:goerli:${address}`,
-        });
-        console.log('ethrDid------------------------------------------');
-        console.log(ethrDid);
+            console.log(response.hash);
 
             await sendRegisterTx(response.hash)
-    }
+        }
     }
 
     async function sendRegisterTx (hash: string) {
