@@ -1,8 +1,8 @@
 
 import ServerAPI from '../api/serverAPI';
-import {LitAuthSig, useLitAuthSig} from "../hooks/useLitAuthSig";
-import {EthrDID} from "ethr-did";
-import {Web3Provider} from "@ethersproject/providers";
+import { LitAuthSig, useLitAuthSig } from "../hooks/useLitAuthSig";
+import { EthrDID } from "ethr-did";
+import { Web3Provider } from "@ethersproject/providers";
 
 export default function Publish() {
 
@@ -17,7 +17,7 @@ export default function Publish() {
         if (msg) {
             let activeAuthSig = authSig as LitAuthSig;
 
-            if(!activeAuthSig) {
+            if (!activeAuthSig) {
                 activeAuthSig = await personalSign();
             }
 
@@ -28,7 +28,7 @@ export default function Publish() {
         }
     }
 
-    async function sendRegisterTx (hash: string) {
+    async function sendRegisterTx(hash: string) {
         const provider = new Web3Provider((window as any).ethereum);
 
         const chainNameOrId = await (window as any).ethereum.request({ method: 'eth_chainId' });

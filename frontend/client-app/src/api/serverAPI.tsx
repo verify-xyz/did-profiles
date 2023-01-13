@@ -1,4 +1,4 @@
-import {LitAuthSig} from "../hooks/useLitAuthSig";
+import { LitAuthSig } from "../hooks/useLitAuthSig";
 
 class ServerAPI {
     /**
