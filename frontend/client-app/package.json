@@ -15,9 +15,11 @@
     "@web3-react/injected-connector": "^6.0.7",
     "buffer": "^6.0.3",
     "cross-env": "^7.0.3",
+    "ethers": "^5.7.2",
     "ethr-did": "^2.3.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.4",
     "web-vitals": "^2.1.4",
@@ -46,8 +48,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "react-router-dom": "^6.6.1"
   }
 }

@@ -1,20 +1,18 @@
-import { useEffect, useState } from "react";
+
 import ServerAPI from '../api/serverAPI';
-import { Web3Provider } from "@ethersproject/providers";
-import { EthrDID } from 'ethr-did';
+import {LitAuthSig, useLitAuthSig} from "../hooks/useLitAuthSig";
+import {EthrDID} from "ethr-did";
+import {Web3Provider} from "@ethersproject/providers";
 
 declare var window: any;
 
 export default function Publish() {
-    const [message, setMessage] = useState('');
     const [hash, setHash] = useState('');
     const [metaMask, setMetaMask] = useState('');
 
-    useEffect(() => {
-        console.log(message);
-        console.log(hash);
-        console.log(metaMask);
-    });
+    const { authSig, personalSign, account } = useLitAuthSig();
+
+    console.log(authSig);
 
     async function buttonPublishClickedHandler() {
         // SEND MESSAGE TO IPFS AND RECEIVE HASH
@@ -22,7 +20,14 @@ export default function Publish() {
         setMessage(message);
         console.log(msg);
 
-        const response = await ServerAPI.sendMessageToIPFS(msg);
+        if (msg) {
+            let activeAuthSig = authSig as LitAuthSig;
+
+            if(!activeAuthSig) {
+                activeAuthSig = await personalSign();
+            }
+
+            const response = await ServerAPI.sendMessageToIPFS(activeAuthSig, msg);
         setHash(response.hash);
         console.log('Received hash: ' + response.hash);
 
@@ -42,6 +47,24 @@ export default function Publish() {
         });
         console.log('ethrDid------------------------------------------');
         console.log(ethrDid);
+
+            await sendRegisterTx(response.hash)
+    }
+    }
+
+    async function sendRegisterTx (hash: string) {
+        const provider = new Web3Provider((window as any).ethereum);
+
+        const chainNameOrId = await (window as any).ethereum.request({ method: 'eth_chainId' });
+        const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' })
+
+        const ethrDid = new EthrDID({
+            identifier: accounts[0],
+            chainNameOrId,
+            provider: provider
+        });
+
+        await ethrDid.setAttribute('did/svc/verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + hash);
     }
 
     return (
