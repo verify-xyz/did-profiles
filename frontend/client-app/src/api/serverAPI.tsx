@@ -1,13 +1,17 @@
+import {LitAuthSig} from "../hooks/useLitAuthSig";
+
 class ServerAPI {
     /**
      * Sends message to IPFS
      * @param {string} message - Message that should be added to IPFS
      * @returns Hash code of the message added to IPFS
      */
-    static async sendMessageToIPFS(message: string) {
-        const sig: string = process.env.REACT_APP_CLIENT_AUTH_SIG ?? '';
-        console.log('sig--------------------------------------------');
-        console.log(sig);
+    static async sendMessageToIPFS(authSig: LitAuthSig, message: string) {
+        // const authSig: string = process.env.REACT_APP_CLIENT_AUTH_SIG ?? '';
+
+
+        console.log('authSig--------------------------------------------');
+        console.log(authSig);
 
         const response = await fetch('/add', {
             method: 'POST',
@@ -17,7 +21,7 @@ class ServerAPI {
             },
             body: JSON.stringify({
                 content: message,
-                authSig: JSON.parse(sig)
+                authSig: authSig
             })
         });
         return await response.json();
