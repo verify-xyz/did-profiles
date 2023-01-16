@@ -140,8 +140,8 @@ function App() {
 
         let serviceEndpoint = 'Request failed. Please try again.';
 
-        if (response?.didDocument?.service[0]?.serviceEndpoint) {
-            serviceEndpoint = response.didDocument.service[0].serviceEndpoint;
+        if (response?.didDocument?.id) {
+            serviceEndpoint = response.didDocument.id;
         }
 
         // window.document.getElementById('resolveID').value = verificationMethod;

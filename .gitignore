@@ -7,12 +7,16 @@
 /backend/.env
 
 /frontend/node_modules
-/frontend/client-app/node_modules
-/frontend/test-app/node_modules
 /frontend/.pnp
 /frontend/.pnp.js
 /frontend/build
-/frontend/.env
+/frontend/testing-app/.env
+
+/frontend/test-app/node_modules
+/frontend/test-app/.env
+
+/frontend/client-app/node_modules
+/frontend/client-app/.env
 
 /frontend/testing-app/node_modules
 /frontend/testing-app/.pnp

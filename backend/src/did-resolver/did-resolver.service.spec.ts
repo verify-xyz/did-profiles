@@ -9,10 +9,7 @@ describe('DidResolverService', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             imports: [ConfigModule],
-            providers: [
-                DidResolverService,
-                ConfigService
-            ],
+            providers: [DidResolverService, ConfigService],
         }).compile();
 
         service = module.get<DidResolverService>(DidResolverService);

@@ -1,11 +1,17 @@
+import { LitAuthSig } from "../hooks/useLitAuthSig";
+
 class ServerAPI {
     /**
      * Sends message to IPFS
      * @param {string} message - Message that should be added to IPFS
      * @returns Hash code of the message added to IPFS
      */
-    static async sendMessageToIPFS(message) {
-        console.log('message: ' + message);
+    static async sendMessageToIPFS(authSig: LitAuthSig, message: string) {
+        // const authSig: string = process.env.REACT_APP_CLIENT_AUTH_SIG ?? '';
+
+
+        console.log('authSig--------------------------------------------');
+        console.log(authSig);
 
         const response = await fetch('/add', {
             method: 'POST',
@@ -15,12 +21,7 @@ class ServerAPI {
             },
             body: JSON.stringify({
                 content: message,
-                authSig: {
-                    address: process.env.REACT_APP_CLIENT_ADDRESS,
-                    sig: process.env.REACT_APP_CLIENT_AUTH_SIG,
-                    signedMessage: process.env.REACT_APP_CLIENT_SIGNED_MESSAGE,
-                    derivedVia: process.env.REACT_APP_CLIENT_DERIVED_VIA
-                }
+                authSig: authSig
             })
         });
 
@@ -37,7 +38,7 @@ class ServerAPI {
      * @param {string} hash - Hash code of the message previously added to IPFS
      * @returns String related to the hash code
      */
-    static async getMessageFromIPFS(hash) {
+    static async getMessageFromIPFS(hash: string) {
         const response = await fetch('/read/' + hash);
         if (response.ok) return (await response.json()).text;
         return (await response.json()).message;
@@ -48,7 +49,7 @@ class ServerAPI {
      * @param {string} bodyJSON JSON body of the POST request
      * @returns client signature
      */
-    static async postClientSignature(bodyJSON) {
+    static async postClientSignature(bodyJSON: string) {
         const rawResponse = await fetch('/client/signature', {
             method: 'POST',
             headers: {
@@ -68,7 +69,7 @@ class ServerAPI {
      * @param {string} bodyJSON JSON body of the POST request
      * @returns register hash
      */
-    static async postRegisterService(bodyJSON) {
+    static async postRegisterService(bodyJSON: string) {
         const rawResponse = await fetch('/register', {
             method: 'POST',
             headers: {
@@ -89,7 +90,7 @@ class ServerAPI {
      * @param {string} bodyJSON JSON body of the POST request
      * @returns register hash
      */
-    static async postRegisterServiceWithAccess(bodyJSON) {
+    static async postRegisterServiceWithAccess(bodyJSON: string) {
         const response = await fetch('/register/access', {
             method: 'POST',
             headers: {
@@ -109,7 +110,7 @@ class ServerAPI {
      * @param {string} hash - Hash code of the message previously added to IPFS
      * @returns String related to the hash code
      */
-    static async getResolve(url) {
+    static async getResolve(url: string) {
         const response = await fetch('/resolve/' + url);
         return await response.json();
     };
