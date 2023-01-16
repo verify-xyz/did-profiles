@@ -16,6 +16,9 @@ export default function Manage() {
 
         const chainNameOrId = await (window as any).ethereum.request({ method: 'eth_chainId' });
         const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
+        /*const accounts = await (window as any).ethereum.request({
+            method: 'eth_requestAccounts',
+        });*/
 
         console.log('accounts------------------------');
         console.log(accounts);
@@ -26,9 +29,14 @@ export default function Manage() {
             provider: provider
         });
 
+        console.log('EthrDID-------------------------------------');
+        console.log(ethrDid);
+
         const newOwner = await ethrDid.changeOwner(accounts[0]);
+
         console.log('new owner------------------------');
         console.log(newOwner);
+
         setCurrentAccount(newOwner);
     }
 
