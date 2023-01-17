@@ -23,18 +23,6 @@
     font-weight: bold;
 }
 
-.Manage-button:disabled {
-    pointer-events: none;
-    color: black;
-    background-color: darkgray;
-}
-
-.Manage-button-disabled {
-    pointer-events: none;
-    color: black;
-    background-color: darkgray;
-}
-
 .Manage-label {
     margin-top: 30px;
 }

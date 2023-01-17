@@ -22,13 +22,9 @@ export default function Manage() {
             provider: provider
         });
 
-        let btn = document.getElementById('changeOwnershipButtonID');
-        btn?.classList.add('Manage-button-disabled');
-
         const newOwner = await ethrDid.changeOwner(accounts[0]);
 
         setTransactionHash(newOwner);
-        btn?.classList.remove('Manage-button-disabled');
     }
 
     return (
