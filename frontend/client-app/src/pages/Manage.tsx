@@ -3,14 +3,14 @@ import { Web3Provider } from "@ethersproject/providers";
 import { useState } from "react";
 
 export default function Manage() {
-    const [currentAccount, setCurrentAccount] = useState('None');
+    const [transactionHash, setTransactionHash] = useState('None');
 
     async function buttonChangeOwnershipClickedHandler() {
         await changeOwnership();
     }
 
     async function changeOwnership() {
-        setCurrentAccount('None');
+        setTransactionHash('None');
 
         const provider = new Web3Provider((window as any).ethereum);
         const chainNameOrId = await (window as any).ethereum.request({ method: 'eth_chainId' });
@@ -22,15 +22,19 @@ export default function Manage() {
             provider: provider
         });
 
+        let btn = document.getElementById('changeOwnershipButtonID');
+        btn?.classList.add('Manage-button-disabled');
+
         const newOwner = await ethrDid.changeOwner(accounts[0]);
 
-        setCurrentAccount(newOwner);
+        setTransactionHash(newOwner);
+        btn?.classList.remove('Manage-button-disabled');
     }
 
     return (
         <div className='Manage-main-container'>
-            <div onClick={buttonChangeOwnershipClickedHandler} className="Manage-button">Change ownership</div>
-            <label className="Manage-label">Transaction Hash: <b>{currentAccount}</b></label>
+            <div onClick={buttonChangeOwnershipClickedHandler} className="Manage-button" id="changeOwnershipButtonID">Change ownership</div>
+            <label className="Manage-label">Transaction Hash: <b>{transactionHash}</b></label>
         </div>
     );
 };
