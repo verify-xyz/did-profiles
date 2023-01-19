@@ -3,12 +3,15 @@ import ServerAPI from '../api/serverAPI';
 import { LitAuthSig, useLitAuthSig } from "../hooks/useLitAuthSig";
 import { EthrDID } from "ethr-did";
 import { Web3Provider } from "@ethersproject/providers";
+import { useState } from 'react';
 
 export default function Publish() {
 
     const { authSig, personalSign, account } = useLitAuthSig();
 
     console.log(authSig);
+
+    const [returnedHash, setReturnedHash] = useState("");
 
     async function buttonPublishClickedHandler() {
         const msg = (document.getElementById('messageID') as HTMLInputElement).value;
@@ -23,6 +26,7 @@ export default function Publish() {
 
             const response = await ServerAPI.sendMessageToIPFS(activeAuthSig, msg);
             console.log(response.hash);
+            setReturnedHash(response.hash);
 
             await sendRegisterTx(response.hash)
         }
@@ -49,6 +53,7 @@ export default function Publish() {
                 <label className="Publish-label">Message:</label>
                 <input className="Publish-input" id='messageID'></input>
                 <div className="Publish-button" id="publishID" onClick={buttonPublishClickedHandler}>Publish</div>
+                <label className="Publish-return-hash-label" id='returnHashID'>Returned hash:  <b>{returnedHash}</b></label>
             </div>
         </div>
     );

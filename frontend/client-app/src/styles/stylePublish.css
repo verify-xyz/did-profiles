@@ -37,3 +37,8 @@
 .Publish-button:active {
     color: red;
 }
+
+.Publish-return-hash-label {
+    text-align: center;
+    grid-column: 1/-1;
+}
