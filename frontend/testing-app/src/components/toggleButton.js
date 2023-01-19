@@ -7,7 +7,7 @@ export const ToggleButton = ({ onToggle, isToggled }) => {
         <div className='toggleButtonMainContainer' >
             <label>Private</label>
             <label className="switch">
-                <input type="checkbox" onChange={onToggle} checked={isToggled}></input>
+                <input type="checkbox" onChange={onToggle} checked={isToggled} data-testid='toggle-button-checkbox'></input>
                 <span className="slider round"></span>
             </label>
             <label>Public</label>
