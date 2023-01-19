@@ -12,6 +12,6 @@ jest.mock('./network/network-utils', () => {
 
 test('renders application title', () => {
     render(<App />);
-    const textElement = screen.getByText('Simple React App');
+    const textElement = screen.getByText('DID Profiles Testing App');
     expect(textElement).toBeInTheDocument();
 });
