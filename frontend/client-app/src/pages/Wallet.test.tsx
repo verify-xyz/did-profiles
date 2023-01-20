@@ -2,10 +2,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Wallet from './Wallet';
 
-jest.mock('ethr-did', () => {
-    return jest.fn();
-});
-
 test('finds the button Connect to MetaMask', () => {
     render(<Wallet />);
     const buttonConnect = screen.getByText('Connect to MetaMask');
