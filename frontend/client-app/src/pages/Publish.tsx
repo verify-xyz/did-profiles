@@ -50,10 +50,10 @@ export default function Publish() {
     return (
         <div className='Publish-main-container'>
             <div className='Publish-grid-container01'>
-                <label className="Publish-label">Message:</label>
+                <label className="Publish-label" data-testid='labelMessage'>Message:</label>
                 <input className="Publish-input" id='messageID'></input>
                 <div className="Publish-button" id="publishID" onClick={buttonPublishClickedHandler}>Publish</div>
-                <label className="Publish-label" id='returnHashID'>Returned hash:</label>
+                <label className="Publish-label" id='returnHashID' data-testid='labelReturnedHash'>Returned hash:</label>
                 <label><b>{returnedHash}</b></label>
             </div>
         </div>

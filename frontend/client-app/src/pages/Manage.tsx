@@ -30,7 +30,7 @@ export default function Manage() {
     return (
         <div className='Manage-main-container'>
             <div onClick={buttonChangeOwnershipClickedHandler} className="Manage-button" id="changeOwnershipButtonID">Change ownership</div>
-            <label className="Manage-label">Transaction Hash: <b>{transactionHash}</b></label>
+            <label className="Manage-label" data-testid='labelTransactionHash'>Transaction Hash: <b>{transactionHash}</b></label>
         </div>
     );
 };

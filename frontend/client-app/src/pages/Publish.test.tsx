@@ -17,3 +17,19 @@ test('finds the text Message', () => {
     const textMessage = screen.getByText('Message:');
     expect(textMessage).toBeInTheDocument();
 });
+
+test('finds the label Message:', () => {
+    render(<Publish />);
+    const label = screen.getByTestId('labelMessage');
+    expect(label).toBeInTheDocument();
+
+    expect((label as HTMLLabelElement).textContent).toBe('Message:');
+});
+
+test('finds the label Returned Hash:', () => {
+    render(<Publish />);
+    const label = screen.getByTestId('labelReturnedHash');
+    expect(label).toBeInTheDocument();
+
+    expect((label as HTMLLabelElement).textContent).toBe('Returned hash:');
+});
