@@ -16,9 +16,6 @@ const Layout = () => {
                 <div className='Layout-menuItem'>
                     <Link to="/manage">Manage</Link>
                 </div>
-                <div className='Layout-menuItem'>
-                    <Link to="/contact">Contact</Link>
-                </div>
             </nav>
 
             <Outlet />
