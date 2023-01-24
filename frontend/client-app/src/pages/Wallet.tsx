@@ -1,27 +1,29 @@
 import { useWeb3React } from "@web3-react/core"
 import { injected } from "../utils/connector";
 import { LitAuthSig, useLitAuthSig } from "../hooks/useLitAuthSig";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { createUnparsedSourceFile } from "typescript";
 
 export default function Wallet() {
     const { active, account, library, connector, activate, deactivate } = useWeb3React();
     const { authSig, personalSign, reset } = useLitAuthSig();
-
-    console.log('signedMessage: ' + authSig);
-    // const signedMessage = (authSig && authSig.signedMessage) ? authSig.signedMessage : 'Not signed';
-    let signedMessage = 'Not signed';
+    const [signedMessage, setSignedMessage] = useState('Not signed');
 
     useEffect(() => {
         checkConnection();
     });
 
-    async function checkConnection() {
-        if (localStorage?.getItem('isWalletConnected') === "true" && 
-            localStorage?.getItem('personalSignResult') !== null && 
+    function checkConnection() {
+        if (localStorage?.getItem('isWalletConnected') === "true" &&
+            localStorage?.getItem('personalSignResult') !== null &&
             localStorage?.getItem('personalSignResult') !== undefined) {
-                const personalSign: any = localStorage.getItem('personalSignResult');
-                console.log(personalSign);
-                signedMessage = personalSign?.signedMessage;
+            const personalSign: any = localStorage.getItem('personalSignResult');
+
+            if (personalSign) {
+                setSignedMessage(JSON.parse(personalSign).signedMessage);
+            } else {
+                setSignedMessage('Not signed');
+            }
         }
     }
 

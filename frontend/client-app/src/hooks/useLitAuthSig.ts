@@ -45,8 +45,7 @@ export const useLitAuthSig = () => {
                 }
             } else {
                 setConnected(false);
-                // const provider = new Web3Provider((window as any).ethereum);
-                // const chainNameOrId = await (window as any).ethereum.request({ method: 'eth_chainId' });
+
                 const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
                 if (accounts.length > 0) {
                     personalSign();
