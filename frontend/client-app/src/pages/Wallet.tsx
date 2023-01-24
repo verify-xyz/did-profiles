@@ -16,6 +16,7 @@ export default function Wallet() {
         if (localStorage?.getItem('isWalletConnected') === "true" &&
             localStorage?.getItem('personalSignResult') !== null &&
             localStorage?.getItem('personalSignResult') !== undefined) {
+
             const personalSign: any = localStorage.getItem('personalSignResult');
 
             if (personalSign) {
@@ -23,7 +24,10 @@ export default function Wallet() {
             } else {
                 setSignedMessage('Not signed');
             }
+        } else {
+            setSignedMessage('Not signed');
         }
+
     }
 
     async function connect() {
