@@ -1,8 +1,7 @@
 import { useWeb3React } from "@web3-react/core"
 import { injected } from "../utils/connector";
-import { LitAuthSig, useLitAuthSig } from "../hooks/useLitAuthSig";
+import { useLitAuthSig } from "../hooks/useLitAuthSig";
 import { useEffect, useState } from 'react';
-import { createUnparsedSourceFile } from "typescript";
 
 export default function Wallet() {
     const { active, account, library, connector, activate, deactivate } = useWeb3React();

@@ -2,7 +2,6 @@ import { useWeb3React } from "@web3-react/core";
 import { useEffect, useState } from "react";
 import { injected } from "../utils/connector";
 import { Buffer } from "buffer";
-// import { Web3Provider } from "@ethersproject/providers";
 
 //-----------------------------------
 //required for ethr-did
