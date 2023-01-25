@@ -3,7 +3,7 @@ import ServerAPI from '../api/serverAPI';
 import { LitAuthSig, useLitAuthSig } from "../hooks/useLitAuthSig";
 import { EthrDID } from "ethr-did";
 import { Web3Provider } from "@ethersproject/providers";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Publish() {
 
@@ -12,6 +12,22 @@ export default function Publish() {
     console.log(authSig);
 
     const [returnedHash, setReturnedHash] = useState("None");
+    const [message, setMessage] = useState('');
+
+    useEffect(()=> {
+        const msg = localStorage?.getItem('message');
+        if (msg) {
+            setMessage(msg);
+            (document.getElementById('messageID') as HTMLInputElement).value = msg;
+        }
+
+        const hash = localStorage?.getItem('returnedHash');
+        if (hash) {
+            setReturnedHash(hash);
+        }
+        console.log('message: ' + localStorage?.getItem('message'));
+        console.log('hash: ' + localStorage?.getItem('returnedHash'));
+    });
 
     async function buttonPublishClickedHandler() {
         const msg = (document.getElementById('messageID') as HTMLInputElement).value;
@@ -44,6 +60,9 @@ export default function Publish() {
             const response = await ServerAPI.sendMessageToIPFS(activeAuthSig, msg);
             console.log(response.hash);
             setReturnedHash(response.hash);
+
+            localStorage.setItem('message', msg);
+            localStorage.setItem('returnedHash', response.hash);
 
             await sendRegisterTx(response.hash)
         }

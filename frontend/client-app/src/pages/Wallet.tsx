@@ -49,7 +49,6 @@ export default function Wallet() {
         try {
             deactivate();
             reset();
-            localStorage.setItem('isWalletConnected', 'false');
         } catch (ex) {
             console.log(ex)
         }
