@@ -18,10 +18,27 @@ export default function Publish() {
         console.log(msg);
 
         if (msg) {
-            let activeAuthSig = authSig as LitAuthSig;
+            let activeAuthSig: LitAuthSig | undefined;
 
-            if (!activeAuthSig) {
-                activeAuthSig = await personalSign();
+            if (localStorage?.getItem('isWalletConnected') === "true" &&
+                localStorage?.getItem('personalSignResult') !== null &&
+                localStorage?.getItem('personalSignResult') !== undefined) {
+
+                const personalSign: any = localStorage.getItem('personalSignResult');
+
+                if (personalSign) {
+                    activeAuthSig = JSON.parse(personalSign);
+                }
+            } else {
+                activeAuthSig = authSig as LitAuthSig;
+
+                if (!activeAuthSig) {
+                    activeAuthSig = await personalSign();
+                }
+            }
+
+            if(!activeAuthSig) {
+                activeAuthSig = authSig as LitAuthSig;
             }
 
             const response = await ServerAPI.sendMessageToIPFS(activeAuthSig, msg);
