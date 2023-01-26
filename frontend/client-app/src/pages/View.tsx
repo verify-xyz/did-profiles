@@ -5,11 +5,11 @@ import ServerAPI from '../api/serverAPI';
 import { ToggleButton} from '../components/toggleButton';
 
 export default function View() {
-    const [transactionHash, setTransactionHash] = useState('None');
     const [ipfsHash, setIpfsHash] = useState('');
     const [message, setMessage] = useState('');
     const [access, setAccess] = useState(false);
     let ethrDid : EthrDID;
+    const serverAddress = getServerAddress();
 
     useEffect(() => {
         const hash = localStorage?.getItem('returnedHash');
@@ -19,8 +19,7 @@ export default function View() {
 
         const msg = localStorage?.getItem('viewMessage');
         handleMessage(msg);
-
-        const serverAddress = getServerAddress();
+        
         initEthrDID(serverAddress);
     });
 
