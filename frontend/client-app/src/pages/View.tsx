@@ -58,12 +58,7 @@ export default function View() {
         }
     }
 
-    /*async function buttonChangeOwnershipClickedHandler() {
-        await changeOwnership();
-    }*/
-
     async function changeOwnership(newOwner: string) {
-        setTransactionHash('None');
         console.log('Change ownership to: ' + newOwner);
  
         await initEthrDID(newOwner);
@@ -74,51 +69,58 @@ export default function View() {
 
     async function fetchButtonClickedHandler() {
         const msg = await ServerAPI.getMessageFromIPFS(ipfsHash);
-        // (document.getElementById('receivedMessageID') as HTMLInputElement).value = msg;
         localStorage.setItem('viewMessage', msg);
         setMessage(msg);
     }
 
     async function changeAccessPrivatePublic() {
         const newState = !access;
-        console.log('newState: ' + newState);
 
         setAccess(!access);
         const serverAddress = getServerAddress();
 
         const owner = await ethrDid.lookupOwner();
-        console.log('owner----------------------------------------');
-        console.log(owner);
+        console.log('owner: ' + owner);
 
-        if((newState === true) && (owner === serverAddress)) {
+        if(newState === true) {
             console.log('change owner to PUBLIC');
             const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
             await changeOwnership(accounts[0]);
             return;
         }
 
-        /*if(newState === false && owner === serverAddress) {
+        if(newState === false) {
+            console.log('change owner to PRIVATE');
+            await changeOwnership(serverAddress);
+            return;
+        }
+
+        /*if((newState === true) && (owner === serverAddress)) {
+            console.log('change owner to PUBLIC');
+            const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
+            await changeOwnership(accounts[0]);
+            return;
+        }
+
+        if(newState === false && owner === serverAddress) {
             (document.getElementById('receivedMessageID') as HTMLInputElement).value = 'Access is already private';
             return;
-        }*/
+        }
 
-        /*if(newState === true && owner !== serverAddress) {
+        if(newState === true && owner !== serverAddress) {
             (document.getElementById('receivedMessageID') as HTMLInputElement).value = 'Access is already public';
             return;
-        }*/
+        }
 
         if(newState === false && owner !== serverAddress) {
             console.log('change owner to PRIVATE');
             await changeOwnership(serverAddress);
             return;
-        }
+        }*/
     }
 
     return (
         <div className='View-main-container'>
-            {/* <div onClick={buttonChangeOwnershipClickedHandler} className="View-button" id="changeOwnershipButtonID">Change ownership</div>
-            <label className="View-label-transaction-hash" data-testid='labelTransactionHash'>Transaction Hash: <b>{transactionHash}</b></label> */}
-
             <div className="View-grid-container">
                 <ToggleButton onToggle={changeAccessPrivatePublic} isToggled={access}></ToggleButton><div></div><div></div>
 
