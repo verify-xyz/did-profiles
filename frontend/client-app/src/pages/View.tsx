@@ -1,9 +1,24 @@
 import { EthrDID } from "ethr-did";
 import { Web3Provider } from "@ethersproject/providers";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import ServerAPI from '../api/serverAPI';
 
 export default function View() {
     const [transactionHash, setTransactionHash] = useState('None');
+    const [ipfsHash, setIpfsHash] = useState('');
+    const [message, setMessage] = useState('');
+
+    useEffect(()=> {
+        const hash = localStorage?.getItem('returnedHash');
+        if (hash) {
+            setIpfsHash(hash);
+        }
+
+        const msg = localStorage?.getItem('viewMessage');
+        if (msg) {
+            setMessage(msg);
+        }
+    });
 
     async function buttonChangeOwnershipClickedHandler() {
         await changeOwnership();
@@ -28,7 +43,10 @@ export default function View() {
     }
 
     async function fetchButtonClickedHandler() {
-
+        const msg = await ServerAPI.getMessageFromIPFS(ipfsHash);
+        // (document.getElementById('receivedMessageID') as HTMLInputElement).value = msg;
+        localStorage.setItem('viewMessage', msg);
+        setMessage(msg);
     }
 
     return (
@@ -38,11 +56,11 @@ export default function View() {
 
             <div className="View-grid-container">
                 <label className="View-label">IPFS Hash:</label>
-                <input className="View-input-hash" id="hashID" readOnly></input>
+                <input className="View-input-hash" id="hashID" readOnly value={ipfsHash}></input>
                 <button className="View-button View-button-fetch" id="fetchID" onClick={fetchButtonClickedHandler}>Fetch</button>
 
                 <label className="View-label">Message:</label>
-                <input className="View-input" id="receivedMessageID" readOnly></input>
+                <input className="View-input" id="receivedMessageID" readOnly value={message}></input>
             </div>
         </div>
     );

@@ -35,6 +35,10 @@
     margin-top: 30px;
 }
 
+.View-input-hash {
+    font-weight: bold;
+}
+
 .View-label {
     margin-top: 0px;
 }
