@@ -2,7 +2,7 @@ import { EthrDID } from "ethr-did";
 import { Web3Provider } from "@ethersproject/providers";
 import { useState } from "react";
 
-export default function Manage() {
+export default function View() {
     const [transactionHash, setTransactionHash] = useState('None');
 
     async function buttonChangeOwnershipClickedHandler() {

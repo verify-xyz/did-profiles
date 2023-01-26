@@ -14,7 +14,7 @@ const Layout = () => {
                     <Link to="/publish">Publish</Link>
                 </div>
                 <div className='Layout-menuItem'>
-                    <Link to="/manage">Manage</Link>
+                    <Link to="/view">View</Link>
                 </div>
             </nav>
 

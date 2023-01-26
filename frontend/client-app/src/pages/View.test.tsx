@@ -1,19 +1,19 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Manage from './Manage';
+import View from './View';
 
 jest.mock('ethr-did', () => {
     return jest.fn();
 });
 
 test('finds the button Change ownership', () => {
-    render(<Manage />);
+    render(<View />);
     const button = screen.getByText('Change ownership');
     expect(button).toBeInTheDocument();
 });
 
 test('finds the label Transaction Hash', () => {
-    render(<Manage />);
+    render(<View />);
     const label = screen.getByTestId('labelTransactionHash');
     expect(label).toBeInTheDocument();
 });
