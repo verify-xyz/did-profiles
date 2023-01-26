@@ -9,8 +9,9 @@ export default function View() {
     const [ipfsHash, setIpfsHash] = useState('');
     const [message, setMessage] = useState('');
     const [access, setAccess] = useState(false);
+    let ethrDid : EthrDID;
 
-    useEffect(()=> {
+    useEffect(() => {
         const hash = localStorage?.getItem('returnedHash');
         if (hash) {
             setIpfsHash(hash);
@@ -18,7 +19,31 @@ export default function View() {
 
         const msg = localStorage?.getItem('viewMessage');
         handleMessage(msg);
+
+        const serverAddress = getServerAddress();
+        initEthrDID(serverAddress);
     });
+
+    async function initEthrDID(address: string) {
+        const provider = new Web3Provider((window as any).ethereum);
+        const chainNameOrId = await (window as any).ethereum.request({ method: 'eth_chainId' });
+
+        ethrDid = new EthrDID({
+            identifier: address,
+            chainNameOrId,
+            provider: provider
+        });
+    }
+
+    function getServerAddress(): string {
+        let serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
+
+        if(!serverAddress) {
+            serverAddress = '0xCfC5720bbeECbEe3133c8bB8f4902dEe1c88ceDD';
+        }
+
+        return serverAddress;
+    }
 
     function handleMessage(msg: string | null) {
         if (msg && access) {
@@ -33,26 +58,18 @@ export default function View() {
         }
     }
 
-    async function buttonChangeOwnershipClickedHandler() {
+    /*async function buttonChangeOwnershipClickedHandler() {
         await changeOwnership();
-    }
+    }*/
 
-    async function changeOwnership() {
+    async function changeOwnership(newOwner: string) {
         setTransactionHash('None');
+        console.log('Change ownership to: ' + newOwner);
+ 
+        await initEthrDID(newOwner);
 
-        const provider = new Web3Provider((window as any).ethereum);
-        const chainNameOrId = await (window as any).ethereum.request({ method: 'eth_chainId' });
-        const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
-
-        const ethrDid = new EthrDID({
-            identifier: accounts[0],
-            chainNameOrId,
-            provider: provider
-        });
-
-        const newOwner = await ethrDid.changeOwner(accounts[0]);
-
-        setTransactionHash(newOwner);
+        await ethrDid.changeOwner(newOwner);
+        console.log('OWNER CHANGED');
     }
 
     async function fetchButtonClickedHandler() {
@@ -63,10 +80,37 @@ export default function View() {
     }
 
     async function changeAccessPrivatePublic() {
-        setAccess(!access);
+        const newState = !access;
+        console.log('newState: ' + newState);
 
-        if (!access) {
-            changeOwnership();
+        setAccess(!access);
+        const serverAddress = getServerAddress();
+
+        const owner = await ethrDid.lookupOwner();
+        console.log('owner----------------------------------------');
+        console.log(owner);
+
+        if((newState === true) && (owner === serverAddress)) {
+            console.log('change owner to PUBLIC');
+            const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
+            await changeOwnership(accounts[0]);
+            return;
+        }
+
+        /*if(newState === false && owner === serverAddress) {
+            (document.getElementById('receivedMessageID') as HTMLInputElement).value = 'Access is already private';
+            return;
+        }*/
+
+        /*if(newState === true && owner !== serverAddress) {
+            (document.getElementById('receivedMessageID') as HTMLInputElement).value = 'Access is already public';
+            return;
+        }*/
+
+        if(newState === false && owner !== serverAddress) {
+            console.log('change owner to PRIVATE');
+            await changeOwnership(serverAddress);
+            return;
         }
     }
 
