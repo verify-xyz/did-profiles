@@ -1,4 +1,4 @@
-.Manage-main-container {
+.View-main-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -7,7 +7,7 @@
     height: 80vh;
 }
 
-.Manage-button {
+.View-button {
     margin-top: 10px;
     border-radius: 25px;
     padding-left: 10px;
@@ -23,7 +23,28 @@
     font-weight: bold;
 }
 
-.Manage-label {
+.View-button-fetch {
+    margin-top: 0px;
+    min-width: 100px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    border-width: 0px;
+}
+
+.View-label-transaction-hash {
     margin-top: 30px;
+}
+
+.View-label {
+    margin-top: 0px;
+}
+
+.View-grid-container {
+    display: grid;
+    grid-template-columns: [column1] 10vw [column2] 30vw [column3] 120px [end];
+    grid-template-rows: [row1] 30px [row2] 30px [row3] 30px;
+    grid-column-gap: 50px;
+    grid-row-gap: 50px;
+    margin-top: 50px;
 }
 

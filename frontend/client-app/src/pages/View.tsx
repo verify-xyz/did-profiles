@@ -27,10 +27,23 @@ export default function View() {
         setTransactionHash(newOwner);
     }
 
+    async function fetchButtonClickedHandler() {
+
+    }
+
     return (
-        <div className='Manage-main-container'>
-            <div onClick={buttonChangeOwnershipClickedHandler} className="Manage-button" id="changeOwnershipButtonID">Change ownership</div>
-            <label className="Manage-label" data-testid='labelTransactionHash'>Transaction Hash: <b>{transactionHash}</b></label>
+        <div className='View-main-container'>
+            <div onClick={buttonChangeOwnershipClickedHandler} className="View-button" id="changeOwnershipButtonID">Change ownership</div>
+            <label className="View-label-transaction-hash" data-testid='labelTransactionHash'>Transaction Hash: <b>{transactionHash}</b></label>
+
+            <div className="View-grid-container">
+                <label className="View-label">IPFS Hash:</label>
+                <input className="View-input-hash" id="hashID" readOnly></input>
+                <button className="View-button View-button-fetch" id="fetchID" onClick={fetchButtonClickedHandler}>Fetch</button>
+
+                <label className="View-label">Message:</label>
+                <input className="View-input" id="receivedMessageID" readOnly></input>
+            </div>
         </div>
     );
 };
