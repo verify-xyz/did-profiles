@@ -2,11 +2,13 @@ import { EthrDID } from "ethr-did";
 import { Web3Provider } from "@ethersproject/providers";
 import { useState, useEffect } from "react";
 import ServerAPI from '../api/serverAPI';
+import { ToggleButton} from '../components/toggleButton';
 
 export default function View() {
     const [transactionHash, setTransactionHash] = useState('None');
     const [ipfsHash, setIpfsHash] = useState('');
     const [message, setMessage] = useState('');
+    const [access, setAccess] = useState(false);
 
     useEffect(()=> {
         const hash = localStorage?.getItem('returnedHash');
@@ -15,10 +17,21 @@ export default function View() {
         }
 
         const msg = localStorage?.getItem('viewMessage');
-        if (msg) {
-            setMessage(msg);
-        }
+        handleMessage(msg);
     });
+
+    function handleMessage(msg: string | null) {
+        if (msg && access) {
+            setMessage(msg);
+        } else {
+            if (!access) {
+                setMessage('Access is set to private');
+                localStorage.setItem('viewMessage', '');
+            } else {
+                setMessage('');
+            }
+        }
+    }
 
     async function buttonChangeOwnershipClickedHandler() {
         await changeOwnership();
@@ -49,12 +62,22 @@ export default function View() {
         setMessage(msg);
     }
 
+    async function changeAccessPrivatePublic() {
+        setAccess(!access);
+
+        if (!access) {
+            changeOwnership();
+        }
+    }
+
     return (
         <div className='View-main-container'>
             <div onClick={buttonChangeOwnershipClickedHandler} className="View-button" id="changeOwnershipButtonID">Change ownership</div>
             <label className="View-label-transaction-hash" data-testid='labelTransactionHash'>Transaction Hash: <b>{transactionHash}</b></label>
 
             <div className="View-grid-container">
+                <ToggleButton onToggle={changeAccessPrivatePublic} isToggled={access}></ToggleButton><div></div><div></div>
+
                 <label className="View-label">IPFS Hash:</label>
                 <input className="View-input-hash" id="hashID" readOnly value={ipfsHash}></input>
                 <button className="View-button View-button-fetch" id="fetchID" onClick={fetchButtonClickedHandler}>Fetch</button>
