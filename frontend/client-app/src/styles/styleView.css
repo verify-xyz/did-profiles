@@ -1,0 +1,54 @@
+.View-main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 20px;
+    height: 80vh;
+}
+
+.View-button {
+    margin-top: 10px;
+    border-radius: 25px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    min-width: 240px;
+    color: white;
+    background-color: #1482b5;
+    cursor: pointer;
+    white-space: nowrap;
+    text-align: center;
+    font-weight: bold;
+}
+
+.View-button-fetch {
+    margin-top: 0px;
+    min-width: 100px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    border-width: 0px;
+}
+
+.View-label-transaction-hash {
+    margin-top: 30px;
+}
+
+.View-input-hash {
+    font-weight: bold;
+}
+
+.View-label {
+    margin-top: 0px;
+}
+
+.View-grid-container {
+    display: grid;
+    grid-template-columns: [column1] 10vw [column2] 30vw [column3] 120px [end];
+    grid-template-rows: [row1] 30px [row2] 30px [row3] 30px;
+    grid-column-gap: 50px;
+    grid-row-gap: 50px;
+    margin-top: 50px;
+}
+
