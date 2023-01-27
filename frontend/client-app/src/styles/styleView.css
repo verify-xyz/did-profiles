@@ -31,6 +31,12 @@
     border-width: 0px;
 }
 
+.View-button-fetch:disabled {
+    pointer-events: none;
+    background-color: darkgray;
+}
+
+
 .View-label-transaction-hash {
     margin-top: 30px;
 }
@@ -46,7 +52,7 @@
 .View-grid-container {
     display: grid;
     grid-template-columns: [column1] 10vw [column2] 30vw [column3] 120px [end];
-    grid-template-rows: [row1] 30px [row2] 30px [row3] 30px;
+    grid-template-rows: [row1] 30px [row2] 30px [row3] 30px [row4] 30px;
     grid-column-gap: 50px;
     grid-row-gap: 50px;
     margin-top: 50px;

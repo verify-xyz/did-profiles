@@ -9,6 +9,7 @@ export default function View() {
     const [ipfsHash, setIpfsHash] = useState('');
     const [message, setMessage] = useState('');
     const [access, setAccess] = useState(false);
+    const [infoMessage, setInfoMessage] = useState('Information about specific actions is shown here.');
     let ethrDid : EthrDID;
     const serverAddress = getServerAddress();
 
@@ -62,7 +63,6 @@ export default function View() {
             setMessage(msg);
         } else {
             if (!access) {
-                setMessage('Access is set to private');
                 localStorage.setItem('viewMessage', '');
             } else {
                 setMessage('');
@@ -71,7 +71,10 @@ export default function View() {
     }
 
     async function changeOwnershipToPrivate(newOwner: string) {
+        setInfoMessage('Changing to private is in progress...');
         console.log('Change ownership to: ' + newOwner);
+        const btn = document.getElementById('fetchID');
+        btn?.setAttribute('disabled', 'disabled');
  
         // await initEthrDID(newOwner);
         const currentOwner = await ethrDid.lookupOwner();
@@ -79,13 +82,19 @@ export default function View() {
 
         await ethrDid.changeOwner(newOwner);
 
+        // setMessage('Access is set to private');
+        setInfoMessage('Access is set to private.');
+
         console.log('OWNER CHANGED');
         const newestOwner = await ethrDid.lookupOwner();
         console.log('new owner: ' + newestOwner);
     }
 
     async function changeOwnershipToPublic(newOwner: string) {
+        setInfoMessage('Changing to public is in progress...');
         console.log('changeOwnershipToPublic');
+        const btn = document.getElementById('fetchID');
+        btn?.setAttribute('disabled', 'disabled');
         
         const did = `did:ethr:goerli:${newOwner}`;
         const signature = '0x0';
@@ -95,6 +104,9 @@ export default function View() {
         const registerServiceBodyWithAccess = new RegisterServiceBodyWithAccess(did, signature, service, 'public');
         const registerServiceBodyJSON = JSON.stringify(registerServiceBodyWithAccess);
         const registerHash = await ServerAPI.postRegisterServiceWithAccess(registerServiceBodyJSON);
+
+        setInfoMessage('Access is set to public.');
+        btn?.removeAttribute('disabled');
         console.log(registerHash);
     }
 
@@ -161,6 +173,10 @@ export default function View() {
 
                 <label className="View-label">Message:</label>
                 <input className="View-input" id="receivedMessageID" readOnly value={message}></input>
+                <div></div>
+
+                <label className="View-label">Info:</label>
+                <label className="View-label">{infoMessage}</label>
             </div>
         </div>
     );
