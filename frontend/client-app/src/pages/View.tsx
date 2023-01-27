@@ -21,12 +21,14 @@ export default function View() {
         const msg = localStorage?.getItem('viewMessage');
         handleMessage(msg);
         
-        initEthrDID('0xEF5325dA33d8DBecd497985b80bC422f4Dee33E2');
+        initEthrDID();
     });
 
-    async function initEthrDID(address: string) {
+    async function initEthrDID() {
         const provider = new Web3Provider((window as any).ethereum);
         const chainNameOrId = await (window as any).ethereum.request({ method: 'eth_chainId' });
+        const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
+        const address = accounts[0];
 
         ethrDid = new EthrDID({
             identifier: address,
