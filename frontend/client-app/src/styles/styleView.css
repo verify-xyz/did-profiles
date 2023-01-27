@@ -58,3 +58,67 @@
     margin-top: 50px;
 }
 
+.View-label-info-public {
+    color: red;
+    font-weight: bold;
+}
+
+.View-label-info-public:after {
+    content: "";
+    animation: spin-public 1s linear infinite;
+}
+
+@keyframes spin-public {
+    0% {
+        content: 'Changing to public is in progress.';
+    }
+
+    25% {
+        content: 'Changing to public is in progress..';
+    }
+
+    50% {
+        content: 'Changing to public is in progress...';
+    }
+
+    75% {
+        content: 'Changing to public is in progress';
+    }
+
+    100% {
+        content: 'Changing to public is in progress.';
+    }
+}
+
+.View-label-info-private {
+    color: red;
+    font-weight: bold;
+}
+
+.View-label-info-private:after {
+    content: "";
+    animation: spin-private 1s linear infinite;
+}
+
+@keyframes spin-private {
+    0% {
+        content: 'Changing to private is in progress.';
+    }
+
+    25% {
+        content: 'Changing to private is in progress..';
+    }
+
+    50% {
+        content: 'Changing to private is in progress...';
+    }
+
+    75% {
+        content: 'Changing to private is in progress';
+    }
+
+    100% {
+        content: 'Changing to private is in progress.';
+    }
+}
+

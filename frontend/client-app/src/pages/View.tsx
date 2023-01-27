@@ -71,14 +71,20 @@ export default function View() {
     }
 
     async function changeOwnershipToPrivate(newOwner: string) {
-        setInfoMessage('Changing to private is in progress...');
+        setInfoMessage('');
         console.log('Change ownership to: ' + newOwner);
+
+        const infoLabel = document.getElementById('infoID');
+        infoLabel?.classList.add("View-label-info-private");
+        
  
         // await initEthrDID(newOwner);
         const currentOwner = await ethrDid.lookupOwner();
         console.log('current owner: ' + currentOwner);
 
         await ethrDid.changeOwner(newOwner);
+
+        infoLabel?.classList.remove("View-label-info-private");
 
         setInfoMessage('Access is set to private.');
 
@@ -88,7 +94,11 @@ export default function View() {
     }
 
     async function changeOwnershipToPublic(newOwner: string) {
-        setInfoMessage('Changing to public is in progress...');
+        setInfoMessage('');
+
+        const infoLabel = document.getElementById('infoID');
+        infoLabel?.classList.add("View-label-info-public");
+        
         
         const did = `did:ethr:goerli:${newOwner}`;
         const signature = '0x0';
@@ -99,6 +109,7 @@ export default function View() {
         const registerServiceBodyJSON = JSON.stringify(registerServiceBodyWithAccess);
         await ServerAPI.postRegisterServiceWithAccess(registerServiceBodyJSON);
 
+        infoLabel?.classList.remove("View-label-info-public");
         setInfoMessage('Access is set to public.');
     }
 
@@ -166,7 +177,8 @@ export default function View() {
                 <div></div>
 
                 <label className="View-label">Info:</label>
-                <label className="View-label">{infoMessage}</label>
+                <label className="View-label" id="infoID">{infoMessage}</label>
+                
             </div>
         </div>
     );
