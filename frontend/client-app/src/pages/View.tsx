@@ -117,7 +117,7 @@ export default function View() {
         const owner = await ethrDid.lookupOwner();
         console.log('owner: ' + owner);
 
-        if(newState === true) {
+        /*if(newState === true) {
             console.log('change owner to PUBLIC');
             const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
             await changeOwnershipToPublic(accounts[0]);
@@ -128,30 +128,30 @@ export default function View() {
             console.log('change owner to PRIVATE');
             await changeOwnershipToPrivate(serverAddress);
             return;
-        }
+        }*/
 
-        /*if((newState === true) && (owner === serverAddress)) {
+        if((newState === true) && (owner === serverAddress)) {
             console.log('change owner to PUBLIC');
             const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
-            await changeOwnership(accounts[0]);
-            return;
-        }
-
-        if(newState === false && owner === serverAddress) {
-            (document.getElementById('receivedMessageID') as HTMLInputElement).value = 'Access is already private';
+            await changeOwnershipToPublic(accounts[0]);
             return;
         }
 
         if(newState === true && owner !== serverAddress) {
-            (document.getElementById('receivedMessageID') as HTMLInputElement).value = 'Access is already public';
+            setInfoMessage('Access is already public.');
             return;
         }
 
         if(newState === false && owner !== serverAddress) {
             console.log('change owner to PRIVATE');
-            await changeOwnership(serverAddress);
+            await changeOwnershipToPrivate(serverAddress);
             return;
-        }*/
+        }
+
+        if(newState === false && owner === serverAddress) {
+            setInfoMessage('Access is already private.');
+            return;
+        }
     }
 
     return (
