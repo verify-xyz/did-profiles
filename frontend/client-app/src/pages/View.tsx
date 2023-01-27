@@ -11,7 +11,6 @@ export default function View() {
     const [access, setAccess] = useState(false);
     const [infoMessage, setInfoMessage] = useState('Information about specific actions is shown here.');
     let ethrDid : EthrDID;
-    const serverAddress = getServerAddress();
 
     useEffect(() => {
         const hash = localStorage?.getItem('returnedHash');
@@ -72,13 +71,10 @@ export default function View() {
 
     async function changeOwnershipToPrivate(newOwner: string) {
         setInfoMessage('');
-        console.log('Change ownership to: ' + newOwner);
 
         const infoLabel = document.getElementById('infoID');
         infoLabel?.classList.add("View-label-info-private");
         
- 
-        // await initEthrDID(newOwner);
         const currentOwner = await ethrDid.lookupOwner();
         console.log('current owner: ' + currentOwner);
 
@@ -88,7 +84,6 @@ export default function View() {
 
         setInfoMessage('Access is set to private.');
 
-        console.log('OWNER CHANGED');
         const newestOwner = await ethrDid.lookupOwner();
         console.log('new owner: ' + newestOwner);
     }
@@ -98,7 +93,6 @@ export default function View() {
 
         const infoLabel = document.getElementById('infoID');
         infoLabel?.classList.add("View-label-info-public");
-        
         
         const did = `did:ethr:goerli:${newOwner}`;
         const signature = '0x0';
@@ -126,20 +120,6 @@ export default function View() {
         const serverAddress = getServerAddress();
 
         const owner = await ethrDid.lookupOwner();
-        console.log('owner: ' + owner);
-
-        /*if(newState === true) {
-            console.log('change owner to PUBLIC');
-            const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
-            await changeOwnershipToPublic(accounts[0]);
-            return;
-        }
-
-        if(newState === false) {
-            console.log('change owner to PRIVATE');
-            await changeOwnershipToPrivate(serverAddress);
-            return;
-        }*/
 
         if((newState === true) && (owner === serverAddress)) {
             const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
