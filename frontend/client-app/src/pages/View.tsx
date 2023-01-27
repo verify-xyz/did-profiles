@@ -73,8 +73,6 @@ export default function View() {
     async function changeOwnershipToPrivate(newOwner: string) {
         setInfoMessage('Changing to private is in progress...');
         console.log('Change ownership to: ' + newOwner);
-        const btn = document.getElementById('fetchID');
-        btn?.setAttribute('disabled', 'disabled');
  
         // await initEthrDID(newOwner);
         const currentOwner = await ethrDid.lookupOwner();
@@ -82,7 +80,6 @@ export default function View() {
 
         await ethrDid.changeOwner(newOwner);
 
-        // setMessage('Access is set to private');
         setInfoMessage('Access is set to private.');
 
         console.log('OWNER CHANGED');
@@ -92,9 +89,6 @@ export default function View() {
 
     async function changeOwnershipToPublic(newOwner: string) {
         setInfoMessage('Changing to public is in progress...');
-        console.log('changeOwnershipToPublic');
-        const btn = document.getElementById('fetchID');
-        btn?.setAttribute('disabled', 'disabled');
         
         const did = `did:ethr:goerli:${newOwner}`;
         const signature = '0x0';
@@ -103,11 +97,9 @@ export default function View() {
 
         const registerServiceBodyWithAccess = new RegisterServiceBodyWithAccess(did, signature, service, 'public');
         const registerServiceBodyJSON = JSON.stringify(registerServiceBodyWithAccess);
-        const registerHash = await ServerAPI.postRegisterServiceWithAccess(registerServiceBodyJSON);
+        await ServerAPI.postRegisterServiceWithAccess(registerServiceBodyJSON);
 
         setInfoMessage('Access is set to public.');
-        btn?.removeAttribute('disabled');
-        console.log(registerHash);
     }
 
     async function fetchButtonClickedHandler() {
