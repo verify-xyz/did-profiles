@@ -20,7 +20,7 @@ export default function View() {
         const msg = localStorage?.getItem('viewMessage');
         handleMessage(msg);
         
-        initEthrDID(serverAddress);
+        initEthrDID('0xEF5325dA33d8DBecd497985b80bC422f4Dee33E2');
     });
 
     async function initEthrDID(address: string) {
@@ -57,13 +57,22 @@ export default function View() {
         }
     }
 
-    async function changeOwnership(newOwner: string) {
+    async function changeOwnershipToPrivate(newOwner: string) {
         console.log('Change ownership to: ' + newOwner);
  
-        await initEthrDID(newOwner);
+        // await initEthrDID(newOwner);
+        const currentOwner = await ethrDid.lookupOwner();
+        console.log('current owner: ' + currentOwner);
 
         await ethrDid.changeOwner(newOwner);
+        
         console.log('OWNER CHANGED');
+        const newestOwner = await ethrDid.lookupOwner();
+        console.log('new owner: ' + newestOwner);
+    }
+
+    async function changeOwnershipToPublic(newOwner: string) {
+
     }
 
     async function fetchButtonClickedHandler() {
@@ -84,13 +93,13 @@ export default function View() {
         if(newState === true) {
             console.log('change owner to PUBLIC');
             const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
-            await changeOwnership(accounts[0]);
+            await changeOwnershipToPublic(accounts[0]);
             return;
         }
 
         if(newState === false) {
             console.log('change owner to PRIVATE');
-            await changeOwnership(serverAddress);
+            await changeOwnershipToPrivate(serverAddress);
             return;
         }
 
