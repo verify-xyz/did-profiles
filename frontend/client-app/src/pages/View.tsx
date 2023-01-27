@@ -3,6 +3,7 @@ import { Web3Provider } from "@ethersproject/providers";
 import { useState, useEffect } from "react";
 import ServerAPI from '../api/serverAPI';
 import { ToggleButton} from '../components/toggleButton';
+import { RegisterServiceBodyWithAccess, RegisterServiceDto } from "../dto/register.dto";
 
 export default function View() {
     const [ipfsHash, setIpfsHash] = useState('');
@@ -44,6 +45,16 @@ export default function View() {
         return serverAddress;
     }
 
+    function getIpfsUrl2(): string {
+        let ipfsUrl2 = process.env.REACT_APP_IPFS_URL2;
+
+        if(!ipfsUrl2) {
+            ipfsUrl2 = 'http://localhost:8080/ipfs/';
+        }
+
+        return ipfsUrl2;
+    }
+
     function handleMessage(msg: string | null) {
         if (msg && access) {
             setMessage(msg);
@@ -65,14 +76,24 @@ export default function View() {
         console.log('current owner: ' + currentOwner);
 
         await ethrDid.changeOwner(newOwner);
-        
+
         console.log('OWNER CHANGED');
         const newestOwner = await ethrDid.lookupOwner();
         console.log('new owner: ' + newestOwner);
     }
 
     async function changeOwnershipToPublic(newOwner: string) {
+        console.log('changeOwnershipToPublic');
+        
+        const did = `did:ethr:goerli:${newOwner}`;
+        const signature = '0x0';
+        const cid = (document.getElementById('hashID') as HTMLInputElement).value;
+        const service = new RegisterServiceDto('verify_xyz_profiles', getIpfsUrl2() + cid, cid);
 
+        const registerServiceBodyWithAccess = new RegisterServiceBodyWithAccess(did, signature, service, 'public');
+        const registerServiceBodyJSON = JSON.stringify(registerServiceBodyWithAccess);
+        const registerHash = await ServerAPI.postRegisterServiceWithAccess(registerServiceBodyJSON);
+        console.log(registerHash);
     }
 
     async function fetchButtonClickedHandler() {
