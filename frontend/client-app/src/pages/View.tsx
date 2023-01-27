@@ -131,7 +131,6 @@ export default function View() {
         }*/
 
         if((newState === true) && (owner === serverAddress)) {
-            console.log('change owner to PUBLIC');
             const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
             await changeOwnershipToPublic(accounts[0]);
             return;
@@ -143,7 +142,6 @@ export default function View() {
         }
 
         if(newState === false && owner !== serverAddress) {
-            console.log('change owner to PRIVATE');
             await changeOwnershipToPrivate(serverAddress);
             return;
         }
