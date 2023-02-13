@@ -44,7 +44,7 @@ export default function Publish() {
             provider: provider
         });
 
-        await ethrDid.setAttribute('did/svc/verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + hash);
+        await ethrDid.setAttribute('did/svc/verify_xyz_profiles', process.env.REACT_APP_IPFS_URL + hash);
     }
 
     return (

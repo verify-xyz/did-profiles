@@ -22,7 +22,9 @@ export default function Manage() {
             provider: provider
         });
 
-        const newOwner = await ethrDid.changeOwner(accounts[0]);
+        const serverAddress = process.env.REACT_APP_SERVER_ADDRESS as string;
+
+        const newOwner = await ethrDid.changeOwner(serverAddress);
 
         setTransactionHash(newOwner);
     }

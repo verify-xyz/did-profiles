@@ -15,12 +15,7 @@ class ServerAPI {
             },
             body: JSON.stringify({
                 content: message,
-                authSig: {
-                    address: process.env.REACT_APP_CLIENT_ADDRESS,
-                    sig: process.env.REACT_APP_CLIENT_AUTH_SIG,
-                    signedMessage: process.env.REACT_APP_CLIENT_SIGNED_MESSAGE,
-                    derivedVia: process.env.REACT_APP_CLIENT_DERIVED_VIA
-                }
+                authSig: JSON.parse(process.env.REACT_APP_CLIENT_AUTH_SIG)
             })
         });
 
