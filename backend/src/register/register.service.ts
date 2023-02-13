@@ -4,7 +4,7 @@ import { Wallet } from 'ethers';
 import { splitSignature } from '@ethersproject/bytes';
 import { NetworkUtils } from './network.utils';
 import { ConfigService } from '@nestjs/config';
-import {interpretIdentifier} from "ethr-did-resolver";
+import { interpretIdentifier } from 'ethr-did-resolver';
 
 const DEFAULT_GAS_LIMIT = 100000;
 
@@ -129,7 +129,7 @@ export class RegisterService {
     private async changeOwnerToPublic(did: string) {
         const controller = await this.getEthrDidController(did, this.configService.get('SERVER_PRIVATE_KEY'));
 
-        return controller.changeOwner(controller.address);//this.configService.get('PROFILE_PUBLIC_CONDITION'));
+        return controller.changeOwner(controller.address); //this.configService.get('PROFILE_PUBLIC_CONDITION'));
     }
 
     /**

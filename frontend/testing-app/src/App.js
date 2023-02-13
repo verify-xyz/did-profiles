@@ -15,6 +15,7 @@ function App() {
         console.log(message);
         console.log(address);
         console.log('access: ' + access);
+        console.log('REACT_APP_INFURA_NETWORK_ID: ' + process.env.REACT_APP_INFURA_NETWORK_ID);
 
         window.document.getElementById('resolveID').value = 'did:ethr:goerli:' + process.env.REACT_APP_CLIENT_ADDRESS;
     });
@@ -140,8 +141,14 @@ function App() {
 
         let serviceEndpoint = 'Request failed. Please try again.';
 
-        if (response?.didDocument?.service[0]?.serviceEndpoint) {
+        if (response?.didDocument?.service) {
             serviceEndpoint = response.didDocument.service[0].serviceEndpoint;
+            if (serviceEndpoint.indexOf('undefined') === 0) {
+                serviceEndpoint = serviceEndpoint.substring(9);
+            } else {
+                const start = serviceEndpoint.lastIndexOf('/');
+                serviceEndpoint = serviceEndpoint.substring(start + 1);
+            }
         }
 
         // window.document.getElementById('resolveID').value = verificationMethod;
@@ -151,7 +158,7 @@ function App() {
     };
 
     /**
-     * Sends register service endpoint ipfs hash to server and gets decryptrd content
+     * Sends register service endpoint ipfs hash to server and gets decrypted content
      */
     async function step4FetchButtonClickedHandler() {
         window.document.getElementById('decryptedContentID').value = '';
@@ -228,7 +235,7 @@ function App() {
      */
     function createHardCodedClientSignatureBody() {
         const cid = getIpfsHash();
-        const regService = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
+        const regService = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL + cid, cid);
         const clientSigBody = new ClientSignatureBody('goerli', regService);
         return clientSigBody;
     }
@@ -239,7 +246,7 @@ function App() {
      */
     function createHardCodedClientSignatureBodyStep5() {
         const cid = getIpfsHash();
-        const regService = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
+        const regService = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL + cid, cid);
         const clientSigBody = new ClientSignatureBody('goerli', regService);
         return clientSigBody;
     }
@@ -251,7 +258,7 @@ function App() {
         const did = `did:ethr:goerli:${process.env.REACT_APP_CLIENT_ADDRESS}`;
         const signature = window.document.getElementById('clientSignatureID').value;
         const cid = getIpfsHash();
-        const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
+        const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL + cid, cid);
         const registerServiceBody = new RegisterServiceBody(did, signature, service);
         return registerServiceBody;
     }
@@ -263,7 +270,7 @@ function App() {
         const did = `did:ethr:goerli:${process.env.REACT_APP_CLIENT_ADDRESS}`;
         const signature = window.document.getElementById('clientSignatureStep5ID').value;
         const cid = getIpfsHash();
-        const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL2 + cid, cid);
+        const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL + cid, cid);
         const accessValue = access ? 'public' : 'private';
         console.log('accessValue: ' + accessValue);
 

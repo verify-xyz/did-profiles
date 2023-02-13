@@ -8,13 +8,9 @@ describe('IpfsApiService', () => {
     let config: ConfigService;
 
     beforeEach(async () => {
-
         const module: TestingModule = await Test.createTestingModule({
             imports: [HttpModule, ConfigModule],
-            providers: [
-                IpfsApiService,
-                ConfigService
-            ],
+            providers: [IpfsApiService, ConfigService],
         }).compile();
 
         service = module.get<IpfsApiService>(IpfsApiService);

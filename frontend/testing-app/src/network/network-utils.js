@@ -29,7 +29,7 @@ export class NetworkUtils {
      */
     constructor() {
         if (!process.env.REACT_APP_INFURA_NETWORK_ID) {
-            throw new Error('Missing env - INFURA_NETWORK_ID');
+            throw new Error('Missing env - REACT_APP_INFURA_NETWORK_ID');
         }
     }
 

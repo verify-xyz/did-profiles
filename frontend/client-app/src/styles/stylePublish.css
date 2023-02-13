@@ -1,0 +1,39 @@
+.Publish-main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 50px;
+}
+
+.Publish-grid-container01 {
+    display: grid;
+    grid-template-columns: [column1] 10vw [column2] 30vw [column3] 120px [end];
+    grid-template-rows: [row1] 30px [row2] 30px;
+    grid-column-gap: 50px;
+    grid-row-gap: 50px;
+}
+
+.Publish-button {
+    border-radius: 25px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    min-width: 120px;
+    color: white;
+    background-color: #1482b5;
+    cursor: pointer;
+    white-space: nowrap;
+    text-align: center;
+    font-weight: bold;
+}
+
+.Publish-button:hover {
+    background-color: #1d6f96;
+}
+
+.Publish-button:active {
+    color: red;
+}
