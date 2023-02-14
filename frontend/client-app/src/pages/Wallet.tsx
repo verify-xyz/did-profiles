@@ -1,12 +1,33 @@
 import { useWeb3React } from "@web3-react/core"
 import { injected } from "../utils/connector";
 import { useLitAuthSig } from "../hooks/useLitAuthSig";
+import { useEffect, useState } from 'react';
 
 export default function Wallet() {
     const { active, account, library, connector, activate, deactivate } = useWeb3React();
     const { authSig, personalSign, reset } = useLitAuthSig();
+    const [signedMessage, setSignedMessage] = useState('Not signed');
 
-    const signedMessage = authSig && authSig.signedMessage || 'Not signed';
+    useEffect(() => {
+        checkConnection();
+    });
+
+    function checkConnection() {
+        if (localStorage?.getItem('isWalletConnected') === "true" &&
+            localStorage?.getItem('personalSignResult') !== null &&
+            localStorage?.getItem('personalSignResult') !== undefined) {
+
+            const personalSign: any = localStorage.getItem('personalSignResult');
+
+            if (personalSign) {
+                setSignedMessage(JSON.parse(personalSign).signedMessage);
+            } else {
+                setSignedMessage('Not signed');
+            }
+        } else {
+            setSignedMessage('Not signed');
+        }
+    }
 
     async function connect() {
         try {

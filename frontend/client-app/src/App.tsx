@@ -5,11 +5,10 @@ import { Web3Provider } from "@ethersproject/providers";
 import Web3 from "web3";
 import Layout from "./pages/Layout";
 import Home from "./pages/Home";
-import Contact from "./pages/Contact";
 import NoPage from "./pages/NoPage";
 import Wallet from "./pages/Wallet";
 import Publish from "./pages/Publish";
-import Manage from "./pages/Manage";
+import View from "./pages/View";
 
 function getLibrary(provider: any): Web3 {
     console.log('provider ' + provider);
@@ -25,8 +24,7 @@ export default function App() {
                         <Route index element={<Home />} />
                         <Route path="wallet" element={<Wallet />} />
                         <Route path="publish" element={<Publish />} />
-                        <Route path="manage" element={<Manage />} />
-                        <Route path="contact" element={<Contact />} />
+                        <Route path="view" element={<View />} />
                         <Route path="*" element={<NoPage />} />
                     </Route>
                 </Routes>
