@@ -7,8 +7,6 @@
 </p>
 
 
-## Development
-
 ## Planned System Design
 
 <p align="center">
