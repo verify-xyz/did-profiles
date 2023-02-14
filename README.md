@@ -7,7 +7,7 @@
 </p>
 
 
-## Planned System Design
+## System Design
 
 <p align="center">
   <img src="https://github.com/verify-xyz/did-profiles/raw/main/assets/schematic.png" width="900" alt="Cabana Labs, Inc Logo" />
@@ -28,7 +28,9 @@ npm install
 npx ts-node utils/create-accounts.ts
 ```
 
-This will generate the variables you need to populate the `backend/.env` and `frontend/client-side/.env` files.
+This will generate the variables you need to populate the 
+1. BACKEND: `backend/.env`
+2. FRONTEND: `frontend/testing-app/.env` and `frontend/client-side/.env`  files.
 
 Use https://goerlifaucet.com/ to receive Goerli ETH
 
