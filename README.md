@@ -13,30 +13,52 @@
   <img src="https://github.com/verify-xyz/did-profiles/raw/main/assets/schematic.png" width="900" alt="Cabana Labs, Inc Logo" />
 </p>
 
-## Installation
+## Setting up the ENV
 
+### IPFS server
+
+Follow the instructions in the [readme.md](https://github.com/verify-xyz/did-profiles/tree/dev/ipfs#readme) to run the IPFS daemon.
+
+### Setup .ENV variable
+
+You can use a script to generate random accounts to use for both client and server
 ```bash
-$ npm install
+cd backend
+npm install
+npx ts-node utils/create-accounts.ts
 ```
 
-## Running the app
+This will generate the variables you need to populate the `backend/.env` and `frontend/client-side/.env` files.
 
+Use https://goerlifaucet.com/ to receive Goerli ETH
+
+### Install and run backend server
 ```bash
-# development
-$ npm run start
-
-
+cd backend
+npm install
+npm run start
 ```
 
-## Test
-
+### Install and run the testing app
 ```bash
-# unit tests
-$ npm run test
-
-
+cd frontend/testing-app
+npm install
+npm run start
 ```
 
+[See walkthrough Part 1 - DID-Publish](https://github.com/verify-xyz/did-profiles/blob/main/reports/milestone_1.md)
+
+[See walkthrough Part 2 - DID-Resolve](https://github.com/verify-xyz/did-profiles/blob/main/reports/milestone_2.md)
+
+### Install and run the client app
+
+```bash
+cd frontend/client-app
+npm install
+npm run start
+```
+
+[See walkthrough Part 3 - Client App](https://github.com/verify-xyz/did-profiles/blob/main/reports/milestone_3.md)
 
 ## Support and License
 
