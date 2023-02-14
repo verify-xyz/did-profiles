@@ -8,5 +8,6 @@ import { IpfsApiService } from './ipfs-api.service';
     imports: [HttpModule, ConfigModule],
     controllers: [IpfsApiController],
     providers: [IpfsApiService],
+    exports: [IpfsApiService],
 })
 export class IpfsApiModule {}

@@ -10,7 +10,19 @@
 /frontend/.pnp
 /frontend/.pnp.js
 /frontend/build
-/frontend/.env
+/frontend/testing-app/.env
+
+/frontend/test-app/node_modules
+/frontend/test-app/.env
+
+/frontend/client-app/node_modules
+/frontend/client-app/.env
+
+/frontend/testing-app/node_modules
+/frontend/testing-app/.pnp
+/frontend/testing-app/.pnp.js
+/frontend/testing-app/build
+/frontend/testing-app/.env
 
 # Logs
 logs

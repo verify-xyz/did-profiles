@@ -1,0 +1,19 @@
+diff --git a/node_modules/ethr-did-resolver/lib/logParser.js b/node_modules/ethr-did-resolver/lib/logParser.js
+index 82f43cb..c5ce914 100644
+--- a/node_modules/ethr-did-resolver/lib/logParser.js
++++ b/node_modules/ethr-did-resolver/lib/logParser.js
+@@ -21,6 +21,14 @@ function populateEventMetaClass(logResult, blockNumber) {
+     });
+     result._eventName = logResult.name;
+     result.blockNumber = blockNumber;
++
++    // ********************* NOTE ***************************************************
++    // Short circuit the changeLog cycle to stop fetching logs for this service type
++    // ******************************************************************************
++    if (result.name === 'did/svc/verify_xyz_profiles') {
++        result.previousChange = bignumber_1.BigNumber.from(blockNumber)
++    }
++
+     return result;
+ }
+ function logDecoder(contract, logs) {
