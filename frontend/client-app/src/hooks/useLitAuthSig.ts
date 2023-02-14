@@ -44,6 +44,12 @@ export const useLitAuthSig = () => {
                 }
             } else {
                 setConnected(false);
+
+                const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
+                if (accounts.length > 0) {
+                    personalSign();
+                    setConnected(true);
+                }
             }
         };
         connectWalletOnPageLoad();

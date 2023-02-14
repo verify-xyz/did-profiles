@@ -3,7 +3,7 @@ import ServerAPI from '../api/serverAPI';
 import { LitAuthSig, useLitAuthSig } from "../hooks/useLitAuthSig";
 import { EthrDID } from "ethr-did";
 import { Web3Provider } from "@ethersproject/providers";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Publish() {
 
@@ -12,21 +12,57 @@ export default function Publish() {
     console.log(authSig);
 
     const [returnedHash, setReturnedHash] = useState("None");
+    const [message, setMessage] = useState('');
+
+    useEffect(()=> {
+        const msg = localStorage?.getItem('message');
+        if (msg) {
+            setMessage(msg);
+            (document.getElementById('messageID') as HTMLInputElement).value = msg;
+        }
+
+        const hash = localStorage?.getItem('returnedHash');
+        if (hash) {
+            setReturnedHash(hash);
+        }
+        console.log('message: ' + localStorage?.getItem('message'));
+        console.log('hash: ' + localStorage?.getItem('returnedHash'));
+    });
 
     async function buttonPublishClickedHandler() {
         const msg = (document.getElementById('messageID') as HTMLInputElement).value;
         console.log(msg);
 
         if (msg) {
-            let activeAuthSig = authSig as LitAuthSig;
+            let activeAuthSig: LitAuthSig | undefined;
 
-            if (!activeAuthSig) {
-                activeAuthSig = await personalSign();
+            if (localStorage?.getItem('isWalletConnected') === "true" &&
+                localStorage?.getItem('personalSignResult') !== null &&
+                localStorage?.getItem('personalSignResult') !== undefined) {
+
+                const personalSign: any = localStorage.getItem('personalSignResult');
+
+                if (personalSign) {
+                    activeAuthSig = JSON.parse(personalSign);
+                }
+            } else {
+                activeAuthSig = authSig as LitAuthSig;
+
+                if (!activeAuthSig) {
+                    activeAuthSig = await personalSign();
+                }
+            }
+
+            if(!activeAuthSig) {
+                activeAuthSig = authSig as LitAuthSig;
             }
 
             const response = await ServerAPI.sendMessageToIPFS(activeAuthSig, msg);
             console.log(response.hash);
             setReturnedHash(response.hash);
+
+            localStorage.setItem('message', msg);
+            localStorage.setItem('returnedHash', response.hash);
 
             await sendRegisterTx(response.hash)
         }
@@ -50,10 +86,10 @@ export default function Publish() {
     return (
         <div className='Publish-main-container'>
             <div className='Publish-grid-container01'>
-                <label className="Publish-label">Message:</label>
+                <label className="Publish-label" data-testid='labelMessage'>Message:</label>
                 <input className="Publish-input" id='messageID'></input>
                 <div className="Publish-button" id="publishID" onClick={buttonPublishClickedHandler}>Publish</div>
-                <label className="Publish-label" id='returnHashID'>Returned hash:</label>
+                <label className="Publish-label" id='returnHashID' data-testid='labelReturnedHash'>Returned hash:</label>
                 <label><b>{returnedHash}</b></label>
             </div>
         </div>

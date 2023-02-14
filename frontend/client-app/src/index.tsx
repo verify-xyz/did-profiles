@@ -8,7 +8,9 @@ import './styles/styleLayout.css';
 import './styles/styleContact.css';
 import './styles/styleWallet.css';
 import './styles/stylePublish.css';
-import './styles/styleManage.css';
+import './styles/styleView.css';
+import './styles/styleToggleButton.css';
+import './styles/styleHome.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

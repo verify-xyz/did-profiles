@@ -45,7 +45,9 @@ export class AppController {
 
             return json;
         } catch (e) {
-            throw new HttpException('Profile is set to private. Unable to decrypt.', HttpStatus.PRECONDITION_REQUIRED);
+            console.log(e.toString())
+            // throw new HttpException('Profile is set to private. Unable to decrypt.', HttpStatus.PRECONDITION_REQUIRED);
+            throw new HttpException(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     //did:ethr:goerli:0x32f8D7ae03e2963975F8cA76D1ff1D8D77752b70

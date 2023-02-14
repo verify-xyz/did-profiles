@@ -1,0 +1,23 @@
+.Home-main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+.Home-headline {
+    margin-bottom: 70px;
+}
+
+.Home-link {
+    color: blue;
+    text-decoration: underline;
+    padding: 10px;
+}
+
+.Home-nav-link {
+    color: blue;
+}

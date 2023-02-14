@@ -5,13 +5,16 @@ const Layout = () => {
         <>
             <nav className='Layout-header'>
                 <div className='Layout-menuItem'>
+                    <Link to="/">Home</Link>
+                </div>
+                <div className='Layout-menuItem'>
                     <Link to="/wallet">Wallet</Link>
                 </div>
                 <div className='Layout-menuItem'>
                     <Link to="/publish">Publish</Link>
                 </div>
                 <div className='Layout-menuItem'>
-                    <Link to="/manage">Manage</Link>
+                    <Link to="/view">View</Link>
                 </div>
             </nav>
 
