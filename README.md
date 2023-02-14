@@ -9,12 +9,6 @@
 
 ## Development
 
-This project is currently under development.
-
-See the latest work in [dev branch](https://github.com/verify-xyz/did-profiles/tree/dev)
-
-A proof-of-concept in [poc-lit branch](https://github.com/verify-xyz/did-profiles/tree/poc-lit) uses Lit Protocol and the smart contract **ethr-did-registry** to show how a user could control access to their profile content.
-
 ## Planned System Design
 
 <p align="center">
