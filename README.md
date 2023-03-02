@@ -13,11 +13,6 @@
   <img src="https://github.com/verify-xyz/did-profiles/raw/main/assets/schematic.png" width="900" alt="Cabana Labs, Inc Logo" />
 </p>
 
-## Setting up the ENV
-
-### IPFS server
-
-Follow the instructions in the [readme.md](https://github.com/verify-xyz/did-profiles/tree/dev/ipfs#readme) to run the IPFS daemon.
 
 ### Setup .ENV variable
 

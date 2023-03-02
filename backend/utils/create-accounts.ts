@@ -11,8 +11,6 @@ const signature = joinSignature(clientWallet._signingKey().signDigest(hashMessag
 
 console.log('\n =============== BACKEND ENV ===============')
 console.log('PORT=3000')
-console.log('IPFS_URL_ADD=http://localhost:8080/ipfs/add')
-console.log('IPFS_URL_READ=http://127.0.0.1:8080/ipfs')
 console.log('SERVER_PRIVATE_KEY=' + serverWallet.privateKey.slice(2))
 console.log('SERVER_ADDRESS=' + serverWallet.address);
 console.log('CLIENT_PRIVATE_KEY=' + clientWallet.privateKey.slice(2))
@@ -20,7 +18,6 @@ console.log('CLIENT_ADDRESS=' + clientWallet.address);
 
 console.log('\n =============== FRONTEND ENV ===============')
 console.log('REACT_APP_INFURA_NETWORK_ID=')
-console.log('REACT_APP_IPFS_URL=https://ipfs.io/ipfs/')
 console.log('REACT_APP_SERVER_ADDRESS=' + serverWallet.address);
 console.log('REACT_APP_CLIENT_PRIVATE_KEY=' + clientWallet.privateKey.slice(2))
 console.log('REACT_APP_CLIENT_ADDRESS=' + clientWallet.address);

@@ -235,7 +235,7 @@ function App() {
      */
     function createHardCodedClientSignatureBody() {
         const cid = getIpfsHash();
-        const regService = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL + cid, cid);
+        const regService = new RegisterServiceDto('verify_xyz_profiles', cid, cid);
         const clientSigBody = new ClientSignatureBody('goerli', regService);
         return clientSigBody;
     }
@@ -246,7 +246,7 @@ function App() {
      */
     function createHardCodedClientSignatureBodyStep5() {
         const cid = getIpfsHash();
-        const regService = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL + cid, cid);
+        const regService = new RegisterServiceDto('verify_xyz_profiles', cid, cid);
         const clientSigBody = new ClientSignatureBody('goerli', regService);
         return clientSigBody;
     }
@@ -258,7 +258,7 @@ function App() {
         const did = `did:ethr:goerli:${process.env.REACT_APP_CLIENT_ADDRESS}`;
         const signature = window.document.getElementById('clientSignatureID').value;
         const cid = getIpfsHash();
-        const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL + cid, cid);
+        const service = new RegisterServiceDto('verify_xyz_profiles', cid, cid);
         const registerServiceBody = new RegisterServiceBody(did, signature, service);
         return registerServiceBody;
     }
@@ -270,7 +270,7 @@ function App() {
         const did = `did:ethr:goerli:${process.env.REACT_APP_CLIENT_ADDRESS}`;
         const signature = window.document.getElementById('clientSignatureStep5ID').value;
         const cid = getIpfsHash();
-        const service = new RegisterServiceDto('verify_xyz_profiles', process.env.REACT_APP_IPFS_URL + cid, cid);
+        const service = new RegisterServiceDto('verify_xyz_profiles', cid, cid);
         const accessValue = access ? 'public' : 'private';
         console.log('accessValue: ' + accessValue);
 
@@ -346,7 +346,7 @@ function App() {
                 <input className="appInput" id="resolveID" readOnly></input>
                 <button className="appButtonFetch" onClick={step4ResolveButtonClickedHandler} id="step4Btn">Resolve</button>
 
-                <label className="appLabel">Service endpoint:</label>
+                <label className="appLabel">IPFS Hash:</label>
                 <input className="appInput" id="serviceEndpointID" readOnly></input>
                 <button className="appButtonFetch" onClick={step4FetchButtonClickedHandler} id="step4BtnFetch">Fetch</button>
 

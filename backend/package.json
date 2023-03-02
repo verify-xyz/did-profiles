@@ -33,12 +33,15 @@
     "ethr-did": "^2.3.6",
     "ethr-did-registry": "^1.1.0",
     "ethr-did-resolver": "^8.0.0",
+    "ipfs-core": "0.14.0",
     "ipfs-only-hash": "^4.0.0",
+    "it-all": "1.0.6",
     "lit-js-sdk": "^1.1.237",
     "patch-package": "^6.5.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "uint8arrays": "3.1.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",

@@ -80,7 +80,7 @@ export default function Publish() {
             provider: provider
         });
 
-        await ethrDid.setAttribute('did/svc/verify_xyz_profiles', process.env.REACT_APP_IPFS_URL + hash);
+        await ethrDid.setAttribute('did/svc/verify_xyz_profiles', hash);
     }
 
     return (

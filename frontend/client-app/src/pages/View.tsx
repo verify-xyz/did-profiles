@@ -47,15 +47,15 @@ export default function View() {
         return serverAddress;
     }
 
-    function getIpfsUrl2(): string {
-        let ipfsUrl2 = process.env.REACT_APP_IPFS_URL2;
-
-        if(!ipfsUrl2) {
-            ipfsUrl2 = 'http://localhost:8080/ipfs/';
-        }
-
-        return ipfsUrl2;
-    }
+    // function getIpfsUrl2(): string {
+    //     let ipfsUrl2 = process.env.REACT_APP_IPFS_URL2;
+    //
+    //     if(!ipfsUrl2) {
+    //         ipfsUrl2 = 'http://localhost:8080/ipfs/';
+    //     }
+    //
+    //     return ipfsUrl2;
+    // }
 
     function handleMessage(msg: string | null) {
         if (msg && access) {
@@ -97,7 +97,7 @@ export default function View() {
         const did = `did:ethr:goerli:${newOwner}`;
         const signature = '0x0';
         const cid = (document.getElementById('hashID') as HTMLInputElement).value;
-        const service = new RegisterServiceDto('verify_xyz_profiles', getIpfsUrl2() + cid, cid);
+        const service = new RegisterServiceDto('verify_xyz_profiles', cid, cid);
 
         const registerServiceBodyWithAccess = new RegisterServiceBodyWithAccess(did, signature, service, 'public');
         const registerServiceBodyJSON = JSON.stringify(registerServiceBodyWithAccess);

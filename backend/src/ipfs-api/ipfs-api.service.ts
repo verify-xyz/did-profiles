@@ -1,21 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
-import { ConfigService } from '@nestjs/config';
-import { AxiosRequestConfig } from 'axios';
+import {Injectable} from '@nestjs/common';
+import {create as createIpfs, IPFS} from 'ipfs-core'
+import all from 'it-all'
+import { concat, toString } from 'uint8arrays'
 
 @Injectable()
 export class IpfsApiService {
-    private readonly ipfsUrlAdd: string;
-    private readonly ipfsUrlRead: string;
 
-    /**
-     * Constructor - constructs IpfsApiService object
-     * @param httpService - HttpService object
-     * @param configService - ConfigService object
-     */
-    constructor(private readonly httpService: HttpService, private readonly configService: ConfigService) {
-        this.ipfsUrlAdd = this.configService.get('IPFS_URL_ADD');
-        this.ipfsUrlRead = this.configService.get('IPFS_URL_READ');
+    private ipfs: IPFS;
+
+    async getIpfs() {
+        if (!this.ipfs) {
+            this.ipfs = await createIpfs();
+        }
+        return this.ipfs;
     }
 
     /**
@@ -24,37 +21,44 @@ export class IpfsApiService {
      * @returns - hash code of the string added into IPFS
      */
     async addStringToIpfs(text: string) {
-        const url = this.ipfsUrlAdd;
-        const data = text;
 
-        const response = await this.httpService.post(url, data).toPromise();
-        const headers = response.headers;
-        const hash = headers['ipfs-hash'];
+        const ipfs = await this.getIpfs();
+        const { cid, path } = await ipfs.add(text);
 
-        return hash;
+        console.log('Added file:', path)
+
+        return cid.toString();
     }
 
     /**
      * Gets string from IPFS
      * @param hash - ipfs hash code of the string previously added into IPFS
-     * @returns - the string witch is related to the provided ipfs hash code
+     * @returns - the string that is related to the provided ipfs hash code
      */
     async getStringFromIpfs(hash: string) {
-        const url = `${this.ipfsUrlRead}/${hash}`;
+        const ipfs = await this.getIpfs();
+        const source = ipfs.cat(hash);
 
-        const config: AxiosRequestConfig = {
-            timeout: 2000,
-        };
+        const arr = [];
+        for await (const entry of source) arr.push(entry);
+
+        const data = concat(arr)
+        const content = toString(data);
+
+        console.log('get file contents:', content);
 
         try {
-            const response = await this.httpService.get(url, config).toPromise();
-            const text = response.data;
+            return JSON.parse(content);
+        }
+        catch(e) {
+            return content;
+        }
+    }
 
-            return text;
-        } catch (error) {
-            console.log(error);
-
-            return 'Getting ipfs data for the provided hash code failed';
+    async shutdown() {
+        console.log('shutdown');
+        if (this.ipfs) {
+            await this.ipfs.stop();
         }
     }
 }
