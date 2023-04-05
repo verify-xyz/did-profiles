@@ -1,0 +1,51 @@
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
+import { AppService } from './app.service';
+import { EncryptService } from './encrypt/encrypt.service';
+import { AddContentDto, AuthSigDto, ProfileContentDto, ProfileDto } from './dto/profile.dto';
+import { EncryptedProfileDto } from './dto/encryptedProfile.dto';
+import { IpfsApiService } from './ipfs-api/ipfs-api.service';
+import { AuthSig } from './types';
+
+@Controller()
+export class AppController {
+    constructor(
+        private readonly appService: AppService,
+        private readonly encryptService: EncryptService,
+        private readonly ipfsApiService: IpfsApiService,
+    ) {}
+
+    @Post('add')
+    async encryptAndAddToIpfs(@Body() body: AddContentDto): Promise<string> {
+        console.log('body', body);
+        const profileContentDto: ProfileContentDto = this.appService.createHardCodedProfileContentDto(body.content);
+
+        const encryptedString = await this.encryptService.encryptProfile(profileContentDto, body.authSig);
+        const hash = await this.ipfsApiService.addStringToIpfs(encryptedString);
+
+        console.log('here', encryptedString);
+
+        const response = { hash, encryptedString };
+        const json = JSON.stringify(response);
+
+        return json;
+    }
+
+    @Get('read/:hash')
+    async readFromIpfsAndDecrypt(@Param('hash') hash: string): Promise<string> {
+        const encryptedProfileDto: EncryptedProfileDto = await this.ipfsApiService.getStringFromIpfs(hash);
+
+        try {
+            const decrypted: any = await this.encryptService.decryptProfile(encryptedProfileDto);
+
+            const response = { text: decrypted.content.template };
+            const json = JSON.stringify(response);
+
+            return json;
+        } catch (e) {
+            console.log(e.toString())
+            // throw new HttpException('Profile is set to private. Unable to decrypt.', HttpStatus.PRECONDITION_REQUIRED);
+            throw new HttpException(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    //did:ethr:goerli:0x32f8D7ae03e2963975F8cA76D1ff1D8D77752b70
+}

@@ -1,29 +1,9 @@
 # compiled output
-/dist
-/node_modules
+dist
+node_modules
+.env
 
-/backend/dist
-/backend/node_modules
-/backend/.env
-/backend/src/test.ts
-
-/frontend/node_modules
-/frontend/.pnp
-/frontend/.pnp.js
-/frontend/build
-/frontend/testing-app/.env
-
-/frontend/test-app/node_modules
-/frontend/test-app/.env
-
-/frontend/client-app/node_modules
-/frontend/client-app/.env
-
-/frontend/testing-app/node_modules
-/frontend/testing-app/.pnp
-/frontend/testing-app/.pnp.js
-/frontend/testing-app/build
-/frontend/testing-app/.env
+/server/src/test.ts
 
 # Logs
 logs
